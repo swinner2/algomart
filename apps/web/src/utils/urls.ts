@@ -54,6 +54,7 @@ export const urls = {
       getUntransferredPacks: '/api/v1/pack/untransferred',
       getRedeemable: '/api/v1/asset/get-redeemable',
       profile: '/api/v1/profile',
+      getLegacyAccount: '/api/v1/profile/get-legacy-account',
       publicKey: '/api/v1/payments/public-key',
       removeCard: '/api/v1/payments/remove-card',
       updateCard: '/api/v1/payments/update-card',
