@@ -36,6 +36,7 @@ import {
   PaymentCards,
   PublicAccount,
   PublicKey,
+  PublicLegacyAccount,
   PublishedPacks,
   PublishedPacksQuery,
   RedeemCode,
@@ -84,9 +85,11 @@ export class ApiClient {
   }
 
   //#region User Accounts
-  async getLegacyAccount(json: { id: string }) {
-    const searchQuery = stringify(json)
-    return await this.http.get(`accounts/legacy-account?${searchQuery}`).json()
+  async getLegacyAccount(id: string) {
+    const searchQuery = stringify({ id })
+    return await this.http
+      .get(`accounts/legacy-account?${searchQuery}`)
+      .json<PublicLegacyAccount>()
   }
 
   async createAccount(json: CreateUserAccountRequest) {
