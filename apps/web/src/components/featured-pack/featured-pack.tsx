@@ -85,7 +85,7 @@ export default function HomeTemplate({
             </div>
 
             {/* Content */}
-            <div className="bg-gray-900 bg-opacity-75 rounded-xl sm:relative lg:absolute md:relative lg:right-40 md:right-0 md:-bottom-0 lg:-bottom-12 md:w-4/5 py-4 px-8 mx-4">
+            <div className="bg-gray-900 bg-opacity-75 rounded-xl sm:relative lg:absolute md:relative lg:right-40 md:right-0 md:-bottom-0 lg:-bottom-12 md:w-4/5 py-4 px-8 mx-4 mt-4">
               <Heading className="text-blue-800 lg:text-2xl md:text-xl mb-4" level={2} bold>
                 {featuredPack.title}
               </Heading>
