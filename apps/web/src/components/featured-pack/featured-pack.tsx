@@ -49,9 +49,9 @@ export default function HomeTemplate({
           <div className={clsx(css.blueStrockeText, "font-extrabold lg:text-7xl md:text-5xl sm:text-4xl text-5xl tracking-wide leading-tight pr-20 text-opacity-20 text-blue-800")}>
             Buy, Sell & Trade Authentic NFTs.
           </div>
-          <div className={clsx(css.grayStrockeText, "text-transparent md:text-3xl text-2xl font-bold mt-4")}>
+          <div className={clsx(css.grayStrockeText, "text-gray-100 text-opacity-20 md:text-3xl text-2xl font-bold mt-4")}>
             Built by the passionate for the passionate
-            <ul className="list-disc">
+            <ul className="list-none">
               <li>- Carbon Neutral</li>
               <li>- Fees as low as $0.001</li>
               <li>- Multi-crypto and fiat supported</li>
