@@ -95,3 +95,7 @@
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #b1b5c3;
 }
+
+.backdropFilter {
+  backdrop-filter: blur(3px);
+}

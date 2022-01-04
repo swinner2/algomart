@@ -1,5 +1,7 @@
 .mediaGalleryWrapper {
   width: 50%;
+  max-width: 30rem;
+  @apply mx-auto;
 }
 @media only screen and (max-width: 768px) {
   .mediaGalleryWrapper {
@@ -8,7 +10,7 @@
 }
 
 .selectedImageWrapper {
-  @apply relative;
+  @apply relative h-full;
 }
 
 .iconWrapper {
@@ -54,6 +56,10 @@
 
 .fullWidth {
   @apply w-full;
+}
+
+.fullHeight {
+  @apply h-full;
 }
 
 .overflowHidden {

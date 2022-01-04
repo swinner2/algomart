@@ -34,7 +34,7 @@ const MarketingCardsSection = () => {
     children: any
   }) => {
     return (
-      <div className="rounded-2xl border-2 border-gray-600 space-y-6 flex flex-col justify-between px-8 py-20 items-center hover:border-blue-800">
+      <div className="rounded-2xl border-2 border-gray-600 space-y-6 flex flex-col justify-between lg:px-8 lg:py-20 md:px-2 md:py-4 px-8 py-12 items-center hover:border-blue-800">
         <div className="bg-blue-400 rounded-full w-12 h-12 p-2.5 text-center">
           <span className="text-gray-50 text-lg font-bold font-poppins">
             {icon}
@@ -78,7 +78,7 @@ const MarketingCardsSection = () => {
           </p>
 
           <div className="mt-20">
-            <div className="mt-12 max-w-6xl mx-auto grid gap-7 lg:grid-cols-3">
+            <div className="mt-12 max-w-6xl mx-auto grid gap-7 md:grid-cols-3">
               <StepCard
                 icon="01"
                 title="Create an OG2D Account"
@@ -155,7 +155,7 @@ export default function HomeTemplate({
       {upcomingPacks.length > 0 ? (
         <>
           <div className="bg-gray-900">
-            <div className="pt-12 pb-24 mx-auto max-w-screen-2xl px-4">
+            <div className="pt-12 pb-8 mx-auto max-w-screen-2xl px-4">
               <Heading
                 level={2}
                 size={1}
@@ -165,15 +165,10 @@ export default function HomeTemplate({
                 {t('release:Active & Upcoming Drops')}
               </Heading>
 
-              <div className="grid gap-7 lg:grid-cols-4">
+              <div className="grid gap-7 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
                 {' '}
                 {upcomingPacks.map((pack) => (
-                  <AppLink
-                    key={pack.templateId}
-                    href={urls.release.replace(':packSlug', pack.slug)}
-                  >
-                    <ReleaseItem pack={pack} />
-                  </AppLink>
+                  <ReleaseItem pack={pack} key={pack.templateId} />
                 ))}
               </div>
             </div>
@@ -185,7 +180,7 @@ export default function HomeTemplate({
       ) : null}
 
       {notableCollectibles.length > 0 ? (
-        <div className="bg-gray-900 relative z-10 pb-12">
+        <div className="bg-gray-900 relative z-10 pb-12 px-4">
           <Heading
             level={2}
             size={1}
@@ -199,14 +194,12 @@ export default function HomeTemplate({
             className={clsx('mx-auto max-w-7xl z-20', css.notableCollectibles)}
           >
             {/* Steps cards */}
-            <Grid columns={4}>
-              {notableCollectibles.map((collectible) => (
-                <NotableCollectible
-                  collectible={collectible}
-                  key={collectible.templateId}
-                />
-              ))}
-            </Grid>
+            {notableCollectibles.map((collectible) => (
+              <NotableCollectible
+                collectible={collectible}
+                key={collectible.templateId}
+              />
+            ))}
           </div>
           <div
             className={clsx(

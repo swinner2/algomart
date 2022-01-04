@@ -1,5 +1,6 @@
 .metadata {
-  @apply text-left bg-yellow-400 bg-opacity-10 rounded-2xl px-2 py-4 m-2;
+  @apply text-left bg-gray-400 bg-opacity-10 rounded-2xl px-2 py-4 m-2;
+  backdrop-filter: blur(4px);
 }
 
 .column {
