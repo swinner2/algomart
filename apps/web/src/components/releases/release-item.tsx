@@ -17,7 +17,6 @@ export interface ReleaseItemProps {
 }
 
 export default function ReleaseItem({ pack }: ReleaseItemProps) {
-  console.log(pack)
   const locale = useLocale()
   const { t } = useTranslation()
 
