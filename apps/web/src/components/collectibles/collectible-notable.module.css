@@ -1,15 +1,7 @@
-.root {
-  @apply relative flex flex-col h-full overflow-hidden text-center  rounded-md shadow-large;
-}
-
-.imageWrapper {
-  @apply relative overflow-hidden hover:border-base-green focus:border-base-green;
-}
-
 .content {
   @apply p-4;
 }
 
 .title {
-  @apply px-4 text-lg font-bold text-white;
+  @apply absolute top-0 left-0 px-3 py-1 text-sm font-bold text-white bg-green-800 rounded-3xl bg-opacity-80 m-4;
 }

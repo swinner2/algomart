@@ -159,7 +159,7 @@ export default function ReleaseTemplate({
         )}
 
 
-        <div className='md:flex-row md:flex flex-col'>
+        <div className='md:flex-row md:flex flex-col mt-12'>
           {/* Media Gallery */}
           <MediaGallery media={[packTemplate.image]} />
           {/* Release Details */}

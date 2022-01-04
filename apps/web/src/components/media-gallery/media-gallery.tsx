@@ -63,18 +63,19 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
           </div>
         )}
 
-        <div className={clsx(css.fullWidth)}>
+        <div className={clsx(css.fullWidth, css.fullHeight)}>
           {/* Current selected media */}
           <div
             className={clsx(
               css.selectedMediaWrapper,
               css.overflowHidden,
-              css.aspect
+              css.aspect,
+              css.fullHeight
             )}
           >
             <Image
               alt={t('common:statuses.Selected Image')}
-              className={css.contain}
+              className={clsx(css.contain, css.fullHeight)}
               layout="fill"
               src={currentMedia}
               objectFit="cover"
