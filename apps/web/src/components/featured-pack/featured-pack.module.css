@@ -97,7 +97,7 @@
 }
 
 .backdropFilter {
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(2rem);
 }
 
 .backgroundImage {

@@ -35,11 +35,11 @@ export default function HomeTemplate({
   const isUpcoming = featuredPack.status === PackStatus.Upcoming
 
   return (
-    <section className="flex relative md:mt-0 mt-16 bg-darkBlue-100">
+    <section className="flex relative md:mt-0 mt-16">
       <div
         className={clsx(
           css.backgroundImage,
-          'absolute inset-0 overflow-hidden opacity-75 flex from-transparent via-transparent to-blue-200 bg-gradient-to-br'
+          'absolute inset-0 overflow-hidden'
         )}
       >
         <img
