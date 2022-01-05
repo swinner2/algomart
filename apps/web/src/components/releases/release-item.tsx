@@ -27,7 +27,7 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
 
   return (
     <div className={css.root}>
-      <div className="my-4 sm:my-0">
+      <div className="my-0">
         <div
           className={clsx(
             css.imageWrapper,
@@ -42,23 +42,33 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
             src={pack.image}
           />
           <div className={css.subContent}>
-            <div className="relative h-80 w-full">
+            <div className="relative h-80 w-full flex items-center">
               {pack.status === PackStatus.Expired ? (
-                <span className="uppercase absolute top-4 left-0 bg-red-600 rounded-sm px-2 py-1 text-sm">
+                <span
+                  className={clsx(
+                    css.status,
+                    'uppercase absolute top-4 left-0 bg-red-600 rounded-xl font-bold px-2 py-1'
+                  )}
+                >
                   purchased!
                 </span>
               ) : (
-                <span className="uppercase absolute top-4 left-0 bg-green-800 rounded-sm px-2 py-1 text-sm">
+                <span
+                  className={clsx(
+                    css.status,
+                    'uppercase absolute top-4 left-0 bg-blue-400 rounded-xl font-bold px-2 py-1'
+                  )}
+                >
                   purchasing!
                 </span>
               )}
-              <div className="absolute top-24">{pack.subtitle}</div>
+              <div>{pack.subtitle}</div>
               <div className="flex justify-center w-full absolute bottom-8">
                 <AppLink href={urls.release.replace(':packSlug', pack.slug)}>
                   <span
                     className={clsx(
                       css.dropshadow,
-                      'bg-gray-900 border-1 border-blue-800 text-md px-4 py-1 rounded-2xl flex items-center cursor-pointer'
+                      'bg-gray-900 border-1 border-blue-800 text-md px-4 py-1 rounded-2xl flex items-center font-bold cursor-pointer'
                     )}
                   >
                     {pack.status === PackStatus.Expired
