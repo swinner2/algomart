@@ -12,7 +12,7 @@
 
 .selectWrapper label {
   @apply ml-auto transform translate-y-1/2 shadow-large;
-  max-width: 175px;
+  max-width: 13rem;
 }
 
 .columns {

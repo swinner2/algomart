@@ -19,9 +19,9 @@
   @apply md:w-40 md:px-4 md:mx-2;
 }
 .tab:hover {
-  @apply bg-blue-600 bg-opacity-80 text-white;
+  @apply bg-blue-800 bg-opacity-80 text-white;
 }
 
 .tabActive {
-  @apply bg-blue-600 text-white;
+  @apply bg-blue-800 bg-opacity-70 text-white;
 }
