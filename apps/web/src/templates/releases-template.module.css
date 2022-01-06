@@ -37,7 +37,7 @@
 }
 
 .gridItem {
-  @apply no-underline;
+  @apply no-underline h-full;
 }
 
 .paginationWrapper {
