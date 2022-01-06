@@ -57,6 +57,9 @@ module.exports = {
           800: '#00fdff',
           1000: '#01224a',
         },
+        darkBlue: {
+          100: '#001b24',
+        },
         pink: {
           400: '#309AC0',
           600: '#EF466F', // Primary Buttons

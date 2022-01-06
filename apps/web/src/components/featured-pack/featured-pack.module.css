@@ -97,5 +97,11 @@
 }
 
 .backdropFilter {
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(2rem);
+}
+
+.backgroundImage {
+  opacity: 0.3;
+  filter: blur(8px);
+  -webkit-mask: linear-gradient(rgb(255, 255, 255), transparent);
 }

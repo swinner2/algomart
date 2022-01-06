@@ -155,7 +155,7 @@ export default function HomeTemplate({
       {upcomingPacks.length > 0 ? (
         <>
           <div className="bg-gray-900">
-            <div className="pt-12 pb-8 mx-auto max-w-screen-2xl px-4">
+            <div className="pt-12 pb-8 mx-auto max-w-7xl px-4">
               <Heading
                 level={2}
                 size={1}
