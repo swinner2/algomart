@@ -27,6 +27,7 @@ export interface SelectProps
   label?: string
   options: SelectOption[]
   selectedValue?: SelectOption | null
+  horizontal?: boolean
 }
 
 export default function Select({
@@ -39,6 +40,7 @@ export default function Select({
   label,
   options,
   selectedValue,
+  horizontal,
 }: SelectProps) {
   const [selected, setSelected] = useState(defaultOption || options[0])
   const value = selectedValue || selected
@@ -52,9 +54,17 @@ export default function Select({
   }
 
   return (
-    <label className={css.root} data-input="select" htmlFor={id}>
+    <label
+      className={clsx(css.root, horizontal && css.horizontal)}
+      data-input="select"
+      htmlFor={id}
+    >
       <div className={css.labelContainer}>
-        {label && <span className={css.label}>{label}</span>}
+        {label && (
+          <span className={clsx(css.label, horizontal ? 'mb-0' : 'mb-1')}>
+            {label}
+          </span>
+        )}
         {error && <span className={css.errorText}>{error}</span>}
         {!error && helpText && <span className={css.helpText}>{helpText}</span>}
       </div>
@@ -62,14 +72,15 @@ export default function Select({
         <div className={css.selectContainer}>
           <Listbox.Button
             className={clsx(
-              'mt-1 block w-full pl-3 pr-10 py-2 font-poppins bg-gray-900 border-2 border-gray-600 rounded-lg placeholder-gray-400 text-gray-50 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm rounded-md overflow-hidden',
+              'block w-full pl-3 pr-10 py-2 font-poppins bg-gray-900 border-2 border-gray-600 rounded-lg placeholder-gray-400 text-gray-50 focus:outline-none focus:ring-white focus:text-gray-900 sm:text-sm rounded-md overflow-hidden',
               {
                 [css.selectButtonDisabled]: disabled,
                 [css.selectButtonError]: error,
-              }
+              },
+              horizontal ? 'mt-0' : 'mt-1'
             )}
           >
-            <span className={css.selectButtonText}>{value.label}</span>
+            <span className="font-bold text-blue-800">{value.label}</span>
             <span className={css.selectButtonIconContainer}>
               <SelectorIcon
                 className={css.selectButtonIcon}
@@ -83,8 +94,8 @@ export default function Select({
               <Listbox.Option
                 className={({ active, selected }) =>
                   clsx(css.selectOption, {
-                    [css.selectOptionActive]: active,
                     [css.selectOptionSelected]: selected,
+                    [css.selectOptionActive]: active,
                   })
                 }
                 key={option.id}

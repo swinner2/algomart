@@ -43,6 +43,8 @@ export default function ReleasesTemplate({
           id="sortOption"
           options={state.selectOptions}
           selectedValue={state.selectedOption}
+          label="Sort by"
+          horizontal
         />
       </div>
       <div className={clsx(css.columns)}>
