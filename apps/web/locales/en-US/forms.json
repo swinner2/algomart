@@ -150,12 +150,28 @@
     },
     "zipCode": {
       "label": "Postal Code"
+    },
+    "reservePrice": {
+      "label": "Reserve Price"
+    },
+    "auctionType": {
+      "label": "Auction Type"
+    },
+    "expiresAt": {
+      "label": "Auction Until"
+    },
+    "collectibleId": {
+      "label": "Collectible"
+    },
+    "royalty": {
+      "label": "Royalty"
     }
   },
   "sections": {
     "Bank Account": "Bank Account",
     "Bank Address": "Bank Address",
     "Billing Address": "Billing Address",
-    "Credit Card": "Credit Card"
+    "Credit Card": "Credit Card",
+    "Collectible Auction": "Collectible Auction"
   }
 }
