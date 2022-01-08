@@ -34,13 +34,6 @@ export default function CollectiblesAuctionForm({
     <section className="pt-5">
       <div className={status === 'form' ? '' : 'hidden'}>
         <form className="" onSubmit={onSubmit}>
-          {formErrors && 'expirationDate' in formErrors && (
-            <AlertMessage
-              className=""
-              content={formErrors.expirationDate}
-              variant="red"
-            />
-          )}
           <Heading level={2}>{t('forms:sections.Collectible Auction')}</Heading>
           <TextInput
             error={formErrors?.collectibleId as string}
