@@ -29,10 +29,10 @@ export default function LoginEmailTemplate({
   const { t } = useTranslation()
   return (
     <>
-      <Heading className="mb-8 text-center">
+      <Heading className="mb-8 text-center mt-20 text-blue-800">
         {t('auth:Sign into your account')}
       </Heading>
-      <form className="relative max-w-sm mx-auto" onSubmit={handleLogin}>
+      <form className="relative max-w-sm mx-auto px-4" onSubmit={handleLogin}>
         {status === 'error' && error && (
           <AlertMessage
             className="mb-6"

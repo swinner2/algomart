@@ -30,9 +30,6 @@ export default function DefaultLayout({
     <>
       <HeadTag pageDescription={pageDescription} pageTitle={pageTitle} />
       <div className={common.background}>
-        <EmailVerification />
-        <UntransferredPacks />
-
         <section>
           <AppHeader />
 
@@ -41,6 +38,8 @@ export default function DefaultLayout({
             panelPadding={panelPadding}
             width={width}
           >
+            <EmailVerification />
+            <UntransferredPacks />
             {children}
           </MainPanel>
         </section>

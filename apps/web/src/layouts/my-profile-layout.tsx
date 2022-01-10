@@ -37,13 +37,12 @@ export default function MyProfileLayout({
       <HeadTag pageDescription={pageDescription} pageTitle={pageTitle} />
 
       <div className={common.background}>
-        <EmailVerification />
-        <UntransferredPacks />
-
         <section>
           <AppHeader />
 
           <MainPanel width="large" className="mx-auto max-w-7xl">
+            <EmailVerification />
+            <UntransferredPacks />
             {isLoading && <LoadingStatus />}
             {!isLoading && !isAuthenticated && <NotAuthenticated />}
             {!isLoading && isAuthenticated && (

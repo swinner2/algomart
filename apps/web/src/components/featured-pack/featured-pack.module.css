@@ -104,4 +104,5 @@
   opacity: 0.3;
   filter: blur(8px);
   -webkit-mask: linear-gradient(rgb(255, 255, 255), transparent);
+  background-image: url('/images/backgrounds/home-background.png');
 }
