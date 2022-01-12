@@ -12,6 +12,7 @@ import {
   IPFSStatus,
   PublicCollectibleQuerystring,
   SortDirection,
+  TransferCollectibleToEscrow,
 } from '@algomart/schemas'
 import { CollectibleListShowcase } from '@algomart/schemas'
 import { CollectibleShowcaseQuerystring } from '@algomart/schemas'
@@ -919,5 +920,88 @@ export default class CollectiblesService {
       total: mappedCollectibles.length,
       collectibles: collectiblesPage,
     }
+  }
+
+  async transferCollectibleToEscrowStatus(
+    collectibleId: string
+  ): Promise<TransferPackStatusList> {
+    const collectible = await CollectibleModel.query()
+      .findOne('Collectible.id', collectibleId)
+      .withGraphJoined('collectibles.latestTransferTransaction')
+
+    userInvariant(collectible, 'pack not found', 404)
+
+    return {
+      status: [
+        {
+          collectibleId: collectible.id,
+          status: collectible.latestTransferTransaction?.status,
+        },
+      ],
+    }
+  }
+
+  async transferCollectibleToEscrow(
+    request: TransferCollectibleToEscrow,
+    trx?: Transaction
+  ) {
+    console.log('inside transferCollectibleToEscrow')
+    const user = await UserAccountModel.query(trx)
+      .findOne('externalId', request.externalId)
+      .withGraphJoined('algorandAccount.creationTransaction')
+
+    userInvariant(user, 'user not found', 404)
+
+    // const pack = await PackModel.query(trx)
+    //   .where('id', request.packId)
+    //   .where('ownerId', user.id)
+    //   .select('id')
+    //   .withGraphFetched('collectibles')
+    //   .modifyGraph('collectibles', (builder) => {
+    //     builder.select('id')
+    //   })
+    //   .first()
+
+    // userInvariant(pack, 'pack not found', 404)
+
+    // if (!pack) {
+    //   return false
+    // }
+
+    // this.logger.info({ pack }, 'pack to be transferred')
+
+    // if (user.algorandAccount?.creationTransactionId === null) {
+    //   await this.accounts.initializeAccount(user.id, request.passphrase, trx)
+    // }
+
+    // const collectibleIds = pack.collectibles?.map((c) => c.id) || []
+
+    // await Promise.all(
+    //   collectibleIds.map(async (id) => {
+    //     await this.collectibles.transferToUserFromCreator(
+    //       id,
+    //       user.id,
+    //       request.passphrase,
+    //       trx
+    //     )
+    //   })
+    // )
+
+    // // Create transfer success notification to be sent to user
+    // const packWithBase = await this.getPackById(request.packId)
+    // if (packWithBase) {
+    //   await this.notifications.createNotification(
+    //     {
+    //       type: NotificationType.TransferSuccess,
+    //       userAccountId: user.id,
+    //       variables: {
+    //         packTitle: packWithBase.title,
+    //       },
+    //     },
+    //     trx
+    //   )
+    // }
+
+    return true
   }
 }

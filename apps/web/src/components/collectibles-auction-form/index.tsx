@@ -36,13 +36,6 @@ export default function CollectiblesAuctionForm({
         <form className="" onSubmit={onSubmit}>
           <Heading level={2}>{t('forms:sections.Collectible Auction')}</Heading>
           <TextInput
-            error={formErrors?.collectibleId as string}
-            label={t('forms:fields.collectibleId.label')}
-            name="collectibleId"
-            placeholder="Enter collectible ID"
-            variant="small"
-          />
-          <TextInput
             error={formErrors?.auctionType as string}
             label={t('forms:fields.auctionType.label')}
             name="auctionType"

@@ -5,6 +5,7 @@ import {
   CollectiblesByAlgoAddressQuerystring,
   CollectibleShowcaseQuerystring,
   PublicCollectibleQuerystring,
+  TransferCollectibleToEscrow,
 } from '@algomart/schemas'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
@@ -124,5 +125,32 @@ export async function getPublicCollectibles(
 
   const result = await collectiblesService.getPublicCollectibles(request.query)
 
+  reply.send(result)
+}
+
+export async function transferCollectibleToEscrow(
+  request: FastifyRequest<{ Body: TransferCollectibleToEscrow }>,
+  reply: FastifyReply
+) {
+  const collectiblesService = request
+    .getContainer()
+    .get<CollectiblesService>(CollectiblesService.name)
+  await collectiblesService.transferCollectibleToEscrow(
+    request.body,
+    request.transaction
+  )
+  reply.status(204).send()
+}
+
+export async function transferCollectibleToEscrowStatus(
+  request: FastifyRequest<{ Params: PackId }>,
+  reply: FastifyReply
+) {
+  const collectiblesService = request
+    .getContainer()
+    .get<CollectiblesService>(CollectiblesService.name)
+  const result = await collectiblesService.transferCollectibleToEscrowStatus(
+    request.params.packId
+  )
   reply.send(result)
 }

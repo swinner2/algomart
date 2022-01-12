@@ -44,6 +44,7 @@ import {
   RedeemCode,
   SendBankAccountInstructions,
   SetWithCollection,
+  TransferCollectibleToEscrow,
   TransferPack,
   TransferPackStatusList,
   UpdatePaymentCard,
@@ -353,6 +354,20 @@ export class ApiClient {
   async transferPackStatus(packId: string): Promise<TransferPackStatusList> {
     return await this.http
       .get(`packs/transfer/${packId}`)
+      .json<TransferPackStatusList>()
+  }
+
+  // TODO change json type
+  async transferCollectibleToEscrow(json: TransferCollectibleToEscrow) {
+    return await this.http.post('collectibles/transfer-to-escrow', { json })
+  }
+
+  // TODO make this work
+  async transferCollectibleToEscrowStatus(
+    collectibleId: string
+  ): Promise<TransferPackStatusList> {
+    return await this.http
+      .get(`packs/transfer/${collectibleId}`)
       .json<TransferPackStatusList>()
   }
 
