@@ -37,9 +37,9 @@
 
 .toolbar {
   /* Base */
-  @apply flex items-center justify-between gap-2 border-t border-gray-800;
+  @apply flex flex-col border-t border-gray-800;
   /* Tablet + */
-  @apply md:pt-5 md:mt-5;
+  @apply md:pt-5 md:mt-5 md:flex md:flex-row md:items-center md:justify-between md:gap-2;
 }
 
 .emptyState {
@@ -51,9 +51,9 @@
 
 .linkWrapper {
   /* Base */
-  @apply border-b border-gray-800 py-5 text-center;
+  @apply border-b border-gray-800 py-5 text-center mx-auto;
   /* Tablet + */
-  @apply md:text-left md:py-0 md:border-none;
+  @apply md:text-left md:py-0 md:border-none md:mx-0;
 }
 
 .toggleWrapper {

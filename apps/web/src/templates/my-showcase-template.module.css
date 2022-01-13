@@ -3,7 +3,7 @@
 }
 
 .ownedCollectiblesHeading {
-  @apply pb-2 mt-8 mb-6 text-center border-b border-base-gray-border md:mt-14;
+  @apply pb-2 mt-8 mb-6 text-center border-b border-base-gray-800 md:mt-14 text-gray-200;
 }
 
 .notification {

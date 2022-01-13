@@ -111,7 +111,8 @@
     "Setup Profile": "Setup Profile",
     "Sign Up": "Sign Up",
     "Transactions": "Transactions",
-    "User Profile": "@{{name}} Profile"
+    "User Profile": "@{{name}} Profile",
+    "My Auctions": "My Auctions"
   },
   "nav": {
     "aria": {

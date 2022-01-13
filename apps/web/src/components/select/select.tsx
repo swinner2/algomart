@@ -31,6 +31,7 @@ export interface SelectProps
 }
 
 export default function Select({
+  className,
   defaultOption,
   disabled,
   error,
@@ -55,7 +56,7 @@ export default function Select({
 
   return (
     <label
-      className={clsx(css.root, horizontal && css.horizontal)}
+      className={clsx(css.root, horizontal && css.horizontal, className)}
       data-input="select"
       htmlFor={id}
     >

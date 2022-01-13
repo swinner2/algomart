@@ -15,6 +15,7 @@ import {
   collectibleIsNumberOfDaysOld,
   getCollectionTabs,
 } from '@/utils/collections'
+import { urls } from '@/utils/urls'
 
 export interface MyCollectiblesTemplateProps {
   activeAsset: CollectibleWithDetails | null
@@ -91,7 +92,12 @@ export default function MyCollectiblesTemplate({
                 }
                 key={asset.id}
                 onClick={() => toggleViewer(asset)}
+                auctionLink={urls.addCollectibleAuction.replace(
+                  ':collectibleSlug',
+                  asset.title
+                )}
                 title={asset.title}
+                mode="linkAuction"
               />
             ))}
           </Grid>

@@ -36,7 +36,7 @@ export default function MyCollectionsTemplate({
       {/* Collections */}
       <section className="mt-12">
         {collectionGroups.length > 0 ? (
-          <Grid columns={2}>
+          <Grid columns={4}>
             {collectionGroups.map(({ collection }) => {
               return (
                 <AppLink
