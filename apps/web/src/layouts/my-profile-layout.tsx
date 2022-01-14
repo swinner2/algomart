@@ -55,11 +55,11 @@ export default function MyProfileLayout({
                   {pageTitle}
                 </Heading>
 
-                <div className={css.columns}>
-                  <section className={css.navColumn}>
+                <div className="flex mx-4">
+                  <section className="lg:w-80 lg:mr-32 md:mr-12 md:w-80 xs:mr-0 xs:w-0">
                     <MyProfileNav screen="desktop" />
                   </section>
-                  <section className={css.contentColumn}>{children}</section>
+                  <section className="w-full">{children}</section>
                 </div>
               </>
             )}

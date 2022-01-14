@@ -25,7 +25,7 @@
 
 /* Profile Image Input */
 .profileImageContainer {
-  @apply flex items-center justify-between p-6 mt-2 rounded-md;
+  @apply flex items-center justify-between py-6 mt-2 rounded-md;
 }
 
 .avatarContainer {
@@ -51,7 +51,7 @@
 }
 
 .profileImageRemove {
-  @apply pr-0 mb-0 underline text-base-gray-medium;
+  @apply mb-0 w-28 text-blue-800;
 }
 
 /* Passphrase Input */

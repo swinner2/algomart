@@ -19,11 +19,11 @@
 }
 
 .editButton {
-  @apply absolute right-0 underline text-base-gray-nav;
+  @apply absolute right-0 text-blue-800;
 }
 
 .cancelButton {
-  @apply px-0 underline text-base-gray-text;
+  @apply px-0 text-blue-800;
 }
 
 .saveButton {

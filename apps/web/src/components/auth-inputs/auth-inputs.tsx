@@ -153,7 +153,7 @@ export function ProfileImage({
             <div className={css.profileImageChange}>
               <div {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Button size="small" type="button">
+                <Button className="text-white" size="small" type="button">
                   {t('common:actions.Change')}
                 </Button>
               </div>
