@@ -29,7 +29,9 @@ export default function ResetPasswordTemplate({
   const { t } = useTranslation()
   return (
     <>
-      <Heading className="mb-8 text-center">{t('auth:Reset Password')}</Heading>
+      <Heading className="mb-8 text-center mt-12 text-blue-800">
+        {t('auth:Reset Password')}
+      </Heading>
 
       <form
         className="relative max-w-sm mx-auto"
