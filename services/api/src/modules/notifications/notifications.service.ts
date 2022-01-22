@@ -165,6 +165,10 @@ export default class NotificationsService {
     })
 
     // Build notification
+
+    this.logger.info(
+      `in getTransferSuccessNotification html: ${JSON.stringify(html)}`
+    )
     const message = {
       to: userAccount?.email as string,
       subject: t('transferSuccess.subject'),
