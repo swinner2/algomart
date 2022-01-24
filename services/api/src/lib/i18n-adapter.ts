@@ -7,7 +7,7 @@ import { logger } from '@/utils/logger'
 
 export default class I18nAdapter {
   constructor() {
-    logger.child({ poop: true }).info(
+    logger.child({ i18n_adapter: true }).info(
       `i18n: ${JSON.stringify({
         fallbackLng: DEFAULT_LOCALE,
         lng: DEFAULT_LOCALE,
@@ -42,7 +42,7 @@ export default class I18nAdapter {
     keyPrefix?: string
   ): TFunction {
     logger
-      .child({ poop: true })
+      .child({ i18n_adapter: true })
       .info(`inside getFixedT ${lng} ${ns} ${keyPrefix}`)
     return i18next.getFixedT(lng, ns, keyPrefix)
   }
