@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "0.3.0",
-    "@tailwindcss/line-clamp": "0.2.2",
+    "@tailwindcss/line-clamp": "0.3.1",
     "@types/cookies": "0.7.7",
     "@types/cors": "2.8.12",
     "@types/crypto-js": "4.0.2",
