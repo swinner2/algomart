@@ -6,16 +6,17 @@ import useTranslation from 'next-translate/useTranslation'
 import css from './release-item.module.css'
 
 import Counter from '@/components/counter/counter'
+import AppLink from '@/components/app-link/app-link'
 import { useLocale } from '@/hooks/use-locale'
 import { cmsImageLoader } from '@/utils/cms-image-loader'
 import { formatCurrency } from '@/utils/format-currency'
+import { urls } from '@/utils/urls'
 
 export interface ReleaseItemProps {
   pack: PublishedPack
 }
 
 export default function ReleaseItem({ pack }: ReleaseItemProps) {
-  console.log(pack)
   const locale = useLocale()
   const { t } = useTranslation()
 
@@ -26,17 +27,63 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
 
   return (
     <div className={css.root}>
-      <div className="relative my-4 sm:my-0 cursor-pointer">
-        <div className={`w-full relative h-80`}>
+      <div className="my-0">
+        <div
+          className={clsx(
+            css.imageWrapper,
+            `w-full relative h-80 rounded-2xl overflow-hidden  border-1 border-gray-800`
+          )}
+        >
           <Image
             alt={pack.title}
             layout="fill"
-            className=" transition-all hover:opacity-80 object-contain lg:object-cover w-full h-full"
+            className="transition-all hover:opacity-80 object-cover lg:object-cover w-full h-full"
             loader={cmsImageLoader}
             src={pack.image}
           />
+          <div className={css.subContent}>
+            <div className="relative h-80 w-full flex items-center">
+              {pack.status === PackStatus.Expired ? (
+                <span
+                  className={clsx(
+                    css.status,
+                    'uppercase absolute top-4 left-0 bg-red-600 rounded-xl font-bold px-2 py-1'
+                  )}
+                >
+                  purchased!
+                </span>
+              ) : (
+                <span
+                  className={clsx(
+                    css.status,
+                    'uppercase absolute top-4 left-0 bg-blue-400 rounded-xl font-bold px-2 py-1'
+                  )}
+                >
+                  purchasing!
+                </span>
+              )}
+              <div>{pack.subtitle}</div>
+              <div className="flex justify-center w-full absolute bottom-8">
+                <AppLink href={urls.release.replace(':packSlug', pack.slug)}>
+                  <span
+                    className={clsx(
+                      css.dropshadow,
+                      'bg-gray-900 border-1 border-blue-800 text-md px-4 py-1 rounded-2xl flex items-center font-bold cursor-pointer'
+                    )}
+                  >
+                    {pack.status === PackStatus.Expired
+                      ? 'View details'
+                      : 'Place a bid'}
+                    <img
+                      src="/images/icons/bid_btn_white.svg"
+                      className="ml-2"
+                    />
+                  </span>
+                </AppLink>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className={css.subtitle}>{pack.subtitle}</div>
       </div>
 
       {/* Metadata for active auction pack */}

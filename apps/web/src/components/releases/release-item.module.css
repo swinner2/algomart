@@ -1,23 +1,29 @@
 .root {
-  @apply relative flex flex-col h-full overflow-hidden text-center rounded-xl shadow-large pb-4 border-1 border-gray-600 bg-gray-900;
+  @apply relative flex flex-col h-full text-center shadow-large pb-4 bg-gray-900 rounded-2xl;
+
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
   transition: all;
   transition-duration: 0.3s;
 }
 
 .root:hover {
-  filter: drop-shadow(0 0 0.3rem #6dfeff);
-  transform: scale(1.02);
-}
-.root:hover .subtitle {
-  @apply flex items-center;
+  box-shadow: 5px 5px #00fdff;
 }
 
-.subtitle {
-  @apply bg-gray-900 bg-opacity-70 text-white text-center  w-full h-full absolute top-0 hidden p-4;
+.imageWrapper:hover .subContent {
+  transform: scale(1);
+}
+
+.subContent {
+  @apply bg-gray-900 bg-opacity-70 text-white text-center w-full h-full absolute top-0 flex items-center p-4;
+  transform: scale(0);
+  transition: all;
+  transition-duration: 0.3s;
 }
 
 .imageWrapper {
-  @apply relative overflow-hidden bg-black hover:border-blue-600 focus:border-blue-600;
+  transition: all;
+  transition-duration: 0.3s;
 }
 
 .content {
@@ -47,4 +53,13 @@
 
 .metadataValue {
   @apply font-poppins text-blue-800 font-bold text-xs p-1 border-2 border-blue-800 rounded max-h-7 mt-3 w-max;
+}
+
+.dropshadow {
+  filter: drop-shadow(0 0 0.3rem #6dfeff);
+}
+
+.status {
+  font-size: 13px;
+  line-height: 15px;
 }

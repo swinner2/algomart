@@ -7,7 +7,7 @@
 }
 
 .label {
-  @apply mb-1 w-1/2;
+  @apply text-gray-200 w-full;
 }
 
 .helpText {
@@ -19,7 +19,7 @@
 }
 
 .selectContainer {
-  @apply relative z-20;
+  @apply relative z-20 w-80;
 }
 
 .selectButton {
@@ -40,7 +40,7 @@
 }
 
 .selectButtonIconContainer {
-  @apply absolute flex items-center inset-y-0 pointer-events-none pr-2 right-0;
+  @apply absolute flex items-center inset-y-0 pointer-events-none pr-2 right-0 text-blue-800;
 }
 
 .selectButtonIcon {
@@ -48,7 +48,7 @@
 }
 
 .selectOptions {
-  @apply absolute bg-white border border-base-gray-border max-h-60 mt-1 overflow-auto py-1 rounded-sm shadow-md text-sm w-full;
+  @apply absolute bg-gray-900 border border-blue-800 max-h-60 mt-1 overflow-auto py-1 rounded-sm shadow-md text-sm w-full text-white;
 }
 
 .selectOption {
@@ -56,9 +56,13 @@
 }
 
 .selectOptionActive {
-  @apply bg-blue-600;
+  @apply text-blue-800 font-extrabold;
 }
 
 .selectOptionSelected {
-  @apply bg-base-gray-bg font-bold;
+  @apply font-bold text-blue-800;
+}
+
+.horizontal {
+  @apply flex items-center justify-center;
 }

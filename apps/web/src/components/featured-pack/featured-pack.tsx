@@ -35,33 +35,36 @@ export default function HomeTemplate({
   const isUpcoming = featuredPack.status === PackStatus.Upcoming
 
   return (
-    <section className="flex relative md:mt-0 mt-16 bg-gray-800">
-      <div className="absolute inset-0 overflow-hidden opacity-75 flex from-transparent via-transparent to-blue-200 bg-gradient-to-br top-40">
+    <section className="flex relative md:mt-0 mt-16">
+      <div
+        className={clsx(
+          css.backgroundImage,
+          'absolute inset-0 overflow-hidden'
+        )}
+      >
         <img
-          src="/images/backgrounds/background-wave.svg"
+          src="/images/backgrounds/home-background.png"
           alt=""
-          className="w-full object-center object-cover"
+          className="object-cover w-full"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 z-10 mx-auto max-w-screen-2xl pt-12 pb-20">
-        <div className="col-span-1 md:col-span-7 md:mt-12 mt-2 flex flex-col justify-center ml-4 md:ml-12">
-          <div className="font-extrabold lg:text-7xl md:text-5xl sm:text-4xl text-5xl tracking-wide leading-tight pr-20 text-blue-800">
+        <div className="col-span-1 md:col-span-7 md:mt-12 mt-2 flex flex-col justify-center mx-4 md:ml-12">
+          <div className="font-extrabold xl:text-6xl lg:text-5xl md:text-4xl sm:text-4xl text-4xl tracking-wide leading-tight text-white">
             Buy, Sell & Trade Authentic NFTs.
           </div>
-          <div className="text-gray-200 md:text-3xl text-2xl font-bold mt-4">
+          <div className="text-blue-800 xl:text-4xl lg:text-3xl md:text-2xl sm:text-2xl text-2xl lg:mt-16 sm:mt-8 xs:mt-8 mt-8 font-extrabold">
             Built by the passionate for the passionate
-            <ul className="list-inside list-disc">
-              <li>Carbon Neutral</li>
-              <li>Fees as low as $0.001</li>
-              <li>Crypto and fiat supported</li>
+            <ul className="list-inside list-none font-light lg:mt-8 lg:ml-8 sm:ml-4 sm:mt-4 xs:ml-4 xs:mt-4 ml-4 mt-4 text-gray-100">
+              <li>- Carbon Neutral</li>
+              <li>- Fees as low as $0.001</li>
+              <li>- Crypto and fiat supported</li>
             </ul>
           </div>
           <div className="mt-12 w-72 mx-auto md:ml-0">
             <AppLink
-              className={
-                'flex items-center justify-center px-4 py-3 border border-blue-500 font-semibold text-sm rounded-full shadow-sm text-gray-50 hover:cursor-pointer focus:outline-none bg-gradient-to-r from-green-400 to-blue-500 hover:sha active:shadow-inner font-poppins disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed'
-              }
+              className="flex items-center justify-center px-4 py-3 border border-blue-500 font-semibold text-sm rounded-full shadow-sm text-gray-50 hover:cursor-pointer focus:outline-none bg-gradient-to-r from-green-400 to-blue-500 hover:sha active:shadow-inner font-poppins disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed"
               href={'/releases'}
               key={'/releases'}
             >
@@ -73,12 +76,7 @@ export default function HomeTemplate({
           {/* Columns */}
           <div className="sm:flex sm:flex-col sm:items-center rounded-xl relative">
             {/* Image */}
-            <div
-              className={clsx(
-                css.dropshadow,
-                'w-full md:w-4/5 aspect-w-16 aspect-w-9 mt-6'
-              )}
-            >
+            <div className="w-3/4 aspect-w-16 aspect-w-9 mt-6 mx-auto">
               <Image
                 src={featuredPack.image}
                 className="rounded-xl"
@@ -90,9 +88,14 @@ export default function HomeTemplate({
             </div>
 
             {/* Content */}
-            <div className="bg-gray-900 bg-opacity-75 rounded-xl md:relative lg:absolute relative md:-bottom-12 lg:-bottom-16 lg:right-48 md:w-4/5 py-4 px-8 mt-4 mx-4">
+            <div
+              className={clsx(
+                css.backdropFilter,
+                'bg-gray-200 bg-opacity-25 rounded-xl xl:absolute lg:absolute md:relative relative xl:-bottom-16 lg:-bottom-36 md:bottom-0 bottom-0 xl:right-48 lg:right-32 md:w-4/5 py-4 lg:px-8 md:px-4 sm:px-4 px-4 mt-4 mx-4'
+              )}
+            >
               <Heading
-                className="text-blue-800 lg:text-2xl md:text-xl mb-4"
+                className="text-blue-800 lg:text-xl md:text-md mb-4"
                 level={2}
                 bold
               >
@@ -100,7 +103,7 @@ export default function HomeTemplate({
               </Heading>
 
               {/* CTA bar */}
-              <div className="p-4 text-sm font-bold text-center text-white uppercase bg-yellow-400 bg-opacity-40 rounded">
+              <div className="p-4 text-xs font-bold text-center text-white uppercase bg-green-800 bg-opacity-70 rounded">
                 {isAuction ? (
                   <>
                     {isActive && (

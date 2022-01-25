@@ -1,15 +1,15 @@
-.root {
-  @apply relative flex flex-col h-full overflow-hidden text-center  rounded-md shadow-large;
-}
-
-.imageWrapper {
-  @apply relative overflow-hidden hover:border-base-green focus:border-base-green;
-}
-
 .content {
-  @apply p-4;
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
+  transition: all;
+  transition-duration: 0.3s;
+}
+
+.content:hover {
+  box-shadow: 3px 3px #00fdff;
 }
 
 .title {
-  @apply px-4 text-lg font-bold text-white;
+  @apply absolute top-0 left-0 px-3 py-1 font-bold text-white bg-blue-400 rounded-3xl m-4;
+  font-size: 13px;
+  line-height: 15px;
 }

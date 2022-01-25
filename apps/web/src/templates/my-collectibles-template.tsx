@@ -75,6 +75,8 @@ export default function MyCollectiblesTemplate({
               id="sortOption"
               options={selectOptions}
               selectedValue={selectedOption}
+              label="Sort by"
+              horizontal
             />
           </div>
           <Grid>

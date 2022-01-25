@@ -45,6 +45,7 @@ module.exports = {
         },
         green: {
           600: '#91ff00',
+          800: '#45B26B', // badge background
         },
         yellow: {
           400: '#dcd48b',
@@ -55,6 +56,9 @@ module.exports = {
           600: '#18A5D8',
           800: '#00fdff',
           1000: '#01224a',
+        },
+        darkBlue: {
+          100: '#001b24',
         },
         pink: {
           400: '#309AC0',
@@ -67,7 +71,7 @@ module.exports = {
           400: '#777E90', // Icons/Typography
           600: '#353945', // Pill Buttons/Borders
           800: '#23262F', // Favorite Button
-          900: '#090B16', // Background
+          900: '#0b0b1d', // Background
         },
         base: {
           errorRed: '#AC0000',
@@ -108,7 +112,7 @@ module.exports = {
             400: '#777E90', // Icons/Typography
             600: '#353945', // Pill Buttons/Borders
             800: '#23262F', // Favorite Button
-            900: '#090B16', // Background
+            900: '#0b0b1d', // Background
             dark: colors.gray['500'],
             text: colors.coolGray['50'],
             nav: '#e5e5e5',

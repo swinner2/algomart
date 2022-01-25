@@ -81,7 +81,9 @@ export default class NotificationsService {
           userAccount: { locale },
         } = notification
         const t = this.i18n.getFixedT(locale, 'emails')
-
+        this.logger
+          .child({ poop: true })
+          .info(`after t 1 inside dispatchNotifications t ${t}`)
         // Attempt to send notification
         try {
           const message = this.dispatchStore[type](notification, t)
@@ -165,6 +167,10 @@ export default class NotificationsService {
     })
 
     // Build notification
+    this.logger
+      .child({ poop: true })
+      .info(`in getTransferSuccessNotification html: ${JSON.stringify(html)}`)
+
     const message = {
       to: userAccount?.email as string,
       subject: t('transferSuccess.subject'),

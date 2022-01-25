@@ -1,4 +1,4 @@
-import { CollectibleListWithTotal, CollectionWithSets } from '@algomart/schemas'
+import { CollectibleList, CollectionWithSets } from '@algomart/schemas'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 
@@ -17,7 +17,7 @@ import { urls } from '@/utils/urls'
 
 interface PublicCollectionPageProps {
   collection: CollectionWithSets
-  collectibles: CollectibleListWithTotal
+  collectibles: CollectibleList
 }
 
 export default function PublicCollectionPage({

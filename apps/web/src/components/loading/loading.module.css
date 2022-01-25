@@ -13,7 +13,7 @@
 
 .svgCorner:first-child,
 .svgCircle:first-child {
-  @apply stroke-current text-blue-600;
+  @apply stroke-current text-blue-800;
 }
 
 .svgCorner:last-child,
@@ -25,12 +25,11 @@
 }
 
 .loadingText {
-  @apply mt-4 text-base-gray-medium text-center;
+  @apply mt-4 text-white text-center font-extrabold;
 }
 
 .primaryLoadingText {
 }
 
 .secondaryLoadingText {
-  @apply font-bold;
 }

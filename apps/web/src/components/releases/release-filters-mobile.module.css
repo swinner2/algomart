@@ -12,7 +12,7 @@
 }
 
 .overlay {
-  @apply bg-white bg-opacity-100 !important;
+  @apply bg-gray-900 bg-opacity-100 !important;
 }
 
 /* Content */
@@ -27,7 +27,7 @@
 }
 
 .dialogHeadingRow {
-  @apply p-5 border-b-8 border-base-gray-dark flex items-center justify-end;
+  @apply p-5 flex items-center justify-end;
 }
 
 /* Floating Filter Button */
