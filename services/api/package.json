@@ -26,7 +26,7 @@
     "@types/node": "16.11.10",
     "@types/nodemailer": "6.4.4",
     "@types/rosie": "0.0.40",
-    "@types/uuid": "8.3.3",
+    "@types/uuid": "8.3.4",
     "nyc": "15.1.0",
     "rosie": "2.1.0",
     "sqlite3": "5.0.2",
