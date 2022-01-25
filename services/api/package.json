@@ -21,7 +21,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/crypto-js": "4.0.2",
+    "@types/crypto-js": "4.1.0",
     "@types/i18next-fs-backend": "1.1.2",
     "@types/node": "16.11.10",
     "@types/nodemailer": "6.4.4",
