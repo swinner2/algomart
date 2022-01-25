@@ -154,6 +154,12 @@ export const CollectibleListShowcaseSchema = Type.Object({
   collectibles: CollectibleListSchema,
 })
 
+export const TransferCollectibleToEscrowSchema = Type.Object({
+  externalId: Type.String(),
+  collectibleId: IdSchema,
+  passphrase: Type.String(),
+})
+
 export type Collectible = Simplify<Static<typeof CollectibleSchema>>
 export type CollectibleOwnership = Simplify<
   Static<typeof CollectibleOwnershipSchema>
@@ -185,4 +191,7 @@ export type CollectibleListWithTotal = Simplify<
 export type CollectibleId = Simplify<Static<typeof CollectibleIdSchema>>
 export type CollectibleListShowcase = Simplify<
   Static<typeof CollectibleListShowcaseSchema>
+>
+export type TransferCollectibleToEscrow = Simplify<
+  Static<typeof TransferCollectibleToEscrowSchema>
 >

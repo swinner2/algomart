@@ -7,6 +7,7 @@ import {
   CollectiblesByAlgoAddressQuerystringSchema,
   CollectibleShowcaseQuerystringSchema,
   PublicCollectibleQuerystringSchema,
+  TransferCollectibleToEscrowSchema,
 } from '@algomart/schemas'
 import { Type } from '@sinclair/typebox'
 import { FastifyInstance } from 'fastify'
@@ -131,4 +132,38 @@ export async function collectiblesRoutes(app: FastifyInstance) {
       },
       getPublicCollectibles
     )
+    .post(
+      '/transfer-to-escrow',
+      {
+        transact: true,
+        schema: {
+          tags,
+          security,
+          description:
+            'Used to initiate the transfer of a collectible to escrow account.',
+          body: TransferCollectibleToEscrowSchema,
+          response: {
+            204: Type.Null(),
+          },
+        },
+      },
+      transferPack
+    )
+
+  // .get(
+  //   '/transfer/:packId',
+  //   {
+  //     schema: {
+  //       tags,
+  //       security,
+  //       description:
+  //         'Get the transfer status of each collectible in the pack.',
+  //       params: PackIdSchema,
+  //       response: {
+  //         200: TransferPackStatusListSchema,
+  //       },
+  //     },
+  //   },
+  //   transferPackStatus
+  // )
 }

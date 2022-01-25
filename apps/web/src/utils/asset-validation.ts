@@ -61,6 +61,9 @@ const releaseSlug = (t: Translate, pattern = /^[\da-z-]{1,32}$/g) =>
 const packId = (t: Translate) =>
   string(required(t('forms:errors.required') as string))
 
+const collectibleId = (t: Translate) =>
+  string(required(t('forms:errors.required') as string))
+
 const packTemplateId = (t: Translate) =>
   string(required(t('forms:errors.required') as string))
 
@@ -101,6 +104,12 @@ export const validateRedeemAsset = (t: Translate) =>
 export const validateTransferAsset = (t: Translate) =>
   object({
     packId: packId(t),
+    passphrase: passphrase(t),
+  })
+
+export const validateTransferAssetToEscrow = (t: Translate) =>
+  object({
+    collectibleId: collectibleId(t),
     passphrase: passphrase(t),
   })
 

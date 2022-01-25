@@ -81,6 +81,31 @@ export class CollectibleService implements CollectibleAPI {
     return response.status
   }
 
+  async transferToEscrow(
+    collectibleId: string,
+    passphrase: string
+  ): Promise<boolean> {
+    const response = await this.http.post(urls.api.v1.assetTransferToEscrow, {
+      json: { collectibleId, passphrase: passphrase },
+      // This may take a while, keep a long timeout...
+      timeout: 60_000,
+    })
+
+    return response.ok
+  }
+
+  async transferToEscrowStatus(
+    collectibleId: string
+  ): Promise<TransferPackStatusList> {
+    const response = await this.http
+      .get(urls.api.v1.assetTransferToEscrow, {
+        searchParams: { collectibleId },
+      })
+      .json<TransferPackStatusList>()
+
+    return response
+  }
+
   async transfer(packId: string, passphrase: string): Promise<boolean> {
     const response = await this.http.post(urls.api.v1.assetTransfer, {
       json: { packId, passphrase: passphrase },

@@ -3,6 +3,7 @@ import useTranslation from 'next-translate/useTranslation'
 
 import css from './my-collectibles-template.module.css'
 
+import AppLink from '@/components/app-link/app-link'
 import CollectibleBrowserDialog from '@/components/collectibles/collectible-browser-dialog'
 import CollectibleItem from '@/components/collectibles/collectible-item'
 import NoCollectiblesContent from '@/components/collectibles/no-collectibles-content'
@@ -15,6 +16,7 @@ import {
   collectibleIsNumberOfDaysOld,
   getCollectionTabs,
 } from '@/utils/collections'
+import { urls } from '@/utils/urls'
 
 export interface MyCollectiblesTemplateProps {
   activeAsset: CollectibleWithDetails | null
@@ -81,18 +83,29 @@ export default function MyCollectiblesTemplate({
           </div>
           <Grid>
             {assets.map((asset) => (
-              <CollectibleItem
-                alt={asset.title}
-                imageUrl={asset.image}
-                isNew={
-                  asset.claimedAt
-                    ? collectibleIsNumberOfDaysOld(asset.claimedAt)
-                    : undefined
-                }
-                key={asset.id}
-                onClick={() => toggleViewer(asset)}
-                title={asset.title}
-              />
+              <div key={asset.id} className="flex flex-col">
+                <CollectibleItem
+                  alt={asset.title}
+                  imageUrl={asset.image}
+                  isNew={
+                    asset.claimedAt
+                      ? collectibleIsNumberOfDaysOld(asset.claimedAt)
+                      : undefined
+                  }
+                  key={asset.id}
+                  onClick={() => toggleViewer(asset)}
+                  title={asset.title}
+                />
+                <AppLink
+                  href={urls.myCollectiblesAuctionsAdd.replace(
+                    ':collectibleId',
+                    asset.id
+                  )}
+                  className="text-white"
+                >
+                  auction
+                </AppLink>
+              </div>
             ))}
           </Grid>
 
