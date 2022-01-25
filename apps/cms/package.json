@@ -22,7 +22,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "canvas": "2.8.0",
+    "canvas": "2.9.0",
     "dinero.js": "2.0.0-alpha.8",
     "directus": "9.2.0",
     "env-var": "7.1.1",
