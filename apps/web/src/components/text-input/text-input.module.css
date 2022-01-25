@@ -16,7 +16,7 @@
 }
 
 .inputError {
-  @apply border-base-errorRed;
+  @apply border-base-error;
 }
 
 .label {
@@ -36,7 +36,7 @@
 }
 
 .errorText {
-  @apply font-light text-base-errorRed text-right text-sm mt-1 w-1/2;
+  @apply w-1/2 mt-1 text-sm font-light text-right text-base-error;
 }
 
 .errorTextSmall {

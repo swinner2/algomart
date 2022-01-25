@@ -12,11 +12,11 @@
 }
 
 .metadataLabel {
-  @apply capitalize text-base-gray-text text-sm;
+  @apply text-sm capitalize text-base-textPrimary;
 }
 
 .metadataValue {
-  @apply font-bold text-xl;
+  @apply text-xl font-bold;
 }
 
 .price {

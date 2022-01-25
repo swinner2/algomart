@@ -19,11 +19,11 @@
 }
 
 .endDate {
-  @apply lowercase pr-1;
+  @apply pr-1 lowercase;
 }
 
 .contentWrapper {
-  @apply flex-initial inline-flex ml-5 w-full;
+  @apply inline-flex flex-initial w-full ml-5;
 }
 
 .centerContent {

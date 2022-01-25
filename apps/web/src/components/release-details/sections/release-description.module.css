@@ -12,7 +12,7 @@
 }
 
 .root p {
-  @apply text-base-gray-text mb-4;
+  @apply mb-4 text-base-textPrimary;
 }
 
 .root p:last-child {
@@ -24,7 +24,7 @@
 }
 
 .mask {
-  @apply absolute bg-gradient-to-t from-white to-transparent left-0 w-full;
+  @apply absolute left-0 w-full bg-gradient-to-t from-white to-transparent;
   bottom: 50px;
   height: 75px;
 }
