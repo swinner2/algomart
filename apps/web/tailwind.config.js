@@ -142,6 +142,10 @@ module.exports = {
             text: colors.coolGray['50'],
             nav: '#e5e5e5',
             notice: '#F9F8F9',
+            medium: '#747F8F',
+            light: '#B6BECB',
+            border: '#DADCDF',
+            bg: '#ECECEC',
           },
           action: {
             primary: generateColorClass('actionPrimary'),
