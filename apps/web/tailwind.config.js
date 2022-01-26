@@ -147,17 +147,15 @@ module.exports = {
             border: '#DADCDF',
             bg: '#ECECEC',
           },
-          action: {
-            primary: generateColorClass('actionPrimary'),
-            primaryContrastText: generateColorClass(
-              'actionPrimaryContrastText'
-            ),
-            secondary: generateColorClass('actionSecondary'),
-            secondaryContrastText: generateColorClass(
-              'actionSecondaryContrastText'
-            ),
-            accent: generateColorClass('actionAccent'),
-          },
+        },
+        action: {
+          primary: generateColorClass('actionPrimary'),
+          primaryContrastText: generateColorClass('actionPrimaryContrastText'),
+          secondary: generateColorClass('actionSecondary'),
+          secondaryContrastText: generateColorClass(
+            'actionSecondaryContrastText'
+          ),
+          accent: generateColorClass('actionAccent'),
         },
       },
       fontFamily: {
