@@ -44,6 +44,7 @@
     "core-js": "3.20.3",
     "cors": "2.8.5",
     "crypto-js": "4.1.1",
+    "css-unit-converter": "^1.1.2",
     "dinero.js": "2.0.0-alpha.8",
     "directus": "9.4.3",
     "env-var": "7.1.1",
