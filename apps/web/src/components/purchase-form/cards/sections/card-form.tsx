@@ -258,12 +258,6 @@ export default function CardPurchaseForm({
         />
       )}
 
-      {/* Price */}
-      <div className={clsx('border-gray-600 border-2', css.priceContainer)}>
-        <p className={css.priceLabel}>{t('release:Total')}</p>
-        <p className={css.priceValue}>{formatCurrency(price, lang)}</p>
-      </div>
-
       {/* Submit */}
       <Button
         fullWidth
