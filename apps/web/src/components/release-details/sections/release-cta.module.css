@@ -11,7 +11,7 @@
 }
 
 .actionNotAllowed {
-  @apply text-center text-base-errorRed;
+  @apply text-center text-base-error;
 }
 
 .tealButton {

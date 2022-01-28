@@ -22,7 +22,7 @@
 }
 
 .error {
-  @apply mb-2 text-sm font-light text-right text-base-errorRed;
+  @apply mb-2 text-sm font-light text-right text-base-error;
 }
 
 .sectionContent {
@@ -34,5 +34,5 @@
 }
 
 .sectionText {
-  @apply mb-4 text-base-gray-dark;
+  @apply mb-4;
 }

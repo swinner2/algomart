@@ -40,8 +40,8 @@ export default function MyCollectiblesAuctionAddPage() {
       const formValidation = await validateFormForSecondaryAuction(body)
 
       if (!formValidation.isValid) {
-        setFormErrors(formValidation.errors)
-        console.error('Errors:', formValidation.errors)
+        // setFormErrors(formValidation.errors)
+        // console.error('Errors:', formValidation.errors)
         setStatus('form')
         return
       }

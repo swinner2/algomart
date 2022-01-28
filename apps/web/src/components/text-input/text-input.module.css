@@ -16,7 +16,7 @@
 }
 
 .inputError {
-  @apply border-base-errorRed;
+  @apply border-base-error;
 }
 
 .label {

@@ -113,7 +113,6 @@ export default function CollectibleShowcase({
             <Toggle
               checked={initialPublish}
               label={t('collection:viewer.Publish Showcase')}
-              styleMode="dark"
               onChange={onTogglePublish}
             />
           </div>
