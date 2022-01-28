@@ -1,0 +1,24 @@
+.table th {
+  @apply p-2 text-blue-800 px-8 text-center bg-gray-500 bg-opacity-20 border-b-1 border-gray-400 cursor-pointer;
+}
+
+.table td {
+  @apply py-2 px-8 text-center;
+}
+
+.table tr:nth-child(odd) {
+  @apply bg-gray-800;
+}
+
+.table tr:nth-child(even) {
+  @apply bg-gray-800 bg-opacity-20;
+}
+
+.sortIcon {
+  @apply ml-4;
+  font-size: 12px;
+}
+
+.table {
+  @apply w-full;
+}

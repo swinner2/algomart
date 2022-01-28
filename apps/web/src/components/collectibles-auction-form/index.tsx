@@ -1,17 +1,16 @@
 import { SecondaryAuctionFormStatus } from '@algomart/schemas'
+import Image from 'next/image'
 import useTranslation from 'next-translate/useTranslation'
 import { FormEvent, useCallback, useState } from 'react'
-import Image from 'next/image'
 
-import TextInput from '../text-input/text-input'
 import Select from '../select/select'
+import TextInput from '../text-input/text-input'
 
 import AlertMessage from '@/components/alert-message/alert-message'
 import Button from '@/components/button'
 import Heading from '@/components/heading'
 import Loading from '@/components/loading/loading'
 import { CollectiblesAuctionFormValidation } from '@/pages/my/collectibles/[collectibleSlug]/auctions/add'
-import { cmsImageLoader } from '@/utils/cms-image-loader'
 
 export interface CollectiblesAuctionFormProps {
   formErrors?: CollectiblesAuctionFormValidation
@@ -60,14 +59,6 @@ export default function CollectiblesAuctionForm({
           >
             {t('forms:sections.Collectible Auction')}
           </Heading>
-          <TextInput
-            error={formErrors?.collectibleId as string}
-            label={t('forms:fields.collectibleId.label')}
-            name="collectibleId"
-            placeholder="Enter collectible ID"
-            variant="small"
-            className="my-3"
-          />
           <Select
             options={auctionType}
             defaultOption={auctionType[1]}

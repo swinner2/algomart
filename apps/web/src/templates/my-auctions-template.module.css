@@ -1,0 +1,12 @@
+.selectWrapper {
+  @apply relative z-10 mb-12 ml-auto;
+}
+
+.selectWrapper label {
+  @apply ml-auto shadow-large;
+  max-width: 13rem;
+}
+
+.paginationWrapper {
+  @apply mt-12;
+}

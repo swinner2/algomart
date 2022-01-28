@@ -7,6 +7,7 @@ export const urls = {
   myCollection: '/my/collections/:collectionSlug',
   myCollections: '/my/collections',
   myAuctions: '/my/auctions',
+  myAuctionDetail: '/my/auctions/:auctionSlug',
   myProfile: '/my/profile',
   myProfilePaymentMethods: '/my/profile/payment-methods',
   myProfilePaymentMethodsAdd: '/my/profile/payment-methods/add',

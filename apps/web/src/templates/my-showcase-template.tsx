@@ -75,7 +75,7 @@ export default function MyShowcaseTemplate({
   )
 
   return (
-    <div className="mx-auto max-w-7xl mt-10">
+    <div className="mx-auto max-w-7xl mt-10 px-2">
       {/* Tabs */}
       <Tabs activeTab={2} tabs={getCollectionTabs(t)} />
 

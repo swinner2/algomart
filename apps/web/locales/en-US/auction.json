@@ -1,0 +1,13 @@
+{
+  "viewer": {
+    "createAuction": "Create auction with your NFTs.",
+    "goToNFTs": "Go To My NFTs"
+  },
+  "sorting": {
+    "Name": "Name",
+    "Newest": "Newest",
+    "Oldest": "Oldest",
+    "Highest": "Highest",
+    "Lowest": "Lowest"
+  }
+}

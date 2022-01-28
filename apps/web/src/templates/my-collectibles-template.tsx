@@ -48,7 +48,7 @@ export default function MyCollectiblesTemplate({
   const auth = useAuth()
 
   return (
-    <div className="mx-auto max-w-7xl mt-10">
+    <div className="mx-auto max-w-7xl mt-10 px-2">
       {/* Viewer */}
       <CollectibleBrowserDialog
         open={isViewerActive}
