@@ -3,7 +3,11 @@
 }
 
 .listItem {
-  @apply grid items-center grid-cols-5 p-5 mb-5 border rounded-md border-base-border;
+  @apply grid items-center grid-cols-5 p-5 mb-5 border rounded-md border-gray-800 cursor-pointer bg-gray-900;
+}
+
+.listItem:hover {
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
 }
 
 .imageColumn {

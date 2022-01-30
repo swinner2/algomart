@@ -1,4 +1,5 @@
 import {
+  AuctionSortOptions,
   CollectibleListQuerystring,
   PacksByOwnerQuery,
   PackStatus,
@@ -105,5 +106,15 @@ export const getSelectSortingOptions = (t: Translate) => {
     { id: SortOptions.Newest, label: t('collection:sorting.Newest') },
     { id: SortOptions.Oldest, label: t('collection:sorting.Oldest') },
     { id: SortOptions.Name, label: t('collection:sorting.Name') },
+  ]
+}
+
+export const getAuctionSortingOptions = (t: Translate) => {
+  return [
+    { id: AuctionSortOptions.Name, label: t('auction:sorting.Name') },
+    { id: AuctionSortOptions.Newest, label: t('auction:sorting.Newest') },
+    { id: AuctionSortOptions.Oldest, label: t('auction:sorting.Oldest') },
+    { id: AuctionSortOptions.Highest, label: t('auction:sorting.Highest') },
+    { id: AuctionSortOptions.Lowest, label: t('auction:sorting.Lowest') },
   ]
 }

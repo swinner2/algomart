@@ -2,7 +2,7 @@
   /* Base */
   @apply relative mx-auto;
   /* Tablet + */
-  @apply md:max-w-520 md:overflow-hidden md:rounded-xl bg-black border-1;
+  @apply md:max-w-520 md:overflow-hidden md:rounded-xl;
 }
 
 .buttonContainer {

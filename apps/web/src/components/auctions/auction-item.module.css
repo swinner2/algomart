@@ -51,7 +51,7 @@
 }
 
 .badge {
-  @apply absolute bg-action-accent bottom-2 font-bold left-2 px-2 py-1 rounded-full text-center text-sm text-white;
+  @apply absolute bg-base-green bottom-2 font-bold left-2 px-2 py-1 rounded-full text-center text-sm text-white;
 }
 
 /* Item content */
@@ -88,7 +88,7 @@
 }
 
 .setNumber {
-  @apply font-black text-2xl text-base-border;
+  @apply font-black text-2xl text-base-gray-border;
 }
 
 .rarity {
@@ -113,5 +113,5 @@
 }
 
 .checkIcon {
-  @apply w-6 h-6 text-black rounded-full bg-action-accent;
+  @apply w-6 h-6 text-black rounded-full bg-base-green;
 }

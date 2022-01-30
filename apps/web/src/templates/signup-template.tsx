@@ -43,11 +43,11 @@ export default function SignupTemplate({
   const { t } = useTranslation()
   return (
     <>
-      <Heading className="mb-8 text-center">
+      <Heading className="mb-8 text-center text-blue-800 mt-12 px-4">
         {t('auth:Setup your account')}
       </Heading>
       <form
-        className="relative max-w-sm mx-auto"
+        className="relative max-w-sm mx-auto px-4"
         onSubmit={handleCreateProfile}
       >
         {status === 'error' && error && (

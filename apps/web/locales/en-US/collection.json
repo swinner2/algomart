@@ -8,7 +8,8 @@
   "tabs": {
     "NFTs": "NFTs",
     "Collections": "Collections",
-    "Showcase": "Showcase"
+    "Showcase": "Showcase",
+    "Auctions": "Auctions"
   },
   "algoAddressPage": {
     "Algorand Account": "Algorand Account",

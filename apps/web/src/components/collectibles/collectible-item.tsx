@@ -3,6 +3,8 @@ import {
   CheckCircleIcon,
   PlusCircleIcon,
   XCircleIcon,
+  PhotographIcon,
+  ChartBarIcon,
 } from '@heroicons/react/solid'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -11,19 +13,21 @@ import useTranslation from 'next-translate/useTranslation'
 import css from './collectible-item.module.css'
 
 import { cmsImageLoader } from '@/utils/cms-image-loader'
+import AppLink from '@/components/app-link/app-link'
 
 export interface CollectibleItemProps {
   alt?: string
   cardView?: boolean
   imageUrl?: string
   isNew?: boolean
-  mode?: 'add' | 'remove' | 'selected'
+  mode?: 'add' | 'remove' | 'selected' | 'linkAuction'
   onClick?: () => void
   questionMarkSize?: 'small' | 'medium' | 'large'
   rarity?: Partial<CollectibleWithDetails['rarity']> | null
   setNumber?: number
   title?: string
   uncollected?: boolean
+  auctionLink?: string
 }
 
 export default function CollectibleItem({
@@ -38,6 +42,7 @@ export default function CollectibleItem({
   setNumber,
   title,
   uncollected = false,
+  auctionLink,
 }: CollectibleItemProps) {
   const { t } = useTranslation()
 
@@ -53,6 +58,7 @@ export default function CollectibleItem({
       height={160}
       objectFit="cover"
       layout="responsive"
+      className="bg-gray-900 rounded-2xl"
     />
   ) : (
     <div className={css.questionMarkWrapper}>
@@ -83,8 +89,20 @@ export default function CollectibleItem({
             </div>
           )}
         </>
+      ) : mode === 'linkAuction' ? (
+        <div className={css.imageWrapper}>
+          {img}
+          <div className={css.actions}>
+            <button className={css.action} onClick={onClick}>
+              View <PhotographIcon className="w-6 h-6 ml-2" />
+            </button>
+            <AppLink className={css.action} href={auctionLink || ''}>
+              Auction <ChartBarIcon className="w-6 h-6 ml-2" />
+            </AppLink>
+          </div>
+        </div>
       ) : (
-        <button onClick={onClick} className={css.imageWrapper}>
+        <div className={css.imageWrapper} onClick={onClick}>
           {img}
           {(mode === 'add' || mode === 'selected') && (
             <div className={css.overlay}>
@@ -96,7 +114,7 @@ export default function CollectibleItem({
             </div>
           )}
           {isNew && <div className={css.badge}>{t('common:statuses.New')}</div>}
-        </button>
+        </div>
       )}
 
       {title && (

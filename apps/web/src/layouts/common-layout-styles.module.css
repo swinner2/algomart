@@ -3,7 +3,7 @@
 }
 
 .pageTitle {
-  @apply mb-6 text-center;
+  @apply mb-6 text-center text-blue-800;
 }
 
 .hideInMobile {

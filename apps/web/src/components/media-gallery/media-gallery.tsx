@@ -78,7 +78,6 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
               className={clsx(css.contain, css.fullHeight)}
               layout="fill"
               src={currentMedia}
-              objectFit="cover"
             />
           </div>
         </div>

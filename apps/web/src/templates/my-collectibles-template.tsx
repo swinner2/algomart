@@ -15,6 +15,7 @@ import {
   collectibleIsNumberOfDaysOld,
   getCollectionTabs,
 } from '@/utils/collections'
+import { urls } from '@/utils/urls'
 
 export interface MyCollectiblesTemplateProps {
   activeAsset: CollectibleWithDetails | null
@@ -47,7 +48,7 @@ export default function MyCollectiblesTemplate({
   const auth = useAuth()
 
   return (
-    <div className="mx-auto max-w-7xl mt-10">
+    <div className="mx-auto max-w-7xl mt-10 px-2">
       {/* Viewer */}
       <CollectibleBrowserDialog
         open={isViewerActive}
@@ -91,7 +92,12 @@ export default function MyCollectiblesTemplate({
                 }
                 key={asset.id}
                 onClick={() => toggleViewer(asset)}
+                auctionLink={urls.addCollectibleAuction.replace(
+                  ':collectibleSlug',
+                  asset.title
+                )}
                 title={asset.title}
+                mode="linkAuction"
               />
             ))}
           </Grid>

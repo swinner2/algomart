@@ -17,7 +17,7 @@
 }
 
 .mobileWrapper {
-  @apply relative z-10 mx-5 transform -translate-y-1/2 border-b border-base-border;
+  @apply relative z-10 mx-5 transform -translate-y-1/2;
 }
 
 .mobileWrapper label {
@@ -29,8 +29,8 @@
   @apply mb-5 rounded-sm shadow-large;
 }
 
-.listItem + .listItem {
-  @apply border-t border-t-base-border;
+.listItem {
+  @apply border-b border-gray-800;
 }
 
 .listItem a {
@@ -38,5 +38,5 @@
 }
 
 .listItemActive a {
-  @apply text-base font-bold text-blue-600;
+  @apply text-base font-bold text-blue-800;
 }

@@ -34,7 +34,7 @@ export default function LoginTemplate({
     </div>
   ) : (
     <>
-      <Heading className="px-4 mb-4 text-center">
+      <Heading className="px-4 mb-4 text-center mt-20 text-blue-800">
         {t('auth:contentTitle')}
       </Heading>
       {redeemable && (

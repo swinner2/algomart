@@ -37,13 +37,12 @@ export default function MyProfileLayout({
       <HeadTag pageDescription={pageDescription} pageTitle={pageTitle} />
 
       <div className={common.background}>
-        <EmailVerification />
-        <UntransferredPacks />
-
         <section>
           <AppHeader />
 
           <MainPanel width="large" className="mx-auto max-w-7xl">
+            <EmailVerification />
+            <UntransferredPacks />
             {isLoading && <LoadingStatus />}
             {!isLoading && !isAuthenticated && <NotAuthenticated />}
             {!isLoading && isAuthenticated && (
@@ -56,11 +55,11 @@ export default function MyProfileLayout({
                   {pageTitle}
                 </Heading>
 
-                <div className={css.columns}>
-                  <section className={css.navColumn}>
+                <div className="flex mx-4">
+                  <section className="lg:w-80 lg:mr-32 md:mr-12 md:w-80 xs:mr-0 xs:w-0">
                     <MyProfileNav screen="desktop" />
                   </section>
-                  <section className={css.contentColumn}>{children}</section>
+                  <section className="w-full">{children}</section>
                 </div>
               </>
             )}

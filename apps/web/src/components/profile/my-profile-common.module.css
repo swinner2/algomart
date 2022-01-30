@@ -26,11 +26,11 @@
 }
 
 .sectionContent {
-  @apply p-6 rounded-md border-1 border-base-border bg-base-bgCard dark:border-opacity-0;
+  @apply py-6;
 }
 
 .sectionContentLarge {
-  @apply p-12 rounded-md border-1 border-base-border;
+  @apply py-12;
 }
 
 .sectionText {

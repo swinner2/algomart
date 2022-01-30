@@ -35,29 +35,23 @@ export default function HomeTemplate({
   const isUpcoming = featuredPack.status === PackStatus.Upcoming
 
   return (
-    <section className="flex relative md:mt-0 mt-16">
+    <section className="flex relative pt-0">
       <div
         className={clsx(
           css.backgroundImage,
           'absolute inset-0 overflow-hidden'
         )}
-      >
-        <img
-          src="/images/backgrounds/home-background.png"
-          alt=""
-          className="object-cover w-full"
-        />
-      </div>
+      ></div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 z-10 mx-auto max-w-screen-2xl pt-12 pb-20">
         <div className="col-span-1 md:col-span-7 md:mt-12 mt-2 flex flex-col justify-center mx-4 md:ml-12">
-          <div className="font-extrabold xl:text-6xl lg:text-5xl md:text-4xl sm:text-4xl text-4xl tracking-wide leading-tight text-white">
+          <div className="font-extrabold xl:text-6xl lg:text-5xl md:text-4xl sm:text-4xl text-4xl tracking-wide leading-tight text-white sm:text-left text-center">
             Buy, Sell & Trade Authentic NFTs.
           </div>
-          <div className="text-blue-800 xl:text-4xl lg:text-3xl md:text-2xl sm:text-2xl text-2xl lg:mt-16 sm:mt-8 xs:mt-8 mt-8 font-extrabold">
+          <div className="text-blue-800 xl:text-4xl lg:text-3xl md:text-2xl sm:text-2xl text-2xl lg:mt-16 sm:mt-8 xs:mt-8 mt-8 font-extrabold  text-center sm:text-left">
             Built by the passionate for the passionate
-            <ul className="list-inside list-none font-light lg:mt-8 lg:ml-8 sm:ml-4 sm:mt-4 xs:ml-4 xs:mt-4 ml-4 mt-4 text-gray-100">
-              <li>- Carbon Neutral</li>
+            <ul className="list-inside list-none font-light lg:mt-8 lg:ml-8 sm:ml-auto sm:mt-4 xs:ml-auto xs:mt-4 ml-auto mt-4 text-gray-100 xl:text-3xl lg:text-2xl md:text-xl sm:text-xl text-xl text-left mr-auto w-max">
+              <li>- Carbon Negative</li>
               <li>- Fees as low as $0.001</li>
               <li>- Crypto and fiat supported</li>
             </ul>

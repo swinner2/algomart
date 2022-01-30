@@ -3,7 +3,7 @@
 }
 
 .listItem {
-  @apply flex items-center justify-between px-6 py-3 mb-6 border rounded-sm border-base-border;
+  @apply flex items-center justify-between px-6 py-3 mb-6 border rounded-sm border-gray-800;
 }
 
 .isExpired {
@@ -19,7 +19,7 @@
 }
 
 .removeButton {
-  @apply pr-0 mb-0 text-sm underline text-base-gray-light;
+  @apply ml-8 mb-0 text-sm w-40 text-blue-800;
 }
 
 .dialogContainer {
