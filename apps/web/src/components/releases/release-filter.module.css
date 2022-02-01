@@ -1,5 +1,5 @@
 .root {
-  @apply rounded-sm shadow-large bg-base-bgCard;
+  @apply rounded-sm shadow-large;
 }
 
 .root + .root {
