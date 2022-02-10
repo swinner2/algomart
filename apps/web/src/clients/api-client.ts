@@ -9,6 +9,7 @@ import {
   CollectibleListWithTotal,
   CollectiblesByAlgoAddressQuerystring,
   CollectibleShowcaseQuerystring,
+  CollectibleWithDetails,
   CollectionWithSets,
   CreateBankAccount,
   CreateBankAccountResponse,
@@ -19,6 +20,7 @@ import {
   CreateUserAccountRequest,
   CreateWalletAddress,
   DEFAULT_LOCALE,
+  ExportCollectible,
   ExternalId,
   FindTransferByAddress,
   GetPaymentBankAccountStatus,
@@ -39,6 +41,8 @@ import {
   PaymentBankAccountInstructions,
   PaymentCard,
   PaymentCards,
+  Payments,
+  PaymentsQuerystring,
   PublicAccount,
   PublicCollectibleQuerystring,
   PublicKey,
@@ -46,14 +50,18 @@ import {
   PublishedPacks,
   PublishedPacksQuery,
   RedeemCode,
+  RevokePack,
   SendBankAccountInstructions,
   SetWithCollection,
+  SingleCollectibleQuerystring,
   ToPaymentBase,
   TransferPack,
   TransferPackStatusList,
+  UpdatePayment,
   UpdatePaymentCard,
   UpdateUserAccount,
   Username,
+  WirePayment,
 } from '@algomart/schemas'
 import ky, { HTTPError } from 'ky'
 import pino from 'pino'
@@ -63,6 +71,7 @@ import { Environment } from '@/environment'
 import {
   getCollectiblesFilterQuery,
   getPacksByOwnerFilterQuery,
+  getPaymentsFilterQuery,
   getPublishedPacksFilterQuery,
 } from '@/utils/filters'
 import { logger } from '@/utils/logger'
@@ -218,6 +227,18 @@ export class ApiClient {
       })
       .then((response) => response.ok)
   }
+
+  async exportCollectible(request: ExportCollectible) {
+    return await this.http
+      .post('collectibles/export', { json: request })
+      .json<{ txId: string }>()
+  }
+
+  async getCollectible(request: SingleCollectibleQuerystring) {
+    return await this.http
+      .get('collectibles/find-one', { searchParams: request })
+      .json<CollectibleWithDetails>()
+  }
   //#endregion
 
   //#region Payments
@@ -314,6 +335,29 @@ export class ApiClient {
       .json<ToPaymentBase>()
       .catch(() => null)
   }
+
+  async getPayments(query: PaymentsQuerystring) {
+    const searchQuery = getPaymentsFilterQuery(query)
+    return await this.http.get(`payments?${searchQuery}`).json<Payments>()
+  }
+
+  async getAdminPaymentById(paymentId: string) {
+    return await this.http
+      .get(`payments/${paymentId}?isAdmin=${true}`)
+      .json<Payment>()
+  }
+
+  async getPaymentsByBankAccountId(bankAccountId: string) {
+    return await this.http
+      .get(`payments/bank-accounts/${bankAccountId}/payments`)
+      .json<WirePayment[]>()
+  }
+
+  async updatePaymentById(paymentId: string, json: UpdatePayment) {
+    return await this.http
+      .patch(`payments/${paymentId}`, { json })
+      .json<UpdatePayment>()
+  }
   //#endregion
 
   //#region Packs
@@ -369,6 +413,12 @@ export class ApiClient {
     return await this.http
       .get('packs/mint', { searchParams: params })
       .json<MintPackStatusResponse>()
+  }
+
+  async revokePack(json: RevokePack) {
+    return await this.http
+      .post('packs/revoke', { json })
+      .then((response) => response.ok)
   }
 
   async transferPack(json: TransferPack) {

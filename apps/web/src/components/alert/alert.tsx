@@ -12,7 +12,7 @@ export interface AlertProps {
   content: string
   counterEndTime?: string | null
   counterText?: string | null
-  handleClick: () => void
+  handleClick?: () => void
   id?: string
 }
 
@@ -56,8 +56,8 @@ export default function Alert({
           </>
         )}
       </div>
-      {callToAction && (
-        <Button onClick={handleClick}>
+      {callToAction && handleClick && (
+        <Button size="small" className={css.callToAction} onClick={handleClick}>
           {callToAction}
         </Button>
       )}

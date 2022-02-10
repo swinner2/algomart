@@ -6,7 +6,8 @@ import {
   CollectibleListWithTotalSchema,
   CollectiblesByAlgoAddressQuerystringSchema,
   CollectibleShowcaseQuerystringSchema,
-  PublicCollectibleQuerystringSchema,
+  ExportCollectibleSchema,
+  SingleCollectibleQuerystringSchema,
 } from '@algomart/schemas'
 import { Type } from '@sinclair/typebox'
 import { FastifyInstance } from 'fastify'
@@ -14,6 +15,8 @@ import fastifyBearerAuth from 'fastify-bearer-auth'
 
 import {
   addCollectibleShowcase,
+  exportCollectible,
+  getCollectible,
   getCollectibles,
   getCollectiblesByAlgoAddress,
   getPublicCollectibles,
@@ -55,6 +58,18 @@ export async function collectiblesRoutes(app: FastifyInstance) {
         },
       },
       getCollectibles
+    )
+    .get(
+      '/find-one',
+      {
+        schema: {
+          tags,
+          security,
+          querystring: SingleCollectibleQuerystringSchema,
+          description: 'Fetch a single collectible and its current owner.',
+        },
+      },
+      getCollectible
     )
     .get(
       '/address/:algoAddress',
@@ -117,18 +132,21 @@ export async function collectiblesRoutes(app: FastifyInstance) {
       },
       removeCollectibleShowcase
     )
-    .get(
-      '/public',
+    .post(
+      '/export',
       {
+        transact: true,
         schema: {
           tags,
           security,
-          querystring: PublicCollectibleQuerystringSchema,
+          body: ExportCollectibleSchema,
           response: {
-            200: CollectibleListWithTotalSchema,
+            200: Type.Object({
+              txId: Type.String(),
+            }),
           },
         },
       },
-      getPublicCollectibles
+      exportCollectible
     )
 }

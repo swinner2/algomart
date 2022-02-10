@@ -4,6 +4,7 @@ import {
   PacksByOwnerQuery,
   PackStatus,
   PackType,
+  PaymentsQuerystring,
   PublishedPacksQuery,
   SortOptions,
 } from '@algomart/schemas'
@@ -95,6 +96,22 @@ export const getCollectiblesFilterQuery = (
     templateIds: query.templateIds,
     setId: query.setId,
     collectionId: query.collectionId,
+  })
+}
+
+/**
+ * Build a search parameter string to filter payments
+ */
+export const getPaymentsFilterQuery = (query: PaymentsQuerystring) => {
+  return stringify({
+    page: query.page,
+    pageSize: query.pageSize || PAGE_SIZE,
+    packId: query.packId,
+    packSlug: query.packSlug,
+    payerExternalId: query.payerExternalId,
+    payerUsername: query.payerUsername,
+    sortBy: query.sortBy,
+    sortDirection: query.sortDirection,
   })
 }
 

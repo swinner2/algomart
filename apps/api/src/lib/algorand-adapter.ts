@@ -27,6 +27,39 @@ export interface AlgorandAdapterOptions {
 export interface AccountInfo {
   address: string
   amount: number
+  amountWithoutPendingRewards: number
+  // https://developer.algorand.org/docs/rest-apis/algod/v2/#applicationlocalstate
+  appsLocalState: {
+    id: number
+  }[]
+  appsTotalExtraPages?: number
+  appsTotalSchema: {
+    numByteSlices: number
+    numInts: number
+  }
+  assets: {
+    amount: number
+    assetId: number
+    creator: string
+    isFrozen: boolean
+  }[]
+  authAddr?: string
+  // https://developer.algorand.org/docs/rest-apis/algod/v2/#applicationparams
+  createdApps: {
+    id: number
+  }[]
+  // https://developer.algorand.org/docs/rest-apis/algod/v2/#asset
+  createdAssets: {
+    index: number
+  }[]
+  // https://developer.algorand.org/docs/rest-apis/algod/v2/#accountparticipation
+  participation?: unknown
+  pendingRewards: number
+  rewardBase: number
+  rewards: number
+  round: number
+  sigType: 'sig' | 'msig' | 'lsig'
+  status: string
 }
 
 export default class AlgorandAdapter {
@@ -160,6 +193,8 @@ export default class AlgorandAdapter {
       address: info.index as number,
       creator: info.params.creator as string,
       unitName: info.params['unit-name'] as string,
+      isFrozen: info['is-frozen'] as boolean,
+      defaultFrozen: info.params['default-frozen'] as boolean,
       url: info.params.url as string,
     }
   }
@@ -236,9 +271,46 @@ export default class AlgorandAdapter {
   async getAccountInfo(account: string): Promise<AccountInfo> {
     const info = await this.algod.accountInformation(account).do()
     return {
-      address: info.address,
-      amount: info.amount,
+      address: info['address'],
+      amount: info['amount'],
+      amountWithoutPendingRewards: info['amount-without-pending-rewards'],
+      appsLocalState: info['apps-local-state'] || [],
+      appsTotalExtraPages: info['apps-total-extra-pages'] || 0,
+      appsTotalSchema: {
+        numByteSlices: info['apps-total-schema']?.['num-byte-slice'] || 0,
+        numInts: info['apps-total-schema']?.['num-uint'] || 0,
+      },
+      assets: info['assets'] || [],
+      authAddr: info['auth-addr'],
+      createdApps: info['created-apps'] || [],
+      createdAssets: info['created-assets'] || [],
+      participation: info['participation'],
+      pendingRewards: info['pending-rewards'],
+      rewardBase: info['reward-base'],
+      rewards: info['rewards'],
+      round: info['round'],
+      sigType: info['sig-type'],
+      status: info['status'],
     }
+  }
+
+  getAccountMinBalance(info: AccountInfo): number {
+    const minBalance = 100_000
+    const assetsOptIn = info.assets.length * 100_000
+    const assetsCreated = info.createdAssets.length * 100_000
+    const appsBytes = info.appsTotalSchema.numByteSlices * 50_000
+    const appsInts = info.appsTotalSchema.numInts * 28_500
+    const appsOptIn = info.appsLocalState.length * 100_000
+    const appsCreated = info.createdApps.length * 100_000
+    const total =
+      minBalance +
+      assetsOptIn +
+      assetsCreated +
+      appsBytes +
+      appsInts +
+      appsOptIn +
+      appsCreated
+    return total
   }
 
   async getCreatorAccount(initialBalance: number) {
@@ -383,6 +455,181 @@ export default class AlgorandAdapter {
     return {
       transactionIds: [fundsTxn.txID(), optInTxn.txID(), clawbackTxn.txID()],
       signedTransactions,
+    }
+  }
+
+  async generateClawbackTransactionsFromUser(options: {
+    assetIndex: number
+    fromAccountAddress: string
+    toAccountAddress: string
+  }) {
+    const suggestedParams = await this.algod.getTransactionParams().do()
+
+    // Use a clawback to "revoke" ownership from current owner to the creator,
+    const clawbackTxn =
+      algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        suggestedParams,
+        amount: 1,
+        assetIndex: options.assetIndex,
+        from: this.fundingAccount.addr, // Who is issuing the transaction
+        to: options.toAccountAddress,
+        revocationTarget: options.fromAccountAddress, // Who the asset is being revoked from
+      })
+
+    // Adds a group id to each transaction object
+    algosdk.assignGroupID([clawbackTxn])
+
+    const signedTransactions = [clawbackTxn.signTxn(this.fundingAccount.sk)]
+
+    return {
+      transactionIds: [clawbackTxn.txID()],
+      signedTransactions,
+    }
+  }
+
+  async compileContract(source: string): Promise<Uint8Array> {
+    const compiled = await this.algod.compile(source).do()
+    return new Uint8Array(Buffer.from(compiled.result, 'base64'))
+  }
+
+  async createApplicationTransaction(options: {
+    approvalProgram: Uint8Array
+    clearProgram: Uint8Array
+    appArgs: Uint8Array[]
+    extraPages?: number
+    numGlobalByteSlices?: number
+    numGlobalInts?: number
+    numLocalByteSlices?: number
+    numLocalInts?: number
+    accounts?: string[]
+    foreignApps?: number[]
+    foreignAssets?: number[]
+    lease?: Uint8Array
+    note?: Uint8Array
+    rekeyTo?: string
+    from?: string
+  }) {
+    const suggestedParams = await this.algod.getTransactionParams().do()
+
+    const txn = algosdk.makeApplicationCreateTxnFromObject({
+      suggestedParams,
+      approvalProgram: options.approvalProgram,
+      clearProgram: options.clearProgram,
+      from: options.from || this.fundingAccount.addr,
+      numGlobalByteSlices: options.numGlobalByteSlices || 0,
+      numGlobalInts: options.numGlobalInts || 0,
+      numLocalByteSlices: options.numLocalByteSlices || 0,
+      numLocalInts: options.numLocalInts || 0,
+      extraPages: options.extraPages || 0,
+      onComplete: algosdk.OnApplicationComplete.NoOpOC,
+      appArgs: options.appArgs,
+      accounts: options.accounts || [],
+      foreignApps: options.foreignApps,
+      foreignAssets: options.foreignAssets,
+      lease: options.lease,
+      note: options.note,
+      rekeyTo: options.rekeyTo,
+    })
+
+    return txn
+  }
+
+  appMinBalance(options: {
+    extraPages?: number
+    numGlobalByteSlices?: number
+    numGlobalInts?: number
+    numLocalByteSlices?: number
+    numLocalInts?: number
+  }): { create: number; optIn: number } {
+    const {
+      extraPages = 0,
+      numGlobalByteSlices: numberGlobalByteSlices = 0,
+      numGlobalInts: numberGlobalInts = 0,
+      numLocalByteSlices: numberLocalByteSlices = 0,
+      numLocalInts: numberLocalInts = 0,
+    } = options
+
+    // https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#minimum-balance-requirement-for-a-smart-contract
+
+    return {
+      create:
+        100_000 * (1 + extraPages) +
+        28_500 * numberGlobalInts +
+        50_000 * numberGlobalByteSlices,
+      optIn:
+        100_000 + 28_500 * numberLocalInts + 50_000 * numberLocalByteSlices,
+    }
+  }
+
+  /**
+   * Only allows exporting non-frozen assets
+   */
+  async generateExportTransactions(options: {
+    assetIndex: number
+    encryptedMnemonic: string
+    passphrase: string
+    fromAccountAddress: string
+    toAccountAddress: string
+  }) {
+    const fromAccount = algosdk.mnemonicToSecretKey(
+      decrypt(options.encryptedMnemonic, options.passphrase)
+    )
+
+    const suggestedParams = await this.algod.getTransactionParams().do()
+
+    // Send funds to cover asset transfer transaction
+    const fundsTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      suggestedParams,
+      amount: 2000,
+      from: this.fundingAccount.addr,
+      to: options.fromAccountAddress,
+    })
+
+    // Clear freeze and reserve addresses
+    const configureTxn =
+      algosdk.makeAssetConfigTxnWithSuggestedParamsFromObject({
+        suggestedParams,
+        assetIndex: options.assetIndex,
+        from: this.fundingAccount.addr,
+        strictEmptyAddressChecking: false,
+        manager: this.fundingAccount.addr,
+        clawback: this.fundingAccount.addr,
+      })
+
+    // Transfer asset to recipient and remove opt-in from sender
+    const transferAssetTxn =
+      algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        suggestedParams,
+        assetIndex: options.assetIndex,
+        from: options.fromAccountAddress,
+        to: options.toAccountAddress,
+        amount: 1,
+        closeRemainderTo: options.toAccountAddress,
+      })
+
+    // Return min balance funds to funding account
+    const returnFundsTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      suggestedParams,
+      from: options.fromAccountAddress,
+      to: this.fundingAccount.addr,
+      amount: 100_000,
+    })
+
+    const txns = [fundsTxn, configureTxn, transferAssetTxn, returnFundsTxn]
+
+    algosdk.assignGroupID(txns)
+
+    const signedTxns = [
+      fundsTxn.signTxn(this.fundingAccount.sk),
+      configureTxn.signTxn(this.fundingAccount.sk),
+      transferAssetTxn.signTxn(fromAccount.sk),
+      returnFundsTxn.signTxn(fromAccount.sk),
+    ]
+
+    return {
+      transferTxnId: transferAssetTxn.txID(),
+      transactionIds: txns.map((txn) => txn.txID()),
+      signedTransactions: signedTxns,
     }
   }
 }

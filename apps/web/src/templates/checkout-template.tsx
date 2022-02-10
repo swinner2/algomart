@@ -3,7 +3,8 @@ import { useRouter } from 'next/router'
 import { Translate } from 'next-translate'
 import useTranslation from 'next-translate/useTranslation'
 
-import Cards from '@/components/cards'
+import Heading from '@/components/heading'
+import PaymentOptions from '@/components/payment-options'
 import EmailVerification from '@/components/profile/email-verification'
 import { useAuth } from '@/contexts/auth-context'
 import { PaymentContextProps } from '@/contexts/payment-context'
@@ -76,24 +77,11 @@ export default function CheckoutTemplate(paymentProps: PaymentContextProps) {
     return <EmailVerification inline />
   }
   return (
-    // <div className="mx-auto max-w-7xl mt-10">
-    //   {doesRequireNonCardPayment ? (
-    //     <BankAccountPurchaseForm
-    //       auctionPackId={paymentProps.auctionPackId}
-    //       currentBid={currentBid}
-    //       release={release}
-    //     />
-    //   ) : (
-    //     <PurchaseNFTForm
-    //       auctionPackId={paymentProps.auctionPackId}
-    //       currentBid={currentBid}
-    //       release={release}
-    //     />
-    //   )}
-    // </div>
-    <Cards
-      header={t('forms:fields.paymentMethods.helpText')}
-      cards={getCardList(t)}
-    />
+    <>
+      <Heading className="mb-10" level={1}>
+        {t('forms:fields.paymentMethods.helpText')}
+      </Heading>
+      <PaymentOptions cards={getCardList(t)} />
+    </>
   )
 }

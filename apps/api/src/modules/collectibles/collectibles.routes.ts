@@ -4,7 +4,8 @@ import {
   CollectibleListQuerystring,
   CollectiblesByAlgoAddressQuerystring,
   CollectibleShowcaseQuerystring,
-  PublicCollectibleQuerystring,
+  ExportCollectible,
+  SingleCollectibleQuerystring,
 } from '@algomart/schemas'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
@@ -34,6 +35,19 @@ export async function getCollectibles(
   } else {
     reply.send(collectiblesForAccount)
   }
+}
+
+export async function getCollectible(
+  request: FastifyRequest<{ Querystring: SingleCollectibleQuerystring }>,
+  reply: FastifyReply
+) {
+  const collectibles = request
+    .getContainer()
+    .get<CollectiblesService>(CollectiblesService.name)
+
+  const collectible = await collectibles.getCollectible(request.query)
+
+  reply.send(collectible)
 }
 
 export async function getCollectiblesByAlgoAddress(
@@ -114,15 +128,20 @@ export async function removeCollectibleShowcase(
   reply.status(204).send()
 }
 
-export async function getPublicCollectibles(
-  request: FastifyRequest<{ Querystring: PublicCollectibleQuerystring }>,
+export async function exportCollectible(
+  request: FastifyRequest<{ Body: ExportCollectible }>,
   reply: FastifyReply
 ) {
   const collectiblesService = request
     .getContainer()
     .get<CollectiblesService>(CollectiblesService.name)
 
-  const result = await collectiblesService.getPublicCollectibles(request.query)
+  const txId = await collectiblesService.exportCollectible(
+    request.body,
+    request.transaction
+  )
 
-  reply.send(result)
+  reply.send({
+    txId,
+  })
 }
