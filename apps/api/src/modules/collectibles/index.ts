@@ -19,7 +19,6 @@ import {
   getCollectible,
   getCollectibles,
   getCollectiblesByAlgoAddress,
-  getPublicCollectibles,
   getShowcaseCollectibles,
   removeCollectibleShowcase,
 } from './collectibles.routes'
