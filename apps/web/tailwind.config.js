@@ -132,7 +132,7 @@ module.exports = {
             800: '#23262F', // Favorite Button
             900: '#0b0b1d', // Background
             dark: colors.gray['500'],
-            text: colors.coolGray['50'],
+            text: colors.gray['50'],
             nav: '#e5e5e5',
             notice: '#F9F8F9',
             medium: '#747F8F',
