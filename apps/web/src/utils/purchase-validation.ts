@@ -1,3 +1,4 @@
+import { PaymentStatus } from '@algomart/schemas'
 import { Translate } from 'next-translate'
 import {
   boolean,
@@ -114,6 +115,12 @@ const description = (t: Translate) =>
 const identifier = (t: Translate) =>
   string(required(t('forms:errors.required') as string))
 
+const address = (t: Translate) =>
+  string(
+    required(t('forms:errors.required') as string),
+    matches(/[\da-z]+/, t('forms:errors.onlyLettersAndNumbers'))
+  )
+
 const bid = (t: Translate, highestBid: number) => {
   const minimum = highestBid + 1
   return number(
@@ -147,7 +154,7 @@ export const validateBidsForm = (t: Translate, highestBid: number) =>
     zipCode: zipCode(t),
   })
 
-export const validateBidsFormForWires = (t: Translate, highestBid: number) =>
+export const validateBidsFormWithoutCard = (t: Translate, highestBid: number) =>
   object({
     bid: bid(t, highestBid),
     confirmBid: boolean(
@@ -222,6 +229,13 @@ export const validateCard = (t: Translate) =>
     default: boolean(),
   })
 
+export const validateTransferPurchase = (t: Translate) =>
+  object({
+    packTemplateId: identifier(t),
+    destinationAddress: address(t),
+    transferId: identifier(t),
+  })
+
 export const validatePurchase = (t: Translate) =>
   object({
     verificationKeyId: keyId(t),
@@ -235,6 +249,16 @@ export const validateUpdateCard = (t: Translate) =>
   object({
     cardId: identifier(t),
     default: boolean(),
+  })
+
+export const validateUpdatePayment = (t: Translate) =>
+  object({
+    paymentId: identifier(t),
+    externalId: string(),
+    status: oneOf(
+      Object.values(PaymentStatus),
+      t('forms:errors.invalidPayment') as string
+    ),
   })
 
 export const validateRemoveCard = (t: Translate) =>

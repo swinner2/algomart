@@ -1,5 +1,17 @@
 .root {
-  @apply relative flex flex-col col-span-1;
+  @apply relative flex flex-col col-span-1 rounded-2xl border-1 border-gray-800 bg-gray-900 h-full;
+
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
+  transition: all;
+  transition-duration: 0.3s;
+}
+
+.root:hover {
+  box-shadow: 5px 5px #00fdff;
+}
+
+.root:hover .actions {
+  transform: scale(1);
 }
 
 .rootCard {
@@ -12,7 +24,7 @@
 
 /* Item image */
 .imageWrapper {
-  @apply relative overflow-hidden bg-black rounded-md shadow-lg hover:border-base-green focus:border-base-green;
+  @apply relative overflow-hidden bg-black rounded-2xl shadow-lg hover:border-base-green focus:border-base-green;
 }
 
 .questionMarkWrapper {
@@ -39,12 +51,12 @@
 }
 
 .badge {
-  @apply absolute bg-base-green bottom-2 font-bold left-2 px-2 py-1 rounded-full text-center text-sm text-white;
+  @apply absolute bg-action-accent bottom-2 font-bold left-2 px-2 py-1 rounded-full text-center text-sm text-white;
 }
 
 /* Item content */
 .title {
-  @apply mt-2 px-4 text-sm text-center text-base-gray-text;
+  @apply px-4 text-base text-blue-800 text-center my-4;
 }
 
 .title.titleFaded {
@@ -53,6 +65,18 @@
 
 .rootCard .title {
   @apply mt-4;
+}
+
+.actions {
+  @apply absolute top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex flex-col justify-center items-center;
+  transform: scale(0);
+  transition: all;
+  transition-duration: 0.3s;
+}
+
+.action {
+  @apply border-1 border-blue-800 bg-gray-900 text-white py-2 my-2 w-40 rounded-full hover:bg-blue-800 hover:bg-opacity-50 flex items-center justify-center;
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
 }
 
 .metaWrapper {
@@ -64,7 +88,7 @@
 }
 
 .setNumber {
-  @apply font-black text-2xl text-base-gray-border;
+  @apply font-black text-2xl text-base-border;
 }
 
 .rarity {
@@ -89,5 +113,5 @@
 }
 
 .checkIcon {
-  @apply w-6 h-6 text-black rounded-full bg-base-green;
+  @apply w-6 h-6 text-black rounded-full bg-action-accent;
 }

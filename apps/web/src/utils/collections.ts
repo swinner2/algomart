@@ -58,6 +58,7 @@ export function getCollectionTabs(t: Translate) {
     { href: urls.myCollectibles, label: t('collection:tabs.NFTs') },
     { href: urls.myCollections, label: t('collection:tabs.Collections') },
     { href: urls.myShowcase, label: t('collection:tabs.Showcase') },
+    { href: urls.myAuctions, label: t('collection:tabs.Auctions') },
   ]
 }
 

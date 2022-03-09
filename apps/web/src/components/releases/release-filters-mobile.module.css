@@ -33,7 +33,7 @@
 /* Floating Filter Button */
 .mobileFilterButton {
   /* Base */
-  @apply fixed bottom-4 z-10 mx-auto p-4 shadow-large rounded-full;
+  @apply fixed z-10 p-4 mx-auto rounded-full bottom-4 shadow-large;
   box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.3);
   left: 50%;
   transform: translate(-50%, 0);

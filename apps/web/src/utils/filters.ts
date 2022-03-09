@@ -1,8 +1,10 @@
 import {
+  AuctionSortOptions,
   CollectibleListQuerystring,
   PacksByOwnerQuery,
   PackStatus,
   PackType,
+  PaymentsQuerystring,
   PublishedPacksQuery,
   SortOptions,
 } from '@algomart/schemas'
@@ -98,6 +100,22 @@ export const getCollectiblesFilterQuery = (
 }
 
 /**
+ * Build a search parameter string to filter payments
+ */
+export const getPaymentsFilterQuery = (query: PaymentsQuerystring) => {
+  return stringify({
+    page: query.page,
+    pageSize: query.pageSize || PAGE_SIZE,
+    packId: query.packId,
+    packSlug: query.packSlug,
+    payerExternalId: query.payerExternalId,
+    payerUsername: query.payerUsername,
+    sortBy: query.sortBy,
+    sortDirection: query.sortDirection,
+  })
+}
+
+/**
  * Build selection options for sorting
  */
 export const getSelectSortingOptions = (t: Translate) => {
@@ -105,5 +123,15 @@ export const getSelectSortingOptions = (t: Translate) => {
     { id: SortOptions.Newest, label: t('collection:sorting.Newest') },
     { id: SortOptions.Oldest, label: t('collection:sorting.Oldest') },
     { id: SortOptions.Name, label: t('collection:sorting.Name') },
+  ]
+}
+
+export const getAuctionSortingOptions = (t: Translate) => {
+  return [
+    { id: AuctionSortOptions.Name, label: t('auction:sorting.Name') },
+    { id: AuctionSortOptions.Newest, label: t('auction:sorting.Newest') },
+    { id: AuctionSortOptions.Oldest, label: t('auction:sorting.Oldest') },
+    { id: AuctionSortOptions.Highest, label: t('auction:sorting.Highest') },
+    { id: AuctionSortOptions.Lowest, label: t('auction:sorting.Lowest') },
   ]
 }

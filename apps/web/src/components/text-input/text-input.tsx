@@ -27,7 +27,7 @@ export default function TextInput({
   const inputField = (
     <input
       className={clsx(
-        'w-full font-poppins bg-gray-900 border-2 border-gray-600 rounded-lg placeholder-gray-400 text-gray-50 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 px-3 py-2',
+        'w-full font-poppins bg-gray-900 border-2 border-gray-600 rounded-lg placeholder-gray-400 text-gray-50 focus:outline-none focus:border-blue-400 focus:ring-white focus:text-white px-3 py-2',
         {
           [css.inputDisabled]: readOnly || disabled,
           [css.inputError]: error,

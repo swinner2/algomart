@@ -2,6 +2,7 @@ import { CollectibleWithDetails } from '@algomart/schemas'
 import clsx from 'clsx'
 import useTranslation from 'next-translate/useTranslation'
 import { useMemo } from 'react'
+import { LinkIcon } from '@heroicons/react/outline'
 
 import CollectibleItem from './collectible-item'
 import CollectiblePlaceholder from './collectible-placeholder'
@@ -98,19 +99,20 @@ export default function CollectibleShowcase({
       {mode === 'editing' && username && (
         <div className={css.toolbar}>
           <div className={css.linkWrapper}>
-            <span>
-              {t('collection:viewer.Your collection')}
-              {': '}
+            
+            <AppLink
+              href={urls.profileShowcase.replace(':username', username)}
+              className="text-gray-200"
+            >
+              <span className="font-bold text-blue-800 hover:underline flex">
+              {t('collection:viewer.Your collection')}<LinkIcon className='w-4 ml-2'/>
             </span>
-            <AppLink href={urls.profileShowcase.replace(':username', username)}>
-              {url}
             </AppLink>
           </div>
           <div className={css.toggleWrapper}>
             <Toggle
               checked={initialPublish}
               label={t('collection:viewer.Publish Showcase')}
-              styleMode="dark"
               onChange={onTogglePublish}
             />
           </div>

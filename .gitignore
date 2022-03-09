@@ -141,8 +141,8 @@ config/firebase-config.json
 *.sqlite
 
 # Local data from CMS
-.postgres/data
-.cms/uploads
-*.backup
-directus-migrate.json
+apps/cms/uploads/*
+!apps/cms/uploads/.gitkeep
 
+# Webstorm IDE folder
+.idea

@@ -1,5 +1,5 @@
 .root {
-  @apply block relative;
+  @apply relative block text-black;
 }
 
 .labelContainer {
@@ -7,7 +7,7 @@
 }
 
 .label {
-  @apply text-gray-200 w-full;
+  @apply text-white text-sm w-full;
 }
 
 .helpText {
@@ -15,28 +15,28 @@
 }
 
 .errorText {
-  @apply font-light text-base-errorRed text-right text-xs;
+  @apply text-xs font-light text-right text-base-error;
 }
 
 .selectContainer {
-  @apply relative z-20 w-80;
+  @apply relative z-20 w-full;
 }
 
 .selectButton {
-  @apply bg-white border border-base-gray-border cursor-default relative rounded-sm text-left w-full;
+  @apply relative w-full text-left bg-white border rounded-sm cursor-default border-base-border;
   padding: 10px 50px 10px 10px;
 }
 
 .selectButtonDisabled {
-  @apply bg-base-gray-bg border-base-gray-bg;
+  @apply bg-base-bg border-base-bg;
 }
 
 .selectButtonError {
-  @apply border-base-errorRed;
+  @apply border-base-error;
 }
 
 .selectButtonText {
-  @apply block font-light text-base-gray-dark text-sm truncate;
+  @apply block text-sm font-light truncate text-base-gray-dark;
 }
 
 .selectButtonIconContainer {
@@ -44,7 +44,7 @@
 }
 
 .selectButtonIcon {
-  @apply h-5  text-gray-400 w-5;
+  @apply w-5 h-5 text-gray-400;
 }
 
 .selectOptions {
@@ -52,7 +52,7 @@
 }
 
 .selectOption {
-  @apply cursor-default font-light p-3 relative select-none;
+  @apply relative p-3 font-light cursor-default select-none;
 }
 
 .selectOptionActive {

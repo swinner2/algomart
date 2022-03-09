@@ -1,0 +1,117 @@
+.root {
+  @apply relative flex flex-col col-span-1 rounded-2xl border-1 border-gray-800 bg-gray-900 h-full;
+
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
+  transition: all;
+  transition-duration: 0.3s;
+}
+
+.root:hover {
+  box-shadow: 5px 5px #00fdff;
+}
+
+.root:hover .actions {
+  transform: scale(1);
+}
+
+.rootCard {
+  @apply bg-white h-full overflow-hidden pb-4 rounded-md shadow-lg;
+}
+
+.rootCard > div {
+  @apply rounded-none shadow-none;
+}
+
+/* Item image */
+.imageWrapper {
+  @apply relative overflow-hidden bg-black rounded-2xl shadow-lg hover:border-base-green focus:border-base-green;
+}
+
+.questionMarkWrapper {
+  @apply flex relative w-full;
+  background: linear-gradient(135deg, #6ba2ce 0%, #3f80b5 100%);
+  padding-bottom: 100%;
+}
+
+.questionMark {
+  @apply absolute font-medium left-1/2 top-1/2 text-center text-white;
+  transform: translate(-50%, -50%);
+}
+
+.questionMarkSmall {
+  @apply text-2xl;
+}
+
+.questionMarkMedium {
+  @apply text-4xl;
+}
+
+.questionMarkLarge {
+  @apply text-7xl;
+}
+
+.badge {
+  @apply absolute bg-base-green bottom-2 font-bold left-2 px-2 py-1 rounded-full text-center text-sm text-white;
+}
+
+/* Item content */
+.title {
+  @apply px-4 text-base text-blue-800 text-center my-4;
+}
+
+.title.titleFaded {
+  @apply text-base-gray-light;
+}
+
+.rootCard .title {
+  @apply mt-4;
+}
+
+.actions {
+  @apply absolute top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex flex-col justify-center items-center;
+  transform: scale(0);
+  transition: all;
+  transition-duration: 0.3s;
+}
+
+.action {
+  @apply border-1 border-blue-800 bg-gray-900 text-white py-2 my-2 w-40 rounded-full hover:bg-blue-800 hover:bg-opacity-50 flex items-center justify-center;
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
+}
+
+.metaWrapper {
+  @apply flex items-center justify-between pt-2 px-4;
+}
+
+.metaWrapper.metaCenter {
+  @apply justify-center;
+}
+
+.setNumber {
+  @apply font-black text-2xl text-base-gray-border;
+}
+
+.rarity {
+  @apply bg-base-gray-medium font-bold px-4 py-1 rounded-full text-xs text-center text-white uppercase;
+}
+
+/* Showcase actions */
+.removeButton {
+  @apply absolute -top-2 -right-2;
+}
+
+.removeIcon {
+  @apply w-6 h-6 text-black bg-white rounded-full;
+}
+
+.overlay {
+  @apply absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50;
+}
+
+.addIcon {
+  @apply w-6 h-6 text-black bg-white rounded-full;
+}
+
+.checkIcon {
+  @apply w-6 h-6 text-black rounded-full bg-base-green;
+}

@@ -29,14 +29,14 @@ export default function MyCollectionsTemplate({
   )
 
   return (
-    <div className="mx-auto max-w-7xl mt-10">
+    <div className="mx-auto max-w-7xl mt-10 px-2">
       {/* Tabs */}
       <Tabs activeTab={1} tabs={getCollectionTabs(t)} negativeMargin />
 
       {/* Collections */}
       <section className="mt-12">
         {collectionGroups.length > 0 ? (
-          <Grid columns={2}>
+          <Grid columns={4}>
             {collectionGroups.map(({ collection }) => {
               return (
                 <AppLink

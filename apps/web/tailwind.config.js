@@ -2,22 +2,26 @@
 const flattenColorPalette =
   require('tailwindcss/lib/util/flattenColorPalette').default
 const plugin = require('tailwindcss/plugin')
+const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind')
+const path = require('path')
+
+const generateColorClass = (variable) => {
+  return ({ opacityValue }) =>
+    opacityValue
+      ? `rgba(var(--${variable}), ${opacityValue})`
+      : `rgb(var(--${variable}))`
+}
 
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-  // Keep JIT disabled for now. Enabling it will break the custom font loading.
-  // mode: 'jit',
-  purge: {
-    // tree-shaking unused styles
-    content: [
-      './src/components/**/*.{js,ts,jsx,tsx,css}',
-      './src/layouts/**/*.{js,ts,jsx,tsx,css}',
-      './src/pages/**/*.{js,ts,jsx,tsx,css}',
-      './src/templates/**/*.{js,ts,jsx,tsx,css}',
-    ],
-  },
-  darkMode: false, // or 'media' or 'class'
+  // tree-shaking unused styles
+  content: [
+    path.join(__dirname, 'src', '**', '*.{js,ts,jsx,tsx,css}'),
+    ...createGlobPatternsForDependencies(__dirname, '**/*.{js,ts,jsx,tsx,css}'),
+  ],
+
+  darkMode: 'class', // or false, 'media' or 'class'
   theme: {
     extend: {
       backgroundImage: {
@@ -105,6 +109,20 @@ module.exports = {
             400: '#309AC0',
             600: '#EF466F', // Primary Buttons
           },
+          error: generateColorClass('error'),
+          price: generateColorClass('price'),
+          border: generateColorClass('border'),
+
+          bg: generateColorClass('bg'),
+          bgCard: generateColorClass('bgCard'),
+          bgPanel: generateColorClass('bgPanel'),
+          bgNotice: generateColorClass('bgNotice'),
+
+          textPrimary: generateColorClass('textPrimary'),
+          textSecondary: generateColorClass('textSecondary'),
+          textTertiary: generateColorClass('textTertiary'),
+          textDisabled: generateColorClass('textDisabled'),
+
           gray: {
             50: '#FCFCFD', // Icons/Typography
             100: '#E6E8EC', // Pill Active - Follow Page
@@ -114,7 +132,7 @@ module.exports = {
             800: '#23262F', // Favorite Button
             900: '#0b0b1d', // Background
             dark: colors.gray['500'],
-            text: colors.coolGray['50'],
+            text: colors.gray['50'],
             nav: '#e5e5e5',
             notice: '#F9F8F9',
             medium: '#747F8F',
@@ -122,6 +140,15 @@ module.exports = {
             border: '#DADCDF',
             bg: '#ECECEC',
           },
+        },
+        action: {
+          primary: generateColorClass('actionPrimary'),
+          primaryContrastText: generateColorClass('actionPrimaryContrastText'),
+          secondary: generateColorClass('actionSecondary'),
+          secondaryContrastText: generateColorClass(
+            'actionSecondaryContrastText'
+          ),
+          accent: generateColorClass('actionAccent'),
         },
       },
       fontFamily: {
@@ -198,21 +225,21 @@ module.exports = {
     plugin(({ addUtilities, theme }) => {
       const colors = flattenColorPalette(theme('colors'))
       delete colors['default']
-
-      const colorMap = Object.keys(colors).map((color) => ({
-        [`.border-t-${color}`]: { borderTopColor: colors[color] },
-        [`.border-r-${color}`]: { borderRightColor: colors[color] },
-        [`.border-b-${color}`]: { borderBottomColor: colors[color] },
-        [`.border-l-${color}`]: { borderLeftColor: colors[color] },
-      }))
+      const colorMap = Object.keys(colors).map((colorName) => {
+        const color =
+          typeof colors[colorName] === 'function'
+            ? colors[colorName](colorName)
+            : colors[colorName]
+        return {
+          [`.border-t-${colorName}`]: { borderTopColor: color },
+          [`.border-r-${colorName}`]: { borderRightColor: color },
+          [`.border-b-${colorName}`]: { borderBottomColor: color },
+          [`.border-l-${colorName}`]: { borderLeftColor: color },
+        }
+      })
       const utilities = Object.assign({}, ...colorMap)
 
       addUtilities(utilities, ['responsive', 'hover'])
     }),
   ],
-  variants: {
-    extend: {
-      borderRadius: ['first', 'last'],
-    },
-  },
 }

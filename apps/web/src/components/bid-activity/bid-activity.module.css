@@ -1,11 +1,11 @@
 .titleWrapper {
-  @apply bg-gradient-to-b from-gray-800 to-gray-600 text-white;
+  @apply bg-gradient-to-b from-gray-200 to-white dark:from-gray-900 dark:to-black;
 }
 
 .title {
-  @apply font-bold p-6 text-2xl text-center;
+  @apply p-6 text-2xl font-bold text-center;
 }
 
 .list {
-  @apply border-t border-base-gray-border px-7;
+  @apply border-t border-base-border px-7;
 }

@@ -17,7 +17,7 @@
 
 .bottomNavLeftImage {
   /* Base */
-  @apply relative mx-auto mb-8;
+  @apply relative inline-block mx-auto mb-8 text-base-textTertiary;
   /* Tablet + */
   @apply md:m-0 md:relative;
 }
