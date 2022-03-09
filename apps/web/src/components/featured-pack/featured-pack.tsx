@@ -96,6 +96,21 @@ export default function HomeTemplate({
                 {featuredPack.title}
               </Heading>
 
+              {featuredPack.subtitle ? (
+                <Heading className={css.subtitle} level={3} size={4}>
+                  {featuredPack.subtitle}
+                </Heading>
+              ) : null}
+
+              {featuredPack.body ? (
+                <div className={css.featuredBody}>
+                  <Markdown options={{ forceBlock: true }}>
+                    {featuredPack.body.slice(0, 500)}
+                  </Markdown>
+                  <div className={css.mask} />
+                </div>
+              ) : null}
+
               {/* CTA bar */}
               <div className="p-4 text-xs font-bold text-center text-white uppercase bg-green-800 bg-opacity-70 rounded">
                 {isAuction ? (

@@ -16,7 +16,7 @@
 }
 
 .metadataValue {
-  @apply text-xl font-bold;
+  @apply text-lg font-bold;
 }
 
 .price {

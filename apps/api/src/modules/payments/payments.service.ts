@@ -1,11 +1,12 @@
 import {
+  CirclePaymentErrorCode,
   CirclePaymentQueryType,
   CirclePaymentSourceType,
+  CirclePaymentVerificationOptions,
   CreateBankAccount,
   CreateCard,
   CreatePayment,
   CreateTransferPayment,
-  CreateWalletAddress,
   DEFAULT_CURRENCY,
   DEFAULT_LOCALE,
   EventAction,
@@ -15,6 +16,7 @@ import {
   PackType,
   PaymentBankAccountStatus,
   PaymentCardStatus,
+  PaymentQuerystring,
   Payments,
   PaymentSortField,
   PaymentsQuerystring,
@@ -27,8 +29,9 @@ import {
   UserAccount,
   WirePayment,
 } from '@algomart/schemas'
-import { env } from 'node:process'
+import { enc, SHA256 } from 'crypto-js'
 import { Transaction } from 'objection'
+import { v4 as uuid } from 'uuid'
 
 import { Configuration } from '@/configuration'
 import CircleAdapter from '@/lib/circle-adapter'
@@ -42,15 +45,17 @@ import { PaymentCardModel } from '@/models/payment-card.model'
 import { UserAccountModel } from '@/models/user-account.model'
 import NotificationService from '@/modules/notifications/notifications.service'
 import PacksService from '@/modules/packs/packs.service'
-import { formatFloatToInt, formatIntToFloat } from '@/utils/format-currency'
 import {
   convertFromUSD,
   convertToUSD,
   currency,
+  formatFloatToInt,
+  formatIntToFloat,
   isGreaterThanOrEqual,
 } from '@/utils/format-currency'
 import { invariant, userInvariant } from '@/utils/invariant'
 import { logger } from '@/utils/logger'
+import { poll } from '@/utils/poll'
 
 export default class PaymentsService {
   logger = logger.child({ context: this.constructor.name })
@@ -271,7 +276,7 @@ export default class PaymentsService {
     // Create card using Circle API
     const card = await this.circle
       .createPaymentCard({
-        idempotencyKey: cardDetails.idempotencyKey,
+        idempotencyKey: uuid(),
         keyId: cardDetails.keyId,
         encryptedData: cardDetails.encryptedData,
         billingDetails: cardDetails.billingDetails,
@@ -330,7 +335,7 @@ export default class PaymentsService {
       .first()
     userInvariant(user, 'no user found', 404)
 
-    const { price, packId } = await this.selectPackAndAssignToUser(
+    const { price, packId, priceInUSD } = await this.selectPackAndAssignToUser(
       bankDetails.packTemplateId,
       user.id,
       trx
@@ -339,7 +344,7 @@ export default class PaymentsService {
     // Create bank account using Circle API
     const bankAccount = await this.circle
       .createBankAccount({
-        idempotencyKey: bankDetails.idempotencyKey,
+        idempotencyKey: uuid(),
         accountNumber: bankDetails.accountNumber,
         routingNumber: bankDetails.routingNumber,
         billingDetails: bankDetails.billingDetails,
@@ -411,6 +416,22 @@ export default class PaymentsService {
       entityId: newBankAccount.id,
       userAccountId: user.id,
     })
+
+    if (Configuration.customerServiceEmail) {
+      const packTemplate = await this.packs.getPackById(packId)
+      await this.notifications.createNotification(
+        {
+          type: NotificationType.CSAwaitingWirePayment,
+          userAccountId: user.id,
+          variables: {
+            packTitle: packTemplate.title,
+            paymentId: newPayment.id,
+            amount: priceInUSD,
+          },
+        },
+        trx
+      )
+    }
 
     return { id: newBankAccount.id, status: bankAccount.status }
   }
@@ -521,15 +542,8 @@ export default class PaymentsService {
 
     // If encrypted details are provided, add to request
     const encryptedDetails = {}
-    const {
-      keyId,
-      encryptedData,
-      cardId,
-      idempotencyKey,
-      metadata,
-      verification,
-      description,
-    } = paymentDetails
+    const { keyId, encryptedData, cardId, metadata, description } =
+      paymentDetails
     if (keyId) {
       Object.assign(encryptedDetails, { keyId })
     }
@@ -541,55 +555,73 @@ export default class PaymentsService {
     // Attempt to find card (cardId could be source or db ID)
     const card = await PaymentCardModel.query(trx).findById(cardId)
 
-    // Create payment using Circle API
-    const payment = await this.circle
-      .createPayment({
-        idempotencyKey: idempotencyKey,
-        metadata: metadata,
-        amount: {
-          amount: priceInUSD,
-          currency: DEFAULT_CURRENCY,
-        },
-        verification: verification,
-        description: description,
-        source: {
-          id: card?.externalId || cardId,
-          type: CirclePaymentSourceType.card, // @TODO: Update when support ACH
-        },
-        ...encryptedDetails,
-      })
-      .catch((error) => {
-        this.logger.error(error, 'failed to create payment')
-        return null
-      })
+    // Circle only accepts loopback addresses
+    const verificationHostname = Configuration.webUrl.includes('localhost')
+      ? 'http://127.0.0.1:3000'
+      : Configuration.webUrl
 
-    if (!payment) {
-      // Remove claim from payment if payment doesn't go through
-      await this.packs.claimPack(
-        {
-          packId,
-          claimedById: null,
-          claimedAt: null,
-        },
-        trx
-      )
-
-      return null
+    // Base payment details
+    const basePayment = {
+      metadata: {
+        ...metadata,
+        sessionId: SHA256(user.id).toString(enc.Base64),
+      },
+      amount: {
+        amount: priceInUSD,
+        currency: DEFAULT_CURRENCY,
+      },
+      description,
+      source: {
+        id: card?.externalId || cardId,
+        type: CirclePaymentSourceType.card,
+      },
     }
 
-    // Create new payment in database
+    // Create 3DS payment
+    const paymentResponse = await this.circle
+      .createPayment({
+        idempotencyKey: uuid(),
+        ...basePayment,
+        ...encryptedDetails,
+        verification: CirclePaymentVerificationOptions.three_d_secure,
+        verificationSuccessUrl: new URL(
+          Configuration.successPath,
+          verificationHostname
+        ).toString(),
+        verificationFailureUrl: new URL(
+          Configuration.failurePath,
+          verificationHostname
+        ).toString(),
+      })
+      .catch(() => null)
+
+    invariant(paymentResponse, 'unable to create 3DS payment')
+
     // Circle may return the same payment ID if there's duplicate info
     const newPayment = await PaymentModel.query(trx)
       .insert({
-        externalId: payment.externalId,
-        status: payment.status,
-        error: payment.error,
+        externalId: paymentResponse.externalId,
+        status: paymentResponse.status,
+        error: paymentResponse.error,
         payerId: user.id,
         packId,
         paymentCardId: card?.id,
       })
       .onConflict('externalId')
       .ignore()
+
+    invariant(newPayment, 'unable to create payment in database')
+
+    // Search for payment status to confirm check is complete
+    const completeWhenNotPendingForPayments = (payment: ToPaymentBase | null) =>
+      !(payment?.status !== PaymentStatus.Pending)
+    const foundPayment = await poll<ToPaymentBase | null>(
+      async () =>
+        await this.circle.getPaymentById(paymentResponse.externalId as string),
+      completeWhenNotPendingForPayments,
+      1000
+    )
+    invariant(foundPayment, 'unable to find payment')
 
     // Create event for payment creation
     await EventModel.query(trx).insert({
@@ -598,6 +630,45 @@ export default class PaymentsService {
       entityId: newPayment.id,
       userAccountId: user.id,
     })
+
+    if (
+      foundPayment.status === PaymentStatus.Failed &&
+      foundPayment.error === CirclePaymentErrorCode.three_d_secure_not_supported
+    ) {
+      // Create cvv payment with Circle if 3DS is not supported
+      const cvvPayment = await this.circle
+        .createPayment({
+          idempotencyKey: uuid(),
+          ...basePayment,
+          ...encryptedDetails,
+          verification: CirclePaymentVerificationOptions.cvv,
+        })
+        .catch(() => null)
+
+      // Remove claim from payment if payment doesn't go through
+      if (!cvvPayment) {
+        await this.packs.revokePack(
+          {
+            packId,
+            ownerId: user.id,
+          },
+          trx
+        )
+        return null
+      }
+      invariant(cvvPayment, 'unable to create cvv payment')
+
+      // Update payment with new details
+      const payment = await PaymentModel.query(trx).patchAndFetchById(
+        newPayment.id,
+        {
+          externalId: cvvPayment.externalId,
+          status: cvvPayment.status,
+          error: cvvPayment.error,
+        }
+      )
+      return payment
+    }
 
     return newPayment
   }
@@ -687,13 +758,13 @@ export default class PaymentsService {
     return newPayment
   }
 
-  async generateAddress(request: CreateWalletAddress) {
+  async generateAddress() {
     // Find the merchant wallet
     const merchantWallet = await this.circle.getMerchantWallet()
     userInvariant(merchantWallet, 'no wallet found', 404)
     // Create blockchain address
     const address = await this.circle.createBlockchainAddress({
-      idempotencyKey: request.idempotencyKey,
+      idempotencyKey: uuid(),
       walletId: merchantWallet.walletId,
     })
     userInvariant(address, 'wallet could not be created', 401)
@@ -731,9 +802,10 @@ export default class PaymentsService {
       return amountInt === foundBankAccount.amount
     })
     if (!sourcePayment) return null
+
     // Update payment details
     if (payment.status !== sourcePayment.status || !payment.externalId) {
-      await PaymentModel.query(trx).patchAndFetchById(payment.id, {
+      await PaymentModel.query(trx).findById(payment.id).patch({
         externalId: sourcePayment.externalId,
         status: sourcePayment.status,
       })
@@ -785,6 +857,42 @@ export default class PaymentsService {
       }
     }
 
+    // STATUS CHANGED
+    if (
+      payment.status !== sourcePayment.status && // Automated notifications to customer service
+      Configuration.customerServiceEmail
+    ) {
+      if (sourcePayment.status === PaymentStatus.Failed) {
+        const packTemplate = await this.packs.getPackById(payment.packId)
+        await this.notifications.createNotification(
+          {
+            type: NotificationType.CSWirePaymentFailed,
+            userAccountId: payment.payerId,
+            variables: {
+              packTitle: packTemplate.title,
+              paymentId: payment.id,
+              amount: sourcePayment.amount,
+            },
+          },
+          trx
+        )
+      } else if (sourcePayment.status === PaymentStatus.Paid) {
+        const packTemplate = await this.packs.getPackById(payment.packId)
+        await this.notifications.createNotification(
+          {
+            type: NotificationType.CSWirePaymentSuccess,
+            userAccountId: payment.payerId,
+            variables: {
+              packTitle: packTemplate.title,
+              paymentId: payment.id,
+              amount: sourcePayment.amount,
+            },
+          },
+          trx
+        )
+      }
+    }
+
     return sourcePayment
   }
 
@@ -812,14 +920,26 @@ export default class PaymentsService {
     return matchingPayments || []
   }
 
-  async getPaymentById(paymentId: string, isAdmin?: boolean) {
-    const payment = await PaymentModel.query()
-      .findById(paymentId)
-      .withGraphFetched('pack')
+  async getPaymentById(paymentId: string, args?: PaymentQuerystring) {
+    const { isAdmin, isExternalId } = args
+    // Find payment by ID or external ID
+    const query = PaymentModel.query()
+    if (isExternalId) {
+      query.where({ externalId: paymentId })
+    } else {
+      query.findById(paymentId)
+    }
+
+    // Search for matching payment
+    const payment = await query
       .withGraphFetched('payer')
+      .withGraphFetched('pack')
+      .first()
     userInvariant(payment, 'payment not found', 404)
+
+    // If admin, return additional pack details
     if (isAdmin) {
-      const { pack } = payment
+      const pack = payment.pack
       invariant(pack?.templateId, 'pack template not found')
       const { packs: packTemplates } = await this.packs.getPublishedPacks({
         templateIds: [pack.templateId],
@@ -919,6 +1039,7 @@ export default class PaymentsService {
         variables: {
           amount: formatIntToFloat(foundBankAccount.amount),
           packTitle: packTemplate.title,
+          packSlug: packTemplate.slug,
           trackingRef: bankAccountInstructions.trackingRef,
           beneficiaryName: bankAccountInstructions.beneficiary.name,
           beneficiaryAddress1: bankAccountInstructions.beneficiary.address1,
@@ -949,8 +1070,12 @@ export default class PaymentsService {
 
   async updatePaymentStatuses(trx?: Transaction) {
     const pendingPayments = await PaymentModel.query(trx)
-      // Pending and Confirmed are non-final statuses
-      .whereIn('status', [PaymentStatus.Pending, PaymentStatus.Confirmed])
+      // Pending, Confirmed, and ActionRequired are non-final statuses
+      .whereIn('status', [
+        PaymentStatus.Pending,
+        PaymentStatus.ActionRequired,
+        PaymentStatus.Confirmed,
+      ])
       // Prioritize pending payments
       .orderBy('status', 'desc')
       .limit(10)
@@ -975,7 +1100,18 @@ export default class PaymentsService {
           if (payment.status !== circlePayment.status) {
             await PaymentModel.query(trx).patchAndFetchById(payment.id, {
               status: circlePayment.status,
+              action: circlePayment.action,
+              error: circlePayment.error,
             })
+            if (circlePayment.status === PaymentStatus.Failed) {
+              await this.packs.revokePack(
+                {
+                  packId: payment.packId,
+                  ownerId: payment.payerId,
+                },
+                trx
+              )
+            }
             status = circlePayment.status
             updatedPayments++
           }

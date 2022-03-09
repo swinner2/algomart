@@ -85,7 +85,7 @@ export default function ReleaseMetadata({
           </>
         ) : (
           <div className={css.metadataValue}>
-            {t('release:N of N editions available', {
+            {t('release:N of N available', {
               available: packTemplate.available,
               total: packTemplate.total,
             })}
@@ -110,9 +110,7 @@ export default function ReleaseMetadata({
           </>
         ) : (
           <div className={css.metadataValue}>
-            {packTemplate.subtitle
-              ? packTemplate.subtitle
-              : isActive
+            {isActive
               ? t('release:This sale is open')
               : t('release:This sale has ended')}
           </div>

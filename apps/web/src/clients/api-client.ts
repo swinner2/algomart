@@ -11,6 +11,7 @@ import {
   CollectibleShowcaseQuerystring,
   CollectibleWithDetails,
   CollectionWithSets,
+  Countries,
   CreateBankAccount,
   CreateBankAccountResponse,
   CreateBidRequest,
@@ -18,14 +19,13 @@ import {
   CreatePayment,
   CreateTransferPayment,
   CreateUserAccountRequest,
-  CreateWalletAddress,
   DEFAULT_LOCALE,
-  ExportCollectible,
   ExternalId,
   FindTransferByAddress,
   GetPaymentBankAccountStatus,
   GetPaymentCardStatus,
   Homepage,
+  InitializeTransferCollectible,
   Locale,
   LocaleAndExternalId,
   MintPack,
@@ -55,6 +55,8 @@ import {
   SetWithCollection,
   SingleCollectibleQuerystring,
   ToPaymentBase,
+  TransferCollectible,
+  TransferCollectibleResult,
   TransferPack,
   TransferPackStatusList,
   UpdatePayment,
@@ -228,9 +230,27 @@ export class ApiClient {
       .then((response) => response.ok)
   }
 
-  async exportCollectible(request: ExportCollectible) {
+  async initializeExportCollectible(request: InitializeTransferCollectible) {
     return await this.http
       .post('collectibles/export', { json: request })
+      .json<TransferCollectibleResult>()
+  }
+
+  async exportCollectible(request: TransferCollectible) {
+    return await this.http
+      .post('collectibles/export/sign', { json: request })
+      .json<{ txId: string }>()
+  }
+
+  async initializeImportCollectible(request: InitializeTransferCollectible) {
+    return await this.http
+      .post('collectibles/import', { json: request })
+      .json<TransferCollectibleResult>()
+  }
+
+  async importCollectible(request: TransferCollectible) {
+    return await this.http
+      .post('collectibles/import/sign', { json: request })
       .json<{ txId: string }>()
   }
 
@@ -246,8 +266,12 @@ export class ApiClient {
     return await this.http.post('payments', { json }).json<Payment>()
   }
 
-  async getPaymentById(paymentId: string) {
-    return await this.http.get(`payments/${paymentId}`).json<Payment>()
+  async getPaymentById(paymentId: string, isExternalId: boolean) {
+    const searchParams = new URLSearchParams()
+    if (isExternalId) searchParams.set('isExternalId', isExternalId.toString())
+    return await this.http
+      .get(`payments/${paymentId}`, { searchParams })
+      .json<Payment>()
   }
 
   async getPublicKey() {
@@ -270,9 +294,9 @@ export class ApiClient {
     return await this.http.post('payments/transfers', { json }).json<Payment>()
   }
 
-  async createWalletAddress(json: CreateWalletAddress) {
+  async createWalletAddress() {
     return await this.http
-      .post('payments/wallets', { json })
+      .post('payments/wallets')
       .json<CircleBlockchainAddress>()
   }
 
@@ -481,6 +505,12 @@ export class ApiClient {
         },
       })
       .json<Homepage>()
+  }
+  //#endregion
+
+  //#region Application
+  async getCountries() {
+    return await this.http.get('application/countries').json<Countries>()
   }
   //#endregion
 }

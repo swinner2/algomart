@@ -77,7 +77,10 @@ async function main(args) {
     nft_templates, nft_templates_translations,
     pack_templates, pack_templates_translations, pack_templates_directus_files,
     collections, collections_translations,
-    sets, sets_translations
+    sets, sets_translations,
+    application, application_countries,
+    countries, countries_translations,
+    languages
     CASCADE`)
 
   /**
@@ -108,6 +111,29 @@ async function main(args) {
     console.log('Language already exists.')
   }
 
+  try {
+    await createEntityRecords(
+      'countries',
+      [{ code: 'US' }, { code: 'CA' }],
+      token
+    )
+  } catch (err) {
+    console.log('Countries already exist.')
+  }
+
+  try {
+    await createEntityRecords(
+      'countries_translations',
+      [
+        { id: 1, countries_code: 'US', languages_code: 'en-US', title: 'United States' },
+        { id: 2, countries_code: 'CA', languages_code: 'en-US', title: 'Canada' },
+      ],
+      token
+    )
+  } catch (err) {
+    console.log('Country translations already exist.')
+  }
+
   /**
    * These numbers can be adjusted, just be mindful of the implications.
    * Disproportional values can break the cascade of how assets are divy'd up.
@@ -134,6 +160,22 @@ async function main(args) {
    * - Collections
    * - Sets
    */
+
+  /**
+   * Create application and application countries
+   */
+  const appId = '6048041f-2d72-4eb7-9a2c-3ab44aace8d5'
+  await updateEntityRecord(
+    'application',
+    '',
+    { id: appId, currency: 'USD' },
+    token
+  )
+  await createEntityRecords(
+    'application_countries',
+    { id: 1, application_id: appId, countries_code: 'US' },
+    token
+  )
 
   /**
    * Create homepage

@@ -63,3 +63,7 @@ body {
 #__next {
   @apply flex flex-col h-full bg-gray-900;
 }
+
+.walletconnect-modal__base {
+  @apply font-sans text-gray-700;
+}
