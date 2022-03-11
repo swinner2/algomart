@@ -12,7 +12,7 @@
 }
 
 .metadataLabel {
-  @apply text-sm capitalize text-base-textPrimary;
+  @apply text-sm capitalize text-gray-200;
 }
 
 .metadataValue {

@@ -55,7 +55,7 @@
 
 html,
 body {
-  @apply h-full text-base-textPrimary bg-base-bg;
+  @apply h-full text-gray-200 bg-base-bg;
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system !important;
 }
 

@@ -1,13 +1,11 @@
 import { CollectionBase } from '@algomart/schemas'
-import Image from 'next/image'
+import { PhotographIcon } from '@heroicons/react/solid'
 import clsx from 'clsx'
-import {
-  PhotographIcon,
-} from '@heroicons/react/solid'
+import Image from 'next/image'
 
-import Button from '@/components/button'
 import css from './collection-group.module.css'
 
+import Button from '@/components/button'
 import { cmsImageLoader } from '@/utils/cms-image-loader'
 
 export interface CollectionGroupProps {
@@ -28,17 +26,12 @@ export default function CollectionGroup({ collection }: CollectionGroupProps) {
             height={320}
             width={320}
           />
-        <div className={css.title}>
-          {collection.name}
-          <Button
-              fullWidth
-              variant="primary"
-              type="submit"
-              className={css.viewButton}
-            >
+          <div className={css.title}>
+            {collection.name}
+            <button type="submit" className={css.viewButton}>
               View <PhotographIcon className="w-6 h-6 ml-2" />
-            </Button>
-        </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -8,11 +8,11 @@
 }
 
 .heading {
-  @apply font-bold my-4 text-base-textPrimary text-lg;
+  @apply font-bold my-4 text-gray-200 text-lg;
 }
 
 .message {
-  @apply text-sm text-base-textPrimary;
+  @apply text-sm text-gray-200;
 }
 
 .button {

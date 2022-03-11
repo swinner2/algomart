@@ -217,7 +217,7 @@ export function Passphrase({ error, t }: AuthInputProps) {
 export function Submit({ disabled, t }: AuthInputProps) {
   return (
     <FormField>
-      <Button disabled={disabled} fullWidth type="submit">
+      <Button disabled={disabled} fullWidth type="submit" size="small">
         {t('common:actions.Done')}
       </Button>
     </FormField>

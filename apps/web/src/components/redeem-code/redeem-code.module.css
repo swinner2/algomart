@@ -17,5 +17,5 @@
 }
 
 .noCodeLink {
-  @apply block mt-12 text-sm text-base-gray-medium hover:text-base-textPrimary;
+  @apply block mt-12 text-sm text-base-gray-medium hover:text-gray-200;
 }

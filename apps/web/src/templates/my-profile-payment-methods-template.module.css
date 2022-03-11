@@ -35,7 +35,7 @@
 }
 
 .dialogHeader {
-  @apply mb-12 text-2xl font-bold text-base-textPrimary;
+  @apply mb-12 text-2xl font-bold text-gray-200;
 }
 
 .closeButton {

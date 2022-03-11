@@ -39,7 +39,7 @@ export default function SelectAssetStage(props: SelectAssetStageProps) {
                 clsx(
                   checked ? 'border-transparent' : 'border-base-border',
                   active ? 'ring-2 ring-action-secondary' : '',
-                  'relative bg-base-bgCard text-base-textPrimary border shadow-sm cursor-pointer focus:outline-none'
+                  'relative bg-base-bgCard text-gray-200 border shadow-sm cursor-pointer focus:outline-none'
                 )
               }
             >
@@ -58,7 +58,7 @@ export default function SelectAssetStage(props: SelectAssetStageProps) {
                     <div className="flex flex-col">
                       <RadioGroup.Label
                         as="span"
-                        className="block overflow-hidden text-sm font-medium text-base-textPrimary text-ellipsis whitespace-nowrap"
+                        className="block overflow-hidden text-sm font-medium text-gray-200 text-ellipsis whitespace-nowrap"
                       >
                         {collectible.title}
                       </RadioGroup.Label>

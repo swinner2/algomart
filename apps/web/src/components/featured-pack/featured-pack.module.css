@@ -49,7 +49,7 @@
 
 .featuredBody {
   /* Base */
-  @apply relative flex-1 overflow-hidden text-base-textPrimary sm:hidden md:block;
+  @apply relative flex-1 overflow-hidden  sm:hidden md:block;
 }
 .featuredBody p {
   @apply mb-3;
@@ -62,7 +62,7 @@
 
 .featuredAvailableNumber {
   /* Base */
-  @apply font-bold text-base-textPrimary;
+  @apply font-bold text-gray-200;
 }
 
 .featuredControls {
@@ -83,7 +83,7 @@
 }
 
 .metadataLabel {
-  @apply text-xs capitalize text-base-textPrimary;
+  @apply text-xs capitalize text-gray-200;
 }
 
 .metadataValue {
@@ -117,7 +117,7 @@
 
 .featuredPrice {
   /* Base */
-  @apply mt-4 font-bold text-center text-base-textPrimary;
+  @apply mt-4 font-bold text-center text-gray-200;
 }
 
 .mask {

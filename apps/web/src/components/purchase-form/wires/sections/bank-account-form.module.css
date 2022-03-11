@@ -40,7 +40,7 @@
 }
 
 .differentCardLink {
-  @apply p-0 text-sm underline text-base-textPrimary;
+  @apply p-0 text-sm underline text-gray-200;
 }
 
 .priceContainer {
@@ -64,7 +64,7 @@
 }
 
 .notice {
-  @apply px-8 py-5 mb-8 text-center rounded bg-base-bgNotice text-base-textPrimary;
+  @apply px-8 py-5 mb-8 text-center rounded bg-base-bgNotice text-gray-200;
 }
 
 .notification {

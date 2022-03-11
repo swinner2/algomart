@@ -8,9 +8,9 @@
 }
 
 .link {
-  @apply inline-block leading-5 no-underline transition text-base-textTertiary hover:text-base-textPrimary;
+  @apply inline-block leading-5 no-underline transition text-base-textTertiary hover:text-gray-200;
 }
 
 .current {
-  @apply border-b-1 text-base-textPrimary border-action-accent;
+  @apply border-b-1 text-gray-200 border-action-accent;
 }

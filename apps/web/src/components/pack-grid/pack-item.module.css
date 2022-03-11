@@ -23,7 +23,7 @@
 }
 
 .informationWrapper {
-  @apply text-center rounded-b-sm text-base-textPrimary bg-base-bg;
+  @apply text-center rounded-b-sm text-gray-200 bg-base-bg;
 }
 
 .information {
@@ -37,7 +37,7 @@
 
 .title {
   /* Base + */
-  @apply h-full pt-1 text-sm font-bold text-base-textPrimary line-clamp-2;
+  @apply h-full pt-1 text-sm font-bold text-gray-200 line-clamp-2;
   /* Tablet + */
   @apply md:text-base md:pt-3;
 }

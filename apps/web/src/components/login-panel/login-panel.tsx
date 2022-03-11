@@ -37,7 +37,11 @@ export default function LoginPanel({
         {/* Login buttons */}
         {!isAuthenticated && (
           <>
-            <Button className={css.button} onClick={handleLoginEmail}>
+            <Button
+              className={css.button}
+              onClick={handleLoginEmail}
+              size="small"
+            >
               {t('auth:Sign in with Email')}
             </Button>
             {/* <Button

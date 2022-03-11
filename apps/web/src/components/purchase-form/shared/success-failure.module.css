@@ -19,7 +19,7 @@
 }
 
 .heading {
-  @apply text-2xl font-bold text-base-textPrimary;
+  @apply text-2xl font-bold text-gray-200;
 }
 
 .notice {
@@ -39,9 +39,9 @@
 }
 
 .error {
-  @apply text-sm text-base-textPrimary;
+  @apply text-sm text-gray-200;
 }
 
 .errorHeading {
-  @apply my-4 text-lg font-bold text-base-textPrimary;
+  @apply my-4 text-lg font-bold text-gray-200;
 }

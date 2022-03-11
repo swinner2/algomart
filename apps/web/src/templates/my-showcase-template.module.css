@@ -19,7 +19,7 @@
 }
 
 .noCollectiblesHeading {
-  @apply mb-5 font-bold text-base-textPrimary;
+  @apply mb-5 font-bold text-gray-200;
 }
 
 .bottomCtaWrapper {
