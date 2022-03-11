@@ -18,7 +18,7 @@
 }
 
 .confirmation {
-  @apply mb-2 text-sm font-light text-right text-blue-600;
+  @apply mb-2 text-sm font-light text-right text-gray-200;
 }
 
 .error {
@@ -34,5 +34,5 @@
 }
 
 .sectionText {
-  @apply mb-4;
+  @apply mb-4 text-gray-200;
 }

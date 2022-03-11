@@ -34,9 +34,6 @@
 }
 
 .viewButton {
-  @apply hidden rounded-full w-36 text-white;
-}
-
-.viewButton:hover {
-  @apply bg-blue-800 bg-opacity-60;
+  @apply hidden hover:block border-1 border-blue-800 bg-gray-900 text-white py-2 my-2 w-40 rounded-full hover:bg-blue-800 hover:bg-opacity-50 flex items-center justify-center;
+  filter: drop-shadow(0 0 0.1rem #6dfeff);
 }

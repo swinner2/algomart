@@ -4,7 +4,7 @@
 }
 
 .labelContainer {
-  @apply relative flex flex-wrap content-between w-full font-bold text-base-textPrimary;
+  @apply relative flex flex-wrap content-between w-full font-bold text-gray-200;
 }
 
 .label {
@@ -73,7 +73,7 @@
 }
 
 .passphraseInputDescription {
-  @apply px-6 font-light text-center text-base-textPrimary;
+  @apply px-6 font-light text-center text-gray-200;
 }
 
 .passphraseInputDescription p:first-child {

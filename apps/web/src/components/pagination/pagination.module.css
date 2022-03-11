@@ -23,5 +23,5 @@
 }
 
 .otherPageNumbers {
-  @apply underline text-base-textPrimary;
+  @apply underline text-gray-200;
 }

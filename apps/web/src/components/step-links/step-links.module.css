@@ -7,11 +7,11 @@
 }
 
 .navLink {
-  @apply flex gap-6 no-underline transition duration-300 text-base-textTertiary hover:text-base-textPrimary;
+  @apply flex gap-6 no-underline transition duration-300 text-base-textTertiary hover:text-gray-200;
 }
 
 .navLink.navLinkActive {
-  @apply font-semibold border-b-1 text-base-textPrimary border-action-accent;
+  @apply font-semibold border-b-1 text-gray-200 border-action-accent;
 }
 
 .navLink.navLinkDisabled {

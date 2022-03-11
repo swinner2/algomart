@@ -92,22 +92,27 @@ export default function HomeTemplate({
                 className="text-blue-800 lg:text-xl md:text-md mb-4"
                 level={2}
                 bold
+                inheritColor
               >
                 {featuredPack.title}
               </Heading>
 
               {featuredPack.subtitle ? (
-                <Heading className={css.subtitle} level={3} size={4}>
+                <Heading
+                  className={clsx(css.subtitle, 'text-blue-800')}
+                  level={3}
+                  size={4}
+                  inheritColor
+                >
                   {featuredPack.subtitle}
                 </Heading>
               ) : null}
 
               {featuredPack.body ? (
-                <div className={css.featuredBody}>
+                <div className={clsx(css.featuredBody, 'text-white')}>
                   <Markdown options={{ forceBlock: true }}>
                     {featuredPack.body.slice(0, 500)}
                   </Markdown>
-                  <div className={css.mask} />
                 </div>
               ) : null}
 

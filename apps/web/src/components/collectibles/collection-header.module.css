@@ -20,5 +20,5 @@
 }
 
 .description {
-  @apply text-base-textPrimary text-lg;
+  @apply text-gray-200 text-lg;
 }

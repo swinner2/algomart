@@ -7,11 +7,11 @@
 }
 
 .successHeading {
-  @apply mb-16 text-2xl font-bold text-base-textPrimary;
+  @apply mb-16 text-2xl font-bold text-gray-200;
 }
 
 .bidPlacedHeading {
-  @apply text-2xl font-bold text-base-textPrimary;
+  @apply text-2xl font-bold text-gray-200;
 }
 
 .button {

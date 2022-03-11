@@ -34,7 +34,7 @@
 }
 
 .listItem a {
-  @apply block p-5 text-base no-underline hover:underline;
+  @apply block p-5 text-gray-200 no-underline hover:underline hover:text-blue-800;
 }
 
 .listItemActive a {

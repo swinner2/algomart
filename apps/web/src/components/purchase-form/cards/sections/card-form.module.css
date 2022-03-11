@@ -64,5 +64,5 @@
 }
 
 .notice {
-  @apply px-8 py-5 mb-8 text-center rounded bg-base-bgNotice text-base-textPrimary;
+  @apply px-8 py-5 mb-8 text-center rounded bg-base-bgNotice text-gray-200;
 }
