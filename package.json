@@ -122,7 +122,7 @@
     "@typescript-eslint/eslint-plugin": "5.13.0",
     "@typescript-eslint/parser": "5.13.0",
     "@vscode/sqlite3": "5.0.7",
-    "@walletconnect/types": "1.7.1",
+    "@walletconnect/types": "1.7.5",
     "autoprefixer": "10.4.2",
     "babel-jest": "27.5.1",
     "canvas": "2.9.0",
