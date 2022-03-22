@@ -1,10 +1,8 @@
 import { CollectibleBase } from '@algomart/schemas'
-import Image from 'next/image'
 import clsx from 'clsx'
+import Image from 'next/image'
 
 import css from './collectible-notable.module.css'
-
-import { cmsImageLoader } from '@/utils/cms-image-loader'
 
 export interface NotableCollectibleProps {
   collectible: CollectibleBase
@@ -23,11 +21,12 @@ export default function NotableCollectible({
       <div className={`w-full relative h-full`}>
         <Image
           alt={collectible.title}
-          layout="fill"
-          className="rounded-2xl w-full h-full"
-          loader={cmsImageLoader}
-          objectFit="cover"
+          height={250}
+          layout="responsive"
+          objectFit="contain"
           src={collectible.image}
+          width={250}
+          sizes="(min-width: 768px) 25vw, (min-width: 640px) 50vw, 100vw"
         />
       </div>
       <div className={css.title}>{collectible.title}</div>

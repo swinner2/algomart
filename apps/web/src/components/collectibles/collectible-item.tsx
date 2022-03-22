@@ -1,10 +1,10 @@
 import { CollectibleWithDetails } from '@algomart/schemas'
 import {
+  ChartBarIcon,
   CheckCircleIcon,
+  PhotographIcon,
   PlusCircleIcon,
   XCircleIcon,
-  PhotographIcon,
-  ChartBarIcon,
 } from '@heroicons/react/solid'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -12,8 +12,8 @@ import useTranslation from 'next-translate/useTranslation'
 
 import css from './collectible-item.module.css'
 
-import { cmsImageLoader } from '@/utils/cms-image-loader'
 import AppLink from '@/components/app-link/app-link'
+import { cmsImageLoader } from '@/utils/cms-image-loader'
 
 export interface CollectibleItemProps {
   alt?: string
@@ -51,7 +51,6 @@ export default function CollectibleItem({
 
   const img = showImage ? (
     <Image
-      loader={cmsImageLoader}
       src={imageUrl}
       alt={alt}
       width={160}

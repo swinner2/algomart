@@ -1,15 +1,22 @@
 #!/bin/sh
+
 set -e
 
-npm install
-npm run build:schemas
+cd /app
 
-npm -w @algomart/api run db:latest
+# We rely on the ENABLE_JOBS environment variable to decide whether to apply migrations
+ENABLE_MIGRATIONS="${ENABLE_JOBS:-false}"
 
-echo
-echo "Waiting on CMS"
-node_modules/.bin/wait-on $CMS_URL
+if [ "$ENABLE_MIGRATIONS" == "true" ]; then
+  echo 'current version, before:'
+  npx nx run api:migrate:currentVersion
 
-echo
-echo "Starting dev server"
-npm -w @algomart/api run dev --
+  echo 'applying migrations...'
+  npx nx run api:migrate:latest
+
+  echo 'current version, after:'
+  npx nx run api:migrate:currentVersion
+fi
+
+echo 'starting api...'
+npx nx serve api

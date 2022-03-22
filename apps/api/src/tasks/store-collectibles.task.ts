@@ -1,8 +1,7 @@
+import { logger } from '@api/configuration/logger'
+import CollectiblesService from '@api/modules/collectibles/collectibles.service'
+import DependencyResolver from '@api/shared/dependency-resolver'
 import { Model } from 'objection'
-
-import CollectiblesService from '@/modules/collectibles/collectibles.service'
-import DependencyResolver from '@/shared/dependency-resolver'
-import { logger } from '@/utils/logger'
 
 export default async function storeCollectiblesTask(
   registry: DependencyResolver
@@ -14,10 +13,13 @@ export default async function storeCollectiblesTask(
   const trx = await Model.startTransaction()
   try {
     const result = await collectibles.storeCollectibles(undefined, trx)
-    log.info('stored %d collectibles on IPFS', result)
+    log.info('stored IPFS records for %d collectibles templates', result)
     await trx.commit()
   } catch (error) {
     await trx.rollback()
-    log.error(error as Error, 'failed to store collectibles')
+    log.error(
+      error as Error,
+      'failed to store IPFS records for collectible templates'
+    )
   }
 }

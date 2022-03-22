@@ -44,7 +44,7 @@ export default function LoginPanel({
             >
               {t('auth:Sign in with Email')}
             </Button>
-            {/* <Button
+            <Button
               className={css.button}
               onClick={handleLoginGoogle}
               variant="secondary"
@@ -55,10 +55,10 @@ export default function LoginPanel({
                 alt={t('auth:Google logo')}
                 src={googleIcon}
               />
-              <p className={css.buttonImageText}>
+              <span className={css.buttonImageText}>
                 {t('auth:Sign in with Google')}
-              </p>
-            </Button> */}
+              </span>
+            </Button>
           </>
         )}
       </div>

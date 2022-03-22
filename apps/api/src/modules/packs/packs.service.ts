@@ -32,29 +32,30 @@ import {
   TransferPack,
   TransferPackStatusList,
 } from '@algomart/schemas'
-import { raw, Transaction } from 'objection'
-
-import DirectusAdapter, {
-  DirectusStatus,
-  ItemFilter,
-} from '@/lib/directus-adapter'
-import { BidModel } from '@/models/bid.model'
-import { CollectibleModel } from '@/models/collectible.model'
-import { CollectibleOwnershipModel } from '@/models/collectible-ownership.model'
-import { EventModel } from '@/models/event.model'
-import { PackModel } from '@/models/pack.model'
-import { UserAccountModel } from '@/models/user-account.model'
-import AccountsService from '@/modules/accounts/accounts.service'
-import CollectiblesService from '@/modules/collectibles/collectibles.service'
-import NotificationsService from '@/modules/notifications/notifications.service'
-import { formatIntToFloat } from '@/utils/format-currency'
-import { invariant, userInvariant } from '@/utils/invariant'
-import { logger } from '@/utils/logger'
 import {
+  formatIntToFloat,
+  invariant,
   randomInteger,
   randomRedemptionCode,
   shuffleArray,
-} from '@/utils/random'
+  userInvariant,
+} from '@algomart/shared/utils'
+import { Configuration } from '@api/configuration'
+import { logger } from '@api/configuration/logger'
+import DirectusAdapter, {
+  DirectusStatus,
+  ItemFilter,
+} from '@api/lib/directus-adapter'
+import { BidModel } from '@api/models/bid.model'
+import { CollectibleModel } from '@api/models/collectible.model'
+import { CollectibleOwnershipModel } from '@api/models/collectible-ownership.model'
+import { EventModel } from '@api/models/event.model'
+import { PackModel } from '@api/models/pack.model'
+import { UserAccountModel } from '@api/models/user-account.model'
+import AccountsService from '@api/modules/accounts/accounts.service'
+import CollectiblesService from '@api/modules/collectibles/collectibles.service'
+import NotificationsService from '@api/modules/notifications/notifications.service'
+import { Model, raw, Transaction } from 'objection'
 
 interface PackFilters {
   priceLow: number
@@ -732,6 +733,7 @@ export default class PacksService {
           .where('co.collectibleId', '=', raw('"c"."id"'))
           .where('co.ownerId', '=', raw('"ua"."id"'))
       )
+      .distinct('p.id', 'p.templateId', 'p.claimedAt')
 
     if (packs.length === 0) {
       return {
@@ -951,14 +953,30 @@ export default class PacksService {
       }
     }
 
-    this.logger.info(`filter ${JSON.stringify(filter)}`)
-    const template = await this.cms.findPack(filter)
-    this.logger.info(`template ${JSON.stringify(template)}`)
+    const { packs: packTemplates } = await this.cms.findAllPacks({ filter })
 
-    if (!template) {
-      return 0
-    }
+    const results = await Promise.all(
+      packTemplates.map(async (packTemplate) => {
+        const trx = await Model.startTransaction()
+        try {
+          const result = await this.generatePack(packTemplate, trx)
+          await trx.commit()
+          return result
+        } catch (error) {
+          await trx.rollback()
+          this.logger.error(
+            error,
+            `error generating pack ${packTemplate.templateId}`
+          )
+          return 0
+        }
+      })
+    )
 
+    return results.reduce((a, b) => a + b, 0)
+  }
+
+  async generatePack(template: PackBase, trx?: Transaction) {
     const { collectibleTemplateIds, templateId, config } = template
     const collectibleTemplateIdsCount = collectibleTemplateIds.length
     const { collectibles: collectibleTemplates } =
@@ -1185,7 +1203,10 @@ export default class PacksService {
             type: NotificationType.AuctionComplete,
             userAccountId: pack.activeBid.userAccount.id,
             variables: {
-              amount: `${formatIntToFloat(pack.activeBid.amount)}`,
+              amount: `${formatIntToFloat(
+                pack.activeBid.amount,
+                Configuration.currency // TODO: receive as argument
+              )}`,
               canExpire: packTemplate.allowBidExpiration,
               packSlug: packTemplate.slug,
               packTitle: packTemplate.title,
@@ -1322,7 +1343,10 @@ export default class PacksService {
               type: NotificationType.AuctionComplete,
               userAccountId: selectedBid.userAccount.id,
               variables: {
-                amount: `${formatIntToFloat(selectedBid.amount)}`,
+                amount: `${formatIntToFloat(
+                  selectedBid.amount,
+                  Configuration.currency // TODO: receive as argument
+                )}`,
                 canExpire: packTemplate.allowBidExpiration,
                 packSlug: packTemplate.slug,
                 packTitle: packTemplate.title,

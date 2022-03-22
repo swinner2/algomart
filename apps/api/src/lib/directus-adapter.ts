@@ -13,13 +13,15 @@ import {
   SetBase,
   SetWithCollection,
 } from '@algomart/schemas'
-import got, { Got } from 'got'
-import { URL, URLSearchParams } from 'node:url'
-
-import { isStringArray } from '@/utils/arrays'
-import { isAfterNow, isNowBetweenDates } from '@/utils/date-time'
-import { invariant } from '@/utils/invariant'
-import { logger } from '@/utils/logger'
+import {
+  HttpTransport,
+  isAfterNow,
+  isNowBetweenDates,
+  isStringArray,
+} from '@algomart/shared/utils'
+import { invariant } from '@algomart/shared/utils'
+import { logger } from '@api/configuration/logger'
+import { URL } from 'node:url'
 
 // #region CMS Types
 
@@ -215,49 +217,49 @@ export interface ItemQuery<TItem> {
 }
 
 function getParameters<TItem>(query?: ItemQuery<TItem>) {
-  const parameters = new URLSearchParams()
+  const parameters = {}
 
   if (query?.fields) {
-    parameters.set('fields', query.fields.join(','))
+    Object.assign(parameters, { fields: query.fields.join(',') })
   }
 
   if (query?.search) {
-    parameters.set('search', query.search)
+    Object.assign(parameters, { search: query.search })
   }
 
   if (query?.sort) {
-    parameters.set('sort', query.sort.join(','))
+    Object.assign(parameters, { sort: query.sort.join(',') })
   }
 
   if (query?.limit) {
-    parameters.set('limit', query.limit.toString())
+    Object.assign(parameters, { limit: query.limit })
   }
 
   if (query?.offset) {
-    parameters.set('offset', query.offset.toString())
+    Object.assign(parameters, { offset: query.offset })
   }
 
   if (query?.page) {
-    parameters.set('page', query.page.toString())
+    Object.assign(parameters, { page: query.page })
   }
 
   if (query?.filter) {
-    parameters.set('filter', JSON.stringify(query.filter))
+    Object.assign(parameters, { filter: JSON.stringify(query.filter) })
   }
 
   if (query?.deep) {
-    parameters.set('deep', JSON.stringify(query.deep))
+    Object.assign(parameters, { deep: JSON.stringify(query.deep) })
   }
 
   if (query?.totalCount || query?.filterCount) {
-    parameters.set(
-      'meta',
-      query.totalCount && query.filterCount
-        ? '*'
-        : query.totalCount
-        ? 'total_count'
-        : 'filter_count'
-    )
+    Object.assign(parameters, {
+      meta:
+        query.totalCount && query.filterCount
+          ? '*'
+          : query.totalCount
+          ? 'total_count'
+          : 'filter_count',
+    })
   }
 
   return parameters
@@ -398,7 +400,11 @@ export function toSetWithCollection(
 
   return {
     ...base,
-    collection: toCollectionBase(set.collection, getFileURL, locale),
+    collection: toCollectionBase(
+      set.collection as DirectusCollection,
+      getFileURL,
+      locale
+    ),
   }
 }
 
@@ -565,19 +571,17 @@ export function toCountryBase(
 
 export interface DirectusAdapterOptions {
   url: string
+  publicUrl: string
   accessToken: string
 }
 
 export default class DirectusAdapter {
   logger = logger.child({ context: this.constructor.name })
-  http: Got
+  http: HttpTransport
 
   constructor(private readonly options: DirectusAdapterOptions) {
-    this.http = got.extend({
-      prefixUrl: options.url,
-      headers: {
-        Authorization: `Bearer ${options.accessToken}`,
-      },
+    this.http = new HttpTransport(options.url, undefined, {
+      Authorization: `Bearer ${options.accessToken}`,
     })
 
     this.testConnection()
@@ -593,26 +597,24 @@ export default class DirectusAdapter {
   }
 
   async ensureFilePermission() {
-    const permissions = await this.http
-      .get('permissions', {
-        searchParams: {
-          fields: 'id,role,collection,action,fields',
-          'filter[collection][_eq]': 'directus_files',
-          'filter[fields][_in]': '*',
-          'filter[action][_eq]': 'read',
-        },
-      })
-      .json<{
-        data: Array<{
-          id: number
-          role: string | null
-          collection: string
-          action: 'create' | 'read' | 'update' | 'delete'
-          fields: string[]
-        }>
-      }>()
+    const permissions = await this.http.get<{
+      data: Array<{
+        id: number
+        role: string | null
+        collection: string
+        action: 'create' | 'read' | 'update' | 'delete'
+        fields: string[]
+      }>
+    }>('permissions', {
+      params: {
+        fields: 'id,role,collection,action,fields',
+        'filter[collection][_eq]': 'directus_files',
+        'filter[fields][_in]': '*',
+        'filter[action][_eq]': 'read',
+      },
+    })
 
-    if (permissions.data.length === 0) {
+    if (permissions.data.data.length === 0) {
       await this.http.post('permissions', {
         json: {
           collection: 'directus_files',
@@ -628,16 +630,14 @@ export default class DirectusAdapter {
     collection: string,
     query: ItemQuery<TItem> = {}
   ): Promise<ItemsResponse<TItem>> {
-    const response = await this.http.get(`items/${collection}`, {
-      searchParams: getParameters(query),
-    })
+    const response = await this.http.get<ItemsResponse<TItem>>(
+      `items/${collection}`,
+      {
+        params: getParameters(query),
+      }
+    )
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      const result: ItemsResponse<TItem> = JSON.parse(response.body)
-      return result
-    }
-
-    return { data: [] }
+    return response.data
   }
 
   private async findPackTemplates(query: ItemQuery<DirectusPackTemplate> = {}) {
@@ -729,7 +729,7 @@ export default class DirectusAdapter {
 
   private getFileURL(fileOrId: string | DirectusFile) {
     const id = typeof fileOrId === 'string' ? fileOrId : fileOrId.id
-    return new URL(`/assets/${id}`, this.options.url).href
+    return new URL(`/assets/${id}`, this.options.publicUrl).href
   }
 
   async findAllPacks({
@@ -932,62 +932,54 @@ export default class DirectusAdapter {
     // Homepage is a singleton in the CMS, which makes this endpoint only return a single item.
     // Therefore we should avoid using the `findMany` method and instead act as if the result is
     // from a `findById` call.
-    const response = await this.http.get('items/homepage', {
-      searchParams: getParameters({
-        fields: ['featured_pack', 'upcoming_packs', 'notable_collectibles'],
-        deep: {
-          featured_pack: {
-            _filter: {
-              status: {
-                _eq: DirectusStatus.Published,
+    const response = await this.http.get<ItemByIdResponse<DirectusHomepage>>(
+      'items/homepage',
+      {
+        params: getParameters({
+          fields: ['featured_pack', 'upcoming_packs', 'notable_collectibles'],
+          deep: {
+            featured_pack: {
+              _filter: {
+                status: {
+                  _eq: DirectusStatus.Published,
+                },
+              },
+            },
+            upcoming_packs: {
+              _filter: {
+                status: {
+                  _eq: DirectusStatus.Published,
+                },
+              },
+            },
+            notable_collectibles: {
+              _filter: {
+                status: {
+                  _eq: DirectusStatus.Published,
+                },
               },
             },
           },
-          upcoming_packs: {
-            _filter: {
-              status: {
-                _eq: DirectusStatus.Published,
-              },
-            },
-          },
-          notable_collectibles: {
-            _filter: {
-              status: {
-                _eq: DirectusStatus.Published,
-              },
-            },
-          },
-        },
-      }),
-    })
+        }),
+      }
+    )
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      const result: ItemByIdResponse<DirectusHomepage> = JSON.parse(
-        response.body
-      )
-      return toHomepageBase(result.data)
-    }
-
-    return null
+    return toHomepageBase(response.data.data)
   }
 
   async findApplication(): Promise<DirectusApplication | null> {
     // Application is a singleton in the CMS, which makes this endpoint only return a single item.
     // Therefore we should avoid using the `findMany` method and instead act as if the result is
     // from a `findById` call.
-    const response = await this.http.get('items/application', {
-      searchParams: getParameters({
-        fields: ['*.*'],
-      }),
-    })
+    const response = await this.http.get<ItemByIdResponse<DirectusApplication>>(
+      'items/application',
+      {
+        params: getParameters({
+          fields: ['*.*'],
+        }),
+      }
+    )
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      const result: ItemByIdResponse<DirectusApplication> = JSON.parse(
-        response.body
-      )
-      return result.data
-    }
-
-    return null
+    return response.data.data
   }
 }

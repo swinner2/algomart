@@ -18,27 +18,30 @@ import {
   TransferCollectible,
   TransferCollectibleResult,
 } from '@algomart/schemas'
-import { Transaction } from 'objection'
-
-import { Configuration } from '@/configuration'
-import AlgoExplorerAdapter from '@/lib/algoexplorer-adapter'
+import {
+  addDays,
+  invariant,
+  isBeforeNow,
+  isDefinedArray,
+  userInvariant,
+} from '@algomart/shared/utils'
+import { Configuration } from '@api/configuration'
+import { logger } from '@api/configuration/logger'
+import AlgoExplorerAdapter from '@api/lib/algoexplorer-adapter'
 import AlgorandAdapter, {
   DEFAULT_INITIAL_BALANCE,
-} from '@/lib/algorand-adapter'
-import DirectusAdapter, { ItemFilter } from '@/lib/directus-adapter'
-import NFTStorageAdapter from '@/lib/nft-storage-adapter'
-import { AlgorandAccountModel } from '@/models/algorand-account.model'
-import { AlgorandTransactionModel } from '@/models/algorand-transaction.model'
-import { AlgorandTransactionGroupModel } from '@/models/algorand-transaction-group.model'
-import { CollectibleModel } from '@/models/collectible.model'
-import { CollectibleOwnershipModel } from '@/models/collectible-ownership.model'
-import { CollectibleShowcaseModel } from '@/models/collectible-showcase.model'
-import { EventModel } from '@/models/event.model'
-import { UserAccountModel } from '@/models/user-account.model'
-import { isDefinedArray } from '@/utils/arrays'
-import { addDays, isBeforeNow } from '@/utils/date-time'
-import { invariant, userInvariant } from '@/utils/invariant'
-import { logger } from '@/utils/logger'
+} from '@api/lib/algorand-adapter'
+import DirectusAdapter, { ItemFilter } from '@api/lib/directus-adapter'
+import NFTStorageAdapter from '@api/lib/nft-storage-adapter'
+import { AlgorandAccountModel } from '@api/models/algorand-account.model'
+import { AlgorandTransactionModel } from '@api/models/algorand-transaction.model'
+import { AlgorandTransactionGroupModel } from '@api/models/algorand-transaction-group.model'
+import { CollectibleModel } from '@api/models/collectible.model'
+import { CollectibleOwnershipModel } from '@api/models/collectible-ownership.model'
+import { CollectibleShowcaseModel } from '@api/models/collectible-showcase.model'
+import { EventModel } from '@api/models/event.model'
+import { UserAccountModel } from '@api/models/user-account.model'
+import { Transaction } from 'objection'
 
 const MAX_SHOWCASES = 8
 
@@ -184,12 +187,14 @@ export default class CollectiblesService {
     }
   }
 
-  async storeCollectibles(limit = 5, trx: Transaction) {
-    // Get unstored collectibles
+  async storeCollectibles(limit = 10, trx: Transaction) {
+    // Get unstored collectibles by their templateIds
     const collectibles = await CollectibleModel.query(trx)
       .whereNull('ipfsStatus')
-      .orderBy('templateId')
-      .limit(10)
+      .groupBy('templateId')
+      .havingRaw('count(*) > 0')
+      .limit(limit)
+      .select('templateId')
 
     if (collectibles.length === 0) {
       return 0
@@ -216,17 +221,10 @@ export default class CollectiblesService {
 
     // Grouping collectibles by template data prevents need to upload assets more than once
     await Promise.all(
-      templates.map(
-        async (t) =>
-          await this.storeCollectiblesByTemplate(
-            t,
-            collectiblesLookupByTemplate.get(t.templateId) || [],
-            trx
-          )
-      )
+      templates.map(async (t) => await this.storeCollectiblesByTemplate(t, trx))
     )
 
-    return collectibles.length
+    return templates.length
   }
 
   async getCollectiblesByAlgoAddress(
@@ -318,14 +316,11 @@ export default class CollectiblesService {
 
   async storeCollectiblesByTemplate(
     template: CollectibleBase,
-    collectibles: CollectibleModel[],
     trx: Transaction
   ) {
+    // Set collectibles to be stored to a pending state
     await CollectibleModel.query()
-      .whereIn(
-        'id',
-        collectibles.map((c) => c.id)
-      )
+      .where('templateId', template.templateId)
       .patch({ ipfsStatus: IPFSStatus.Pending })
 
     try {
@@ -337,47 +332,50 @@ export default class CollectiblesService {
         ? await this.storage.storeFile(animationField)
         : null
 
-      await Promise.all(
-        collectibles.map(async (c) => {
-          const metadata = this.storage.mapToMetadata({
-            ...(animationData && {
-              animation_integrity: animationData.integrityHash,
-              animation_url_mimetype: animationData.mimeType,
-              animation_url: animationData.uri,
-            }),
-            description: template.subtitle,
-            editionNumber: c.edition,
-            image_integrity: imageData.integrityHash,
-            image_mimetype: imageData.mimeType,
-            image: imageData.uri,
-            name: template.uniqueCode,
-            totalEditions: template.totalEditions,
-          })
+      const metadata = this.storage.mapToMetadata({
+        ...(animationData && {
+          animation_integrity: animationData.integrityHash,
+          animation_url_mimetype: animationData.mimeType,
+          animation_url: animationData.uri,
+        }),
+        description: template.subtitle,
+        image_integrity: imageData.integrityHash,
+        image_mimetype: imageData.mimeType,
+        image: imageData.uri,
+        name: template.uniqueCode,
+        totalEditions: template.totalEditions,
+      })
 
-          // Store metadata as JSON on IPFS
-          const assetUrl = await this.storage.storeJSON(metadata)
+      // Store metadata as JSON on IPFS
+      const assetUrl = await this.storage.storeJSON(metadata)
 
-          // Construct JSON hash of metadata
-          const assetMetadataHash = this.storage.hashMetadata(metadata)
+      // Construct JSON hash of metadata
+      const assetMetadataHash = this.storage.hashMetadata(metadata)
 
-          await CollectibleModel.query(trx).where('id', c.id).patch({
-            assetUrl,
-            assetMetadataHash,
-            ipfsStatus: IPFSStatus.Stored,
-          })
-          await EventModel.query(trx).insert({
-            action: EventAction.Update,
-            entityType: EventEntityType.Collectible,
-            entityId: c.id,
-          })
+      // Update records with new IPFS data
+      await CollectibleModel.query(trx)
+        .where('templateId', template.templateId)
+        .patch({
+          assetUrl,
+          assetMetadataHash,
+          ipfsStatus: IPFSStatus.Stored,
         })
+
+      // Get updated collectibles and update event records
+      const updatedCollectibles = await CollectibleModel.query().where(
+        'templateId',
+        template.templateId
+      )
+      await EventModel.query(trx).insert(
+        updatedCollectibles.map((c) => ({
+          action: EventAction.Update,
+          entityType: EventEntityType.Collectible,
+          entityId: c.id,
+        }))
       )
     } catch (error) {
       await CollectibleModel.query()
-        .whereIn(
-          'id',
-          collectibles.map((c) => c.id)
-        )
+        .where('templateId', template.templateId)
         .patch({ ipfsStatus: null })
       throw error
     }

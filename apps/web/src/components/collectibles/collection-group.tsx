@@ -5,9 +5,6 @@ import Image from 'next/image'
 
 import css from './collection-group.module.css'
 
-import Button from '@/components/button'
-import { cmsImageLoader } from '@/utils/cms-image-loader'
-
 export interface CollectionGroupProps {
   collection: CollectionBase
 }
@@ -20,7 +17,6 @@ export default function CollectionGroup({ collection }: CollectionGroupProps) {
           <Image
             alt={collection.name}
             layout="responsive"
-            loader={cmsImageLoader}
             objectFit="cover"
             src={collection.image}
             height={320}

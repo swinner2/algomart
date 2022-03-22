@@ -1,11 +1,10 @@
 import { CollectibleBase, TransferCollectibleResult } from '@algomart/schemas'
+import { decrypt, encrypt } from '@algomart/shared/utils'
+import { invariant } from '@algomart/shared/utils'
+import { Configuration } from '@api/configuration'
+import { logger } from '@api/configuration/logger'
+import { CollectibleModel } from '@api/models/collectible.model'
 import algosdk from 'algosdk'
-
-import { Configuration } from '@/configuration'
-import { CollectibleModel } from '@/models/collectible.model'
-import { decrypt, encrypt } from '@/utils/encryption'
-import { invariant } from '@/utils/invariant'
-import { logger } from '@/utils/logger'
 
 // 100_000 microAlgos = 0.1 ALGO
 export const DEFAULT_INITIAL_BALANCE = 100_000
@@ -93,7 +92,11 @@ export default class AlgorandAdapter {
   generateAccount(passphrase: string): PublicAccount {
     const account = algosdk.generateAccount()
     const mnemonic = algosdk.secretKeyToMnemonic(account.sk)
-    const encryptedMnemonic = encrypt(mnemonic, passphrase)
+    const encryptedMnemonic = encrypt(
+      mnemonic,
+      passphrase,
+      Configuration.secret // TODO: receive via argument
+    )
     return {
       address: account.addr,
       encryptedMnemonic,
@@ -108,7 +111,11 @@ export default class AlgorandAdapter {
   ): Promise<PublicAccount> {
     const account = algosdk.generateAccount()
     const mnemonic = algosdk.secretKeyToMnemonic(account.sk)
-    const encryptedMnemonic = encrypt(mnemonic, passphrase)
+    const encryptedMnemonic = encrypt(
+      mnemonic,
+      passphrase,
+      Configuration.secret // TODO: receive via argument
+    )
 
     const { signedTransactions, transactionIds } =
       await this.initialFundTransactions(
@@ -131,7 +138,11 @@ export default class AlgorandAdapter {
     initialBalance = DEFAULT_INITIAL_BALANCE
   ) {
     const account = algosdk.mnemonicToSecretKey(
-      decrypt(encryptedMnemonic, passphrase)
+      decrypt(
+        encryptedMnemonic,
+        passphrase,
+        Configuration.secret // TODO: receive via argument
+      )
     )
 
     const fundingTransaction =
@@ -238,7 +249,11 @@ export default class AlgorandAdapter {
 
   isValidPassphrase(encryptedMnemonic: string, passphrase: string) {
     try {
-      const mnemonic = decrypt(encryptedMnemonic, passphrase)
+      const mnemonic = decrypt(
+        encryptedMnemonic,
+        passphrase,
+        Configuration.secret // TODO: receive via argument
+      )
       if (mnemonic) {
         algosdk.mnemonicToSecretKey(mnemonic)
         return true
@@ -253,7 +268,11 @@ export default class AlgorandAdapter {
 
   async closeCreatorAccount(creator: PublicAccount) {
     const account = algosdk.mnemonicToSecretKey(
-      decrypt(creator.encryptedMnemonic, Configuration.creatorPassphrase)
+      decrypt(
+        creator.encryptedMnemonic,
+        Configuration.creatorPassphrase,
+        Configuration.secret // TODO: receive via argument
+      )
     )
     const suggestedParams = await this.algod.getTransactionParams().do()
     const transaction = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -359,7 +378,11 @@ export default class AlgorandAdapter {
 
     if (creator) {
       fromAccount = algosdk.mnemonicToSecretKey(
-        decrypt(creator.encryptedMnemonic, Configuration.creatorPassphrase)
+        decrypt(
+          creator.encryptedMnemonic,
+          Configuration.creatorPassphrase,
+          Configuration.secret // TODO: receive via argument
+        )
       )
     }
 
@@ -384,9 +407,7 @@ export default class AlgorandAdapter {
         decimals: 0,
         defaultFrozen: false,
         clawback: this.fundingAccount.addr,
-        freeze: this.fundingAccount.addr,
         manager: this.fundingAccount.addr,
-        reserve: this.fundingAccount.addr,
         unitName: template.uniqueCode,
         suggestedParams,
       })
@@ -413,7 +434,11 @@ export default class AlgorandAdapter {
     fromAccountAddress?: string
   }) {
     const toAccount = algosdk.mnemonicToSecretKey(
-      decrypt(options.encryptedMnemonic, options.passphrase)
+      decrypt(
+        options.encryptedMnemonic,
+        options.passphrase,
+        Configuration.secret // TODO: receive via argument
+      )
     )
 
     const suggestedParams = await this.algod.getTransactionParams().do()
@@ -585,18 +610,6 @@ export default class AlgorandAdapter {
       to: options.fromAccountAddress,
     })
 
-    // Clear freeze and reserve addresses
-    // Signed by funding account (current manager address)
-    const configureTxn =
-      algosdk.makeAssetConfigTxnWithSuggestedParamsFromObject({
-        suggestedParams,
-        assetIndex: options.assetIndex,
-        from: this.fundingAccount.addr,
-        strictEmptyAddressChecking: false,
-        manager: this.fundingAccount.addr,
-        clawback: this.fundingAccount.addr,
-      })
-
     // Opt-in to asset in recipient's non-custodial wallet
     // Signed by non-custodial wallet recipient
     const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -628,16 +641,9 @@ export default class AlgorandAdapter {
       amount: 100_000,
     })
 
-    const transactions = [
-      fundsTxn,
-      configureTxn,
-      optInTxn,
-      transferAssetTxn,
-      returnFundsTxn,
-    ]
+    const transactions = [fundsTxn, optInTxn, transferAssetTxn, returnFundsTxn]
 
     const signers = [
-      this.fundingAccount.addr,
       this.fundingAccount.addr,
       options.toAccountAddress,
       options.fromAccountAddress,
@@ -663,7 +669,11 @@ export default class AlgorandAdapter {
     transactions: TransferCollectibleResult
   }) {
     const fromAccount = algosdk.mnemonicToSecretKey(
-      decrypt(options.encryptedMnemonic, options.passphrase)
+      decrypt(
+        options.encryptedMnemonic,
+        options.passphrase,
+        Configuration.secret // TODO: receive via argument
+      )
     )
 
     const signedTransactions = options.transactions.map((transaction) => {
