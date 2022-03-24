@@ -37,7 +37,6 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
             alt={pack.title}
             layout="fill"
             className="transition-all hover:opacity-80 object-cover lg:object-cover w-full h-full"
-            loader={cmsImageLoader}
             src={pack.image}
           />
           <div className={css.subContent}>
