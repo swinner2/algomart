@@ -251,3 +251,22 @@ variable "web_node_env" {
 
 variable "web_revision_name" {
 }
+
+##
+## VPC and networking
+##
+
+variable "public_outbound_ip_name" {
+  default   = "algomart-public-outbound-ip"
+  sensitive = true
+}
+
+variable "vpc_cloud_router_name" {
+  default = "algomart-cloud-router"
+  sensitive = true
+}
+
+variable "vpc_nat_name" {
+  default = "algomart-nat"
+  sensitive = true
+}
