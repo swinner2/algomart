@@ -194,8 +194,8 @@ export class ApiClient {
   ): Promise<CollectibleListWithTotal> {
     const searchQuery = getCollectiblesFilterQuery(query)
     return await this.http
-      .get(`collectibles/public?${searchQuery}`)
-      .json<CollectibleListWithTotal>()
+      .get<CollectibleListWithTotal>(`collectibles/public?${searchQuery}`)
+      .then((response) => response.data)
   }
 
   async getShowcaseByUser(
