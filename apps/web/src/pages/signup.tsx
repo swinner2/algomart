@@ -79,12 +79,6 @@ export default function SignUpPage() {
   }, [])
 
   useEffect(() => {
-    if (!isValidating) {
-      console.log(data)
-    }
-  }, [isValidating, data])
-
-  useEffect(() => {
     if (auth.status === 'authenticated') {
       // prevent authenticated users from trying to register
       router.push(urls.home)
@@ -101,7 +95,6 @@ export default function SignUpPage() {
         formErrors={formErrors}
         profilePic={profilePic}
         status={auth.status}
-        legacyEmail={data?.legacyEmail}
       />
     </DefaultLayout>
   )
