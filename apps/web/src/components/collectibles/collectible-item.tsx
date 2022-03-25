@@ -13,7 +13,6 @@ import useTranslation from 'next-translate/useTranslation'
 import css from './collectible-item.module.css'
 
 import AppLink from '@/components/app-link/app-link'
-import { cmsImageLoader } from '@/utils/cms-image-loader'
 
 export interface CollectibleItemProps {
   alt?: string
