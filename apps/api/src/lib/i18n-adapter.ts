@@ -7,20 +7,6 @@ import { logger } from '@/utils/logger'
 
 export default class I18nAdapter {
   constructor() {
-    logger.child({ i18n_adapter: true }).info(
-      `i18n: ${JSON.stringify({
-        fallbackLng: DEFAULT_LOCALE,
-        lng: DEFAULT_LOCALE,
-        ns: ['emails'],
-        backend: {
-          loadPath: path.join(__dirname, '../../locales/{{lng}}/{{ns}}.json'),
-          addPath: path.join(
-            __dirname,
-            '../../locales/{{lng}}/{{ns}}.missing.json'
-          ),
-        },
-      })}`
-    )
     if (i18next.isInitialized) return
     i18next.use(Backend).init({
       fallbackLng: DEFAULT_LOCALE,
@@ -38,9 +24,6 @@ export default class I18nAdapter {
     ns?: string | readonly string[],
     keyPrefix?: string
   ): TFunction {
-    logger
-      .child({ i18n_adapter: true })
-      .info(`inside getFixedT ${lng} ${ns} ${keyPrefix}`)
     return i18next.getFixedT(lng, ns, keyPrefix)
   }
 }

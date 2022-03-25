@@ -44,11 +44,6 @@ export default class AccountsService {
       },
     })
 
-    if (request.legacyAccountId && user) {
-      await LegacyAccountModel.query(trx)
-        .findById(request.legacyAccountId)
-        .patch({ newAccountId: user.id })
-    }
     // 4. return "public" user account
     const userAccount = await UserAccountModel.query(trx)
       .findOne({
@@ -167,14 +162,6 @@ export default class AccountsService {
       .withGraphJoined('algorandAccount.creationTransaction')
 
     return this.mapPublicAccount(userAccount)
-  }
-
-  async getLegacyAccount(request: { id: string }) {
-    const legacyAccount = await LegacyAccountModel.query().findOne({
-      id: request.id,
-    })
-
-    return { legacyEmail: legacyAccount?.legacyEmail }
   }
 
   async verifyPassphraseFor(externalId: string, passphrase: string) {
