@@ -1,4 +1,3 @@
-import { PublicLegacyAccount } from '@algomart/schemas'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import { stringify } from 'query-string'
@@ -44,7 +43,6 @@ export default function SignUpPage() {
         password: formData.get('password') as string,
         passphrase: formData.get('passphrase') as string,
         profilePic: profilePic as FileWithPreview,
-        legacyAccountId: token || null,
       }
 
       setFormErrors({})
@@ -79,11 +77,6 @@ export default function SignUpPage() {
   const handleProfilePicClear = useCallback(() => {
     setProfilePic(null)
   }, [])
-
-  // TODO only make this request if token is present
-  const { data, isValidating } = useApi<PublicLegacyAccount>(
-    `${urls.api.v1.getLegacyAccount}?${stringify({ id: token })}`
-  )
 
   useEffect(() => {
     if (!isValidating) {

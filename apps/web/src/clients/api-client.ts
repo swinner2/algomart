@@ -46,7 +46,6 @@ import {
   PublicAccount,
   PublicCollectibleQuerystring,
   PublicKey,
-  PublicLegacyAccount,
   PublishedPacks,
   PublishedPacksQuery,
   RedeemCode,
@@ -107,13 +106,6 @@ export class ApiClient {
   }
 
   //#region User Accounts
-  async getLegacyAccount(id: string) {
-    const searchQuery = stringify({ id })
-    return await this.http
-      .get(`accounts/legacy-account?${searchQuery}`)
-      .then((response) => response.data)
-  }
-
   async createAccount(request: CreateUserAccountRequest) {
     return await this.http
       .post<PublicAccount>('accounts', request)

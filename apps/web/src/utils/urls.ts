@@ -90,7 +90,6 @@ export const urls = {
       getTransfer: '/api/v1/payments/get-transfer-payment',
       getUntransferredPacks: '/api/v1/pack/untransferred',
       profile: '/api/v1/profile',
-      getLegacyAccount: '/api/v1/profile/get-legacy-account',
       getPublicCollectibles: 'api/v1/collectible/get-public',
       publicKey: '/api/v1/payments/public-key',
       removeCard: '/api/v1/payments/remove-card',

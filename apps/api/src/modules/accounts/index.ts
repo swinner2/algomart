@@ -1,9 +1,7 @@
 import {
   CreateUserAccountRequestSchema,
   ExternalIdSchema,
-  LegacyAccountSchema,
   PassphraseSchema,
-  PublicLegacyAccountSchema,
   PublicUserAccountSchema,
   UpdateUserAccountSchema,
   UsernameSchema,
@@ -18,7 +16,6 @@ import {
   createAccount,
   getByExternalId,
   getByUsername,
-  getLegacyAccount,
   removeUser,
   updateAccount,
   verifyPassphrase,
@@ -70,20 +67,6 @@ export async function accountsRoutes(app: FastifyInstance) {
         },
       },
       getByUsername
-    )
-    .get(
-      '/legacy-account',
-      {
-        schema: {
-          tags,
-          security,
-          querystring: LegacyAccountSchema,
-          response: {
-            200: PublicLegacyAccountSchema,
-          },
-        },
-      },
-      getLegacyAccount
     )
     .get(
       '/:externalId',

@@ -263,7 +263,6 @@ export function useAuthProvider() {
       passphrase,
       profilePic,
       username,
-      legacyAccountId,
     }: SignUpPayload) => {
       dispatch(authActions.setLoading())
       try {
@@ -281,7 +280,6 @@ export function useAuthProvider() {
               email,
               passphrase,
               username,
-              legacyAccountId,
             }),
             headers: {
               authorization: `bearer ${token}`,
