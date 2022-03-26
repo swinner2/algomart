@@ -51,6 +51,7 @@ module.exports = withNx(
         permanent: false,
       },
     ],
+    swcMinify: false,
   })
 )
 
