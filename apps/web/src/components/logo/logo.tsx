@@ -26,7 +26,7 @@ export default function Logo({
   color = 'grey',
   layout = 'responsive',
 }: LogoProps) {
-  const props = { alt: 'AlgoMart', layout, className }
+  const props = { alt: 'OG2D', layout, className }
   const image =
     color === 'grey' ? (
       <Image src={ImageGrey} {...props} objectFit="cover" layout="fill" />

@@ -2,7 +2,7 @@
   "walletConnect": {
     "title": "Algorand WalletConnect",
     "connect": "Open WalletConnect",
-    "description": "Use WalletConnect to link your Algorand wallet to AlgoMart.",
+    "description": "Use WalletConnect to link your Algorand wallet to OG2D.",
     "helpText": "Need a wallet? Get one here:",
     "destinationWallet": "Destination wallet:",
     "selectAccount": "Select Account",

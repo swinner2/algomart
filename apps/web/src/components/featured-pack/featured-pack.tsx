@@ -1,8 +1,8 @@
 import { PackStatus, PackType, PublishedPack } from '@algomart/schemas'
 import clsx from 'clsx'
-import Markdown from 'markdown-to-jsx'
+// import Markdown from 'markdown-to-jsx'
 import Image from 'next/image'
-import Trans from 'next-translate/Trans'
+// import Trans from 'next-translate/Trans'
 import useTranslation from 'next-translate/useTranslation'
 
 import css from './featured-pack.module.css'
@@ -99,7 +99,7 @@ export default function HomeTemplate({
 
               {featuredPack.subtitle ? (
                 <Heading
-                  className={clsx(css.subtitle, 'text-blue-800')}
+                  className={clsx(css.subtitle, 'text-white', 'mb-3')}
                   level={3}
                   size={4}
                   inheritColor
@@ -108,13 +108,13 @@ export default function HomeTemplate({
                 </Heading>
               ) : null}
 
-              {featuredPack.body ? (
+              {/* {featuredPack.body ? (
                 <div className={clsx(css.featuredBody, 'text-white')}>
                   <Markdown options={{ forceBlock: true }}>
                     {featuredPack.body.slice(0, 500)}
                   </Markdown>
                 </div>
-              ) : null}
+              ) : null} */}
 
               {/* CTA bar */}
               <div className="p-4 text-xs font-bold text-center text-white uppercase bg-green-800 bg-opacity-70 rounded">
