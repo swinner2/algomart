@@ -5,10 +5,9 @@ import useTranslation from 'next-translate/useTranslation'
 
 import css from './release-item.module.css'
 
-import Counter from '@/components/counter/counter'
 import AppLink from '@/components/app-link/app-link'
+import Counter from '@/components/counter/counter'
 import { useLocale } from '@/hooks/use-locale'
-import { cmsImageLoader } from '@/utils/cms-image-loader'
 import { formatCurrency } from '@/utils/format-currency'
 import { urls } from '@/utils/urls'
 
@@ -38,7 +37,6 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
             alt={pack.title}
             layout="fill"
             className="transition-all hover:opacity-80 object-cover lg:object-cover w-full h-full"
-            loader={cmsImageLoader}
             src={pack.image}
           />
           <div className={css.subContent}>

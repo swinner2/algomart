@@ -5,9 +5,8 @@ import {
   Username,
 } from '@algomart/schemas'
 import { UpdateUserAccount } from '@algomart/schemas'
+import { AccountsService } from '@algomart/shared/services'
 import { FastifyReply, FastifyRequest } from 'fastify'
-
-import AccountsService from '@/modules/accounts/accounts.service'
 
 export async function createAccount(
   request: FastifyRequest<{ Body: CreateUserAccountRequest }>,
@@ -60,17 +59,6 @@ export async function getByUsername(
     .getContainer()
     .get<AccountsService>(AccountsService.name)
   const account = await accounts.getByUsername(request.query)
-  reply.send(account)
-}
-
-export async function getLegacyAccount(
-  request: FastifyRequest<{ Querystring: { id: string } }>,
-  reply: FastifyReply
-) {
-  const accounts = request
-    .getContainer()
-    .get<AccountsService>(AccountsService.name)
-  const account = await accounts.getLegacyAccount(request.query)
   reply.send(account)
 }
 

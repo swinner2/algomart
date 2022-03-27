@@ -5,7 +5,6 @@ import useTranslation from 'next-translate/useTranslation'
 import css from './auction-item.module.css'
 
 import AppLink from '@/components/app-link/app-link'
-import { cmsImageLoader } from '@/utils/cms-image-loader'
 
 export interface AuctionItemProps {
   auctionId: string
@@ -31,7 +30,6 @@ export default function AuctionItem({
     <div className={css.root}>
       <div className={css.imageWrapper}>
         <Image
-          loader={cmsImageLoader}
           src={image}
           alt={image}
           width={160}

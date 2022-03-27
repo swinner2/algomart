@@ -33,18 +33,6 @@ export const UsernameSchema = Type.Object({
   username: Type.String(),
 })
 
-export const LegacyAccountSchema = Type.Intersect([
-  BaseSchema,
-  Type.Object({
-    legacyEmail: Type.Optional(Type.String({ format: 'email' })),
-    newAccountId: Type.Optional(Type.String({ format: 'uuid' })),
-  }),
-])
-
-export const PublicLegacyAccountSchema = Type.Object({
-  legacyEmail: Type.String({ format: 'email' }),
-})
-
 const BaseUserAccountSchema = Type.Intersect([
   ExternalIdSchema,
   UsernameSchema,
@@ -61,7 +49,6 @@ const BaseUserAccountSchema = Type.Intersect([
 export const CreateUserAccountRequestSchema = Type.Intersect([
   BaseUserAccountSchema,
   PassphraseSchema,
-  Type.Optional(Type.Object({ legacyAccountId: Type.String() })),
 ])
 
 export const UpdateUserAccountSchema = Type.Object({
@@ -94,9 +81,6 @@ export type CreateUserAccountRequest = Simplify<
 >
 export type Passphrase = Simplify<Static<typeof PassphraseSchema>>
 export type PublicAccount = Simplify<Static<typeof PublicUserAccountSchema>>
-export type PublicLegacyAccount = Simplify<
-  Static<typeof PublicLegacyAccountSchema>
->
 export type UserAccount = Simplify<Static<typeof UserAccountSchema>>
 export type Username = Simplify<Static<typeof UsernameSchema>>
 export type UpdateUserAccount = Simplify<Static<typeof UpdateUserAccountSchema>>

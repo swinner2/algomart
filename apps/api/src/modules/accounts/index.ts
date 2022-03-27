@@ -1,13 +1,13 @@
 import {
   CreateUserAccountRequestSchema,
   ExternalIdSchema,
-  LegacyAccountSchema,
   PassphraseSchema,
-  PublicLegacyAccountSchema,
   PublicUserAccountSchema,
   UpdateUserAccountSchema,
   UsernameSchema,
 } from '@algomart/schemas'
+import { appErrorHandler } from '@algomart/shared/utils'
+import bearerAuthOptions from '@api/configuration/bearer-auth'
 import { Type } from '@sinclair/typebox'
 import { FastifyInstance } from 'fastify'
 import fastifyBearerAuth from 'fastify-bearer-auth'
@@ -16,15 +16,11 @@ import {
   createAccount,
   getByExternalId,
   getByUsername,
-  getLegacyAccount,
   removeUser,
   updateAccount,
   verifyPassphrase,
   verifyUsername,
 } from './accounts.routes'
-
-import bearerAuthOptions from '@/configuration/bearer-auth'
-import { appErrorHandler } from '@/utils/errors'
 
 export async function accountsRoutes(app: FastifyInstance) {
   // Helps with organization in the Swagger docs
@@ -71,20 +67,6 @@ export async function accountsRoutes(app: FastifyInstance) {
         },
       },
       getByUsername
-    )
-    .get(
-      '/legacy-account',
-      {
-        schema: {
-          tags,
-          security,
-          querystring: LegacyAccountSchema,
-          response: {
-            200: PublicLegacyAccountSchema,
-          },
-        },
-      },
-      getLegacyAccount
     )
     .get(
       '/:externalId',

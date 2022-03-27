@@ -1,8 +1,7 @@
+import { PaymentsService } from '@algomart/shared/services'
+import { DependencyResolver } from '@algomart/shared/utils'
+import { logger } from '@api/configuration/logger'
 import { Model } from 'objection'
-
-import PaymentsService from '@/modules/payments/payments.service'
-import DependencyResolver from '@/shared/dependency-resolver'
-import { logger } from '@/utils/logger'
 
 export async function updatePaymentStatusesTask(registry: DependencyResolver) {
   const log = logger.child({ task: 'update-payment-statuses' })

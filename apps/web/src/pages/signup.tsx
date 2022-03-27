@@ -1,4 +1,3 @@
-import { PublicLegacyAccount } from '@algomart/schemas'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import { stringify } from 'query-string'
@@ -8,7 +7,7 @@ import { ExtractError } from 'validator-fns'
 import { useAuth } from '@/contexts/auth-context'
 import { useRedemption } from '@/contexts/redemption-context'
 import DefaultLayout from '@/layouts/default-layout'
-import authService from '@/services/auth-service'
+import { AuthService } from '@/services/auth-service'
 import SignupTemplate from '@/templates/signup-template'
 import { FileWithPreview } from '@/types/file'
 import { validateEmailAndPasswordRegistration } from '@/utils/auth-validation'
@@ -44,7 +43,6 @@ export default function SignUpPage() {
         password: formData.get('password') as string,
         passphrase: formData.get('passphrase') as string,
         profilePic: profilePic as FileWithPreview,
-        legacyAccountId: token || null,
       }
 
       setFormErrors({})
@@ -52,9 +50,8 @@ export default function SignUpPage() {
       if (validation.state === 'invalid' && validation.errors) {
         return setFormErrors(validation.errors)
       }
-      const isUsernameAvailable = await authService.isUsernameAvailable(
-        body.username
-      )
+      const isUsernameAvailable =
+        await AuthService.instance.isUsernameAvailable(body.username)
       if (!isUsernameAvailable) {
         setFormErrors((errors) => {
           return { ...errors, username: t('forms:errors.usernameTaken') }
@@ -81,17 +78,6 @@ export default function SignUpPage() {
     setProfilePic(null)
   }, [])
 
-  // TODO only make this request if token is present
-  const { data, isValidating } = useApi<PublicLegacyAccount>(
-    `${urls.api.v1.getLegacyAccount}?${stringify({ id: token })}`
-  )
-
-  useEffect(() => {
-    if (!isValidating) {
-      console.log(data)
-    }
-  }, [isValidating, data])
-
   useEffect(() => {
     if (auth.status === 'authenticated') {
       // prevent authenticated users from trying to register
@@ -109,7 +95,6 @@ export default function SignUpPage() {
         formErrors={formErrors}
         profilePic={profilePic}
         status={auth.status}
-        legacyEmail={data?.legacyEmail}
       />
     </DefaultLayout>
   )

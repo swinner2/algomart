@@ -4,11 +4,6 @@
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["jest", "node"],
-    "paths": {
-      "@/*": ["apps/api/src/*"],
-      "test/*": ["apps/api/test/*"],
-      "@algomart/schemas": ["libs/schemas/src/index.ts"]
-    }
   },
   "include": [
     "src/**/*.ts",
@@ -17,5 +12,5 @@
     "**/*.d.ts",
     "test/**/*.ts",
     "**/seeds/*.ts"
-  ]
+, "../../libs/shared/models/src/lib/algorand-account.model.ts", "../../libs/shared/adapters/src/lib/algoexplorer-adapter.ts", "../../libs/shared/services/src/lib/application.service.ts", "../../libs/shared/services/src/lib/auctions.service.ts", "../../libs/shared/services/src/lib/bids.service.ts", "../../libs/shared/services/src/lib/collectibles.service.ts"  ]
 }

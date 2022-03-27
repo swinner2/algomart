@@ -40,7 +40,6 @@ handler.post(
         locale,
         passphrase: body.passphrase,
         username: body.username,
-        legacyAccountId: body.legacyAccountId,
       })
     } catch {
       throw new BadRequest('Could not create account')

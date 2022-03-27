@@ -1,8 +1,7 @@
 import { DEFAULT_CURRENCY } from '@algomart/schemas'
+import { MailerAdapterOptions } from '@algomart/shared/adapters'
 import * as Currencies from '@dinero.js/currencies'
 import env from 'env-var'
-
-import { MailerAdapterOptions } from '../lib/mailer-adapter'
 
 export const Configuration = {
   get env() {
@@ -82,6 +81,11 @@ export const Configuration = {
 
   get cmsUrl() {
     return env.get('CMS_URL').default('http://localhost:8055').asUrlString()
+  },
+
+  get cmsPublicUrl() {
+    return this.cmsUrl
+    // return env.get('CMS_PUBLIC_URL').default(this.cmsUrl).asUrlString()
   },
 
   get cmsAccessToken() {
@@ -181,5 +185,9 @@ export const Configuration = {
 
   get failurePath(): string {
     return env.get('WEB_FAILURE_PATH').default('/payments/failure').asString()
+  },
+
+  get enableJobs(): boolean {
+    return env.get('ENABLE_JOBS').default('false').asBool()
   },
 }

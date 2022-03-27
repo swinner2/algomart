@@ -1,8 +1,7 @@
+import { CollectiblesService } from '@algomart/shared/services'
+import { DependencyResolver } from '@algomart/shared/utils'
+import { logger } from '@api/configuration/logger'
 import { Model } from 'objection'
-
-import CollectiblesService from '@/modules/collectibles/collectibles.service'
-import DependencyResolver from '@/shared/dependency-resolver'
-import { logger } from '@/utils/logger'
 
 export default async function mintCollectibles(registry: DependencyResolver) {
   const log = logger.child({ task: 'mint-collectibles' })

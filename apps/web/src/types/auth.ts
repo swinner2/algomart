@@ -47,5 +47,4 @@ export interface SignUpPayload {
   passphrase: string
   profilePic: FileWithPreview | null
   username: string
-  legacyAccountId: string | null
 }

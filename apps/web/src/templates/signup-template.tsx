@@ -27,7 +27,6 @@ export interface SignupTemplateProps {
   handleProfilePicClear: () => void
   profilePic: FileWithPreview | null
   status: AuthState['status']
-  legacyEmail: string | undefined
 }
 
 export default function SignupTemplate({
@@ -38,7 +37,6 @@ export default function SignupTemplate({
   handleProfilePicClear,
   profilePic,
   status,
-  legacyEmail,
 }: SignupTemplateProps) {
   const { t } = useTranslation()
   return (
@@ -57,7 +55,7 @@ export default function SignupTemplate({
             variant="red"
           />
         )}
-        <Email defaultValue={legacyEmail} error={formErrors.email} t={t} />
+        <Email error={formErrors.email} t={t} />
         <Username error={formErrors.username} t={t} />
         <Password error={formErrors.password} t={t} />
         <ProfileImage
