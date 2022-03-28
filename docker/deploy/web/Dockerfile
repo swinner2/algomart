@@ -5,7 +5,7 @@ RUN apk add --no-cache libc6-compat python2 make g++
 RUN npm config set python python2
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN rm package-lock.json && npm install --force
+RUN npm ci
 
 
 # Rebuild the source code only when needed
