@@ -47,7 +47,7 @@
     "crypto-js": "4.1.1",
     "css-unit-converter": "^1.1.2",
     "dinero.js": "2.0.0-alpha.8",
-    "directus": "9.7.0",
+    "directus": "9.8.0",
     "env-var": "7.1.1",
     "fastify": "3.27.4",
     "fastify-bearer-auth": "6.2.0",
