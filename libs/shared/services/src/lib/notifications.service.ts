@@ -122,13 +122,11 @@ export class NotificationsService {
           type,
           id,
           userAccountId,
-          userAccount: { locale },
+          userAccount: { language: language },
         } = notification
-        // Get user's locale
-        const t = this.i18n.getFixedT(locale, 'emails')
-        this.logger
-          .child({ poop: true })
-          .info(`after t 1 inside dispatchNotifications t ${t}`)
+        // Get user's language
+        const t = this.i18n.getFixedT(language, 'emails')
+
         // Attempt to send notification
         try {
           const message = this.dispatchStore[type](notification, t)

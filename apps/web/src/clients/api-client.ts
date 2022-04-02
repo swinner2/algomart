@@ -19,15 +19,18 @@ import {
   CreatePayment,
   CreateTransferPayment,
   CreateUserAccountRequest,
-  DEFAULT_LOCALE,
+  CurrencyConversionDict,
+  DEFAULT_LANG,
+  DropdownLanguageList,
   ExternalId,
   FindTransferByAddress,
   GetPaymentBankAccountStatus,
   GetPaymentCardStatus,
   Homepage,
+  I18nInfo,
   InitializeTransferCollectible,
-  Locale,
-  LocaleAndExternalId,
+  Language,
+  LanguageAndExternalId,
   MintPack,
   MintPackStatusResponse,
   OwnerExternalId,
@@ -46,6 +49,7 @@ import {
   PublicAccount,
   PublicCollectibleQuerystring,
   PublicKey,
+  PublishedPack,
   PublishedPacks,
   PublishedPacksQuery,
   RedeemCode,
@@ -61,7 +65,9 @@ import {
   UpdatePayment,
   UpdatePaymentCard,
   UpdateUserAccount,
+  UserAccounts,
   Username,
+  UsersQuerystring,
   WirePayment,
 } from '@algomart/schemas'
 import axios from 'axios'
@@ -73,7 +79,8 @@ import {
   getCollectiblesFilterQuery,
   getPacksByOwnerFilterQuery,
   getPaymentsFilterQuery,
-  getPublishedPacksFilterQuery,
+  getUsersFilterQuery,
+  searchPublishedPacksFilterQuery,
 } from '@/utils/filters'
 import { HttpTransport, validateStatus } from '@/utils/http-transport'
 import { invariant } from '@/utils/invariant'
@@ -143,6 +150,13 @@ export class ApiClient {
         }
         throw error
       })
+  }
+
+  async getUsers(query: UsersQuerystring): Promise<UserAccounts> {
+    const searchQuery = getUsersFilterQuery(query)
+    return await this.http
+      .get<UserAccounts>(`accounts/all?${searchQuery}`)
+      .then((response) => response.data)
   }
 
   async verifyPassphrase(externalId: string, passphrase: string) {
@@ -388,10 +402,17 @@ export class ApiClient {
   //#endregion
 
   //#region Packs
-  async getPublishedPacks(query: PublishedPacksQuery) {
-    const searchQuery = getPublishedPacksFilterQuery(query)
+  async searchPublishedPacks(query: PublishedPacksQuery) {
+    const searchQuery = searchPublishedPacksFilterQuery(query)
     return await this.http
-      .get<PublishedPacks>(`packs?${searchQuery}`)
+      .get<PublishedPacks>(`packs/search?${searchQuery}`)
+      .then((response) => response.data)
+  }
+
+  async getPublishedPackBySlug(slug: string, language: string) {
+    const searchQuery = searchPublishedPacksFilterQuery({ language })
+    return await this.http
+      .get<PublishedPack>(`packs/by-slug/${slug}?${searchQuery}`)
       .then((response) => response.data)
   }
 
@@ -402,21 +423,21 @@ export class ApiClient {
       .then((response) => response.data)
   }
 
-  async packWithCollectibles(request: Locale & PackId) {
+  async packWithCollectibles(request: Language & PackId) {
     return await this.http
       .get<PackWithCollectibles>(`packs/${request.packId}`, {
         params: {
-          locale: request.locale || DEFAULT_LOCALE,
+          language: request.language || DEFAULT_LANG,
         },
       })
       .then((response) => response.data)
   }
 
-  async redeemablePack(request: RedeemCode & Locale) {
+  async redeemablePack(request: RedeemCode & Language) {
     return await this.http
       .get<{ pack: PackWithId }>(`packs/redeemable/${request.redeemCode}`, {
         params: {
-          locale: request.locale || DEFAULT_LOCALE,
+          language: request.language || DEFAULT_LANG,
         },
       })
       .then((response) => response.data)
@@ -462,7 +483,9 @@ export class ApiClient {
       .then((response) => response.data)
   }
 
-  async untransferredPacks(params: LocaleAndExternalId): Promise<PacksByOwner> {
+  async untransferredPacks(
+    params: LanguageAndExternalId
+  ): Promise<PacksByOwner> {
     return await this.http
       .get<PacksByOwner>('packs/untransferred', { params: params })
       .then((response) => response.data)
@@ -508,11 +531,39 @@ export class ApiClient {
   //#endregion
 
   //#region Homepage
-  async getHomepage(locale: string) {
+  async getHomepage(language: string) {
     return await this.http
       .get<Homepage>('homepage', {
         params: {
-          locale,
+          language,
+        },
+      })
+      .then((response) => response.data)
+  }
+  //#endregion
+
+  //#region i18n
+  async getLanguages(language: string) {
+    return await this.http
+      .get<DropdownLanguageList>('i18n/languages', {
+        params: {
+          language: language || DEFAULT_LANG,
+        },
+      })
+      .then((response) => response.data)
+  }
+
+  async getCurrencyConversions() {
+    return await this.http
+      .get<CurrencyConversionDict>('i18n/currencyConversions')
+      .then((response) => response.data)
+  }
+
+  async getI18n(language: string) {
+    return await this.http
+      .get<I18nInfo>('i18n/i18n-info', {
+        params: {
+          language: language || DEFAULT_LANG,
         },
       })
       .then((response) => response.data)

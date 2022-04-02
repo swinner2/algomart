@@ -28,6 +28,7 @@ export interface SelectProps
   options: SelectOption[]
   selectedValue?: SelectOption | null
   horizontal?: boolean
+  Icon?: ReactNode
 }
 
 export default function Select({
@@ -42,6 +43,7 @@ export default function Select({
   options,
   selectedValue,
   horizontal,
+  Icon,
 }: SelectProps) {
   const [selected, setSelected] = useState(defaultOption || options[0])
   const value = selectedValue || selected
@@ -81,7 +83,10 @@ export default function Select({
               horizontal ? 'mt-0' : 'mt-1'
             )}
           >
-            <span className="font-bold text-blue-800">{value.label}</span>
+            <span className="font-bold text-blue-800">
+              {Icon ? Icon : <svg viewBox={'0 0 24 24'} />}
+              {value.label}
+            </span>
             <span className={css.selectButtonIconContainer}>
               <SelectorIcon
                 className={css.selectButtonIcon}

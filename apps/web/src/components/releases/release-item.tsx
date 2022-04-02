@@ -7,6 +7,8 @@ import css from './release-item.module.css'
 
 import AppLink from '@/components/app-link/app-link'
 import Counter from '@/components/counter/counter'
+import { useI18n } from '@/contexts/i18n-context'
+import { useCurrency } from '@/hooks/use-currency'
 import { useLocale } from '@/hooks/use-locale'
 import { formatCurrency } from '@/utils/format-currency'
 import { urls } from '@/utils/urls'
@@ -17,6 +19,8 @@ export interface ReleaseItemProps {
 
 export default function ReleaseItem({ pack }: ReleaseItemProps) {
   const locale = useLocale()
+  const currency = useCurrency()
+  const { conversionRate } = useI18n()
   const { t } = useTranslation()
 
   const reserveMet =
@@ -95,7 +99,12 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
             </div>
             <div className={css.metadataValue}>
               {reserveMet
-                ? formatCurrency(pack.activeBid ?? 0, locale)
+                ? formatCurrency(
+                    pack.activeBid ?? 0,
+                    locale,
+                    currency,
+                    conversionRate
+                  )
                 : t('release:Not Met')}
             </div>
           </div>
@@ -122,7 +131,12 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
             </div>
             <div className={css.metadataValue}>
               {reserveMet
-                ? formatCurrency(pack.activeBid ?? 0, locale)
+                ? formatCurrency(
+                    pack.activeBid ?? 0,
+                    locale,
+                    currency,
+                    conversionRate
+                  )
                 : t('release:Not Met')}
             </div>
           </div>
@@ -151,13 +165,11 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
       {/* Metadata for purchasable pack */}
       {pack.type === PackType.Purchase && (
         // Purchase Data
-        <div>
-          <div className={clsx(css.metadata, css.full)}>
-            <div className="flex flex-col">
-              <div className={css.metadataLabel}>{pack.title}</div>
-              <div className={css.metadataValue}>
-                {formatCurrency(pack.price, locale)}
-              </div>
+        <div className={css.metadata}>
+          <div>
+            <div className={css.metadataLabel}>{t('release:Mint Cost')}</div>
+            <div className={css.metadataValue}>
+              {formatCurrency(pack.price, locale, currency, conversionRate)}
             </div>
           </div>
           <div className="text-right mt-4 px-4">

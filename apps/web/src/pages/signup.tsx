@@ -4,8 +4,11 @@ import { stringify } from 'query-string'
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { ExtractError } from 'validator-fns'
 
+import { SelectOption } from '@/components/select/select'
 import { useAuth } from '@/contexts/auth-context'
 import { useRedemption } from '@/contexts/redemption-context'
+import { useCurrency } from '@/hooks/use-currency'
+import { useLanguage } from '@/hooks/use-language'
 import DefaultLayout from '@/layouts/default-layout'
 import { AuthService } from '@/services/auth-service'
 import SignupTemplate from '@/templates/signup-template'
@@ -23,11 +26,14 @@ const useToken = () => {
 export default function SignUpPage() {
   const auth = useAuth()
   const router = useRouter()
-  const token = useToken()
+  const language = useLanguage()
+  const currency = useCurrency()
   const { redeemable } = useRedemption()
   const { t } = useTranslation()
 
   const validate = useMemo(() => validateEmailAndPasswordRegistration(t), [t])
+  const [dropdownLanguage, setDropdownLanguage] = useState<string>(language)
+  const [dropdownCurrency, setDropdownCurrency] = useState<string>(currency)
   const [profilePic, setProfilePic] = useState<FileWithPreview | null>(null)
   const [formErrors, setFormErrors] = useState<ExtractError<typeof validate>>(
     {}
@@ -38,7 +44,9 @@ export default function SignUpPage() {
       event.preventDefault()
       const formData = new FormData(event.currentTarget)
       const body = {
+        currency: dropdownCurrency,
         email: formData.get('email') as string,
+        language: dropdownLanguage,
         username: formData.get('username') as string,
         password: formData.get('password') as string,
         passphrase: formData.get('passphrase') as string,
@@ -62,10 +70,21 @@ export default function SignUpPage() {
       const result = await auth.registerWithEmailAndPassword(body)
       if (result.isValid) {
         await auth.reloadProfile()
-        router.push(redeemable ? urls.login : urls.home)
+        router.push(redeemable ? urls.login : urls.home, router.asPath, {
+          locale: body.language,
+        })
       }
     },
-    [auth, redeemable, router, profilePic, t, validate]
+    [
+      auth,
+      redeemable,
+      router,
+      profilePic,
+      t,
+      validate,
+      dropdownCurrency,
+      dropdownLanguage,
+    ]
   )
 
   const handleProfilePicAccept = useCallback((files: File[]) => {
@@ -78,6 +97,14 @@ export default function SignUpPage() {
     setProfilePic(null)
   }, [])
 
+  const handleLanguageChange = useCallback((selectOption: SelectOption) => {
+    setDropdownLanguage(selectOption.id as string)
+  }, [])
+
+  const handleCurrencyChange = useCallback((selectOption: SelectOption) => {
+    setDropdownCurrency(selectOption.id as string)
+  }, [])
+
   useEffect(() => {
     if (auth.status === 'authenticated') {
       // prevent authenticated users from trying to register
@@ -85,10 +112,22 @@ export default function SignUpPage() {
     }
   }, []) /* eslint-disable-line react-hooks/exhaustive-deps */
 
+  useEffect(() => {
+    setDropdownLanguage(language)
+  }, [language])
+
+  useEffect(() => {
+    setDropdownCurrency(currency)
+  }, [currency])
+
   return (
     <DefaultLayout pageTitle={t('common:pageTitles.Sign Up')} panelPadding>
       <SignupTemplate
+        dropdownCurrency={dropdownCurrency}
+        dropdownLanguage={dropdownLanguage}
         handleCreateProfile={handleCreateProfile}
+        handleCurrencyChange={handleCurrencyChange}
+        handleLanguageChange={handleLanguageChange}
         handleProfilePicAccept={handleProfilePicAccept}
         handleProfilePicClear={handleProfilePicClear}
         error={auth.error}

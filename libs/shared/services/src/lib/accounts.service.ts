@@ -4,6 +4,10 @@ import {
   CreateUserAccountRequest,
   ExternalId,
   PublicAccount,
+  SortDirection,
+  UserAccounts,
+  UserSortField,
+  UsersQuerystring,
 } from '@algomart/schemas'
 import { UpdateUserAccount } from '@algomart/schemas'
 import { Username } from '@algomart/schemas'
@@ -27,6 +31,7 @@ export class AccountsService {
   }
 
   async create(request: CreateUserAccountRequest, trx?: Transaction) {
+    console.log('IN CREATE')
     // 1. Check for a username or externalId collision
     const existing = await UserAccountModel.query(trx)
       .where({
@@ -36,14 +41,16 @@ export class AccountsService {
       .first()
     userInvariant(!existing, 'username or externalId already exists', 400)
 
+    console.log('existing')
     // 2. generate algorand account (i.e. wallet)
     const result = this.algorand.generateAccount(request.passphrase)
 
     // 3. save account with encrypted mnemonic
     const user = await UserAccountModel.query(trx).insertGraph({
       username: request.username,
+      currency: request.currency,
       email: request.email,
-      locale: request.locale,
+      language: request.language,
       externalId: request.externalId,
       algorandAccount: {
         address: result.address,
@@ -51,12 +58,16 @@ export class AccountsService {
       },
     })
 
+    console.log('saved account')
+
     // 4. return "public" user account
     const userAccount = await UserAccountModel.query(trx)
       .findOne({
         username: request.username,
       })
       .withGraphJoined('algorandAccount.creationTransaction')
+
+    console.log('returning public account')
 
     return this.mapPublicAccount(userAccount)
   }
@@ -140,10 +151,11 @@ export class AccountsService {
 
     return {
       address: userAccount.algorandAccount.address,
+      currency: userAccount.currency,
       externalId: userAccount.externalId,
       username: userAccount.username,
       email: userAccount.email,
-      locale: userAccount.locale,
+      language: userAccount.language,
       status: userAccount.algorandAccount.creationTransaction
         ? userAccount.algorandAccount.creationTransaction.status
         : undefined,
@@ -169,6 +181,50 @@ export class AccountsService {
       .withGraphJoined('algorandAccount.creationTransaction')
 
     return this.mapPublicAccount(userAccount)
+  }
+
+  async getUsers({
+    page = 1,
+    pageSize = 10,
+    search = '',
+    sortBy = UserSortField.CreatedAt,
+    sortDirection = SortDirection.Ascending,
+  }: UsersQuerystring): Promise<UserAccounts> {
+    userInvariant(page > 0, 'page must be greater than 0')
+    userInvariant(
+      pageSize > 0 || pageSize === -1,
+      'pageSize must be greater than 0'
+    )
+    userInvariant(
+      [
+        UserSortField.Username,
+        UserSortField.CreatedAt,
+        UserSortField.Email,
+      ].includes(sortBy),
+      'sortBy must be one of username, email, or createdAt'
+    )
+    userInvariant(
+      [SortDirection.Ascending, SortDirection.Descending].includes(
+        sortDirection
+      ),
+      'sortDirection must be one of asc or desc'
+    )
+
+    const query = UserAccountModel.query()
+
+    // Find payer
+    if (search?.length > 0) {
+      const ilikeSearch = `%${search}%`
+      query
+        .where('email', 'ilike', ilikeSearch)
+        .orWhere('username', 'ilike', ilikeSearch)
+    }
+
+    const { results: users, total } = await query
+      .orderBy(sortBy, sortDirection)
+      .page(page >= 1 ? page - 1 : page, pageSize)
+
+    return { users, total }
   }
 
   async verifyPassphraseFor(externalId: string, passphrase: string) {
