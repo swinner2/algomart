@@ -1,5 +1,5 @@
 version: 1
-directus: 9.7.0
+directus: 9.8.0
 collections:
   - collection: application
     meta:
@@ -390,6 +390,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: application
     field: currency
     type: string
@@ -760,6 +762,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: id
     type: uuid
@@ -800,6 +804,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: status
     type: string
@@ -862,6 +868,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: sort
     type: integer
@@ -901,6 +909,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: user_created
     type: uuid
@@ -942,6 +952,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: date_created
     type: timestamp
@@ -983,6 +995,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: user_updated
     type: uuid
@@ -1024,6 +1038,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: date_updated
     type: timestamp
@@ -1065,6 +1081,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: slug
     type: string
@@ -1114,6 +1132,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: collection_image
     type: uuid
@@ -1153,6 +1173,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: reward_image
     type: uuid
@@ -1194,6 +1216,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: id
     type: integer
@@ -1233,6 +1257,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: collections_id
     type: uuid
@@ -1272,6 +1298,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: languages_code
     type: string
@@ -1311,6 +1339,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: name
     type: string
@@ -1351,6 +1381,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: description
     type: string
@@ -1391,6 +1423,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: metadata
     type: json
@@ -1417,7 +1451,7 @@ fields:
       collection: collections_translations
       field: metadata
       special:
-        - json
+        - cast-json
       interface: input-code
       options:
         template: |-
@@ -1444,6 +1478,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: reward_prompt
     type: string
@@ -1486,6 +1522,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections_translations
     field: reward_complete
     type: string
@@ -1528,6 +1566,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: homepage
     field: id
     type: uuid
@@ -1568,6 +1608,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: homepage
     field: featured_pack
     type: uuid
@@ -1609,6 +1651,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: languages
     field: code
     type: string
@@ -1649,6 +1693,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: languages
     field: name
     type: string
@@ -1689,6 +1735,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: id
     type: uuid
@@ -1729,6 +1777,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: status
     type: string
@@ -1791,6 +1841,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: user_created
     type: uuid
@@ -1832,6 +1884,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: date_created
     type: timestamp
@@ -1873,6 +1927,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: user_updated
     type: uuid
@@ -1914,6 +1970,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: date_updated
     type: timestamp
@@ -1955,6 +2013,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: total_editions
     type: integer
@@ -2003,6 +2063,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: unique_code
     type: string
@@ -2051,6 +2113,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: preview_image
     type: uuid
@@ -2090,6 +2154,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: preview_video
     type: uuid
@@ -2129,6 +2195,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: preview_audio
     type: uuid
@@ -2168,6 +2236,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: asset_file
     type: uuid
@@ -2207,6 +2277,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: pack_template
     type: uuid
@@ -2257,6 +2329,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: rarity
     type: uuid
@@ -2306,6 +2380,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: set
     type: uuid
@@ -2356,6 +2432,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: collection
     type: uuid
@@ -2406,6 +2484,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: homepage
     type: uuid
@@ -2445,6 +2525,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates_translations
     field: id
     type: integer
@@ -2484,6 +2566,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates_translations
     field: nft_templates_id
     type: uuid
@@ -2523,6 +2607,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates_translations
     field: languages_code
     type: string
@@ -2562,6 +2648,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates_translations
     field: title
     type: string
@@ -2602,6 +2690,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates_translations
     field: subtitle
     type: string
@@ -2642,6 +2732,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates_translations
     field: body
     type: text
@@ -2681,6 +2773,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: id
     type: uuid
@@ -2721,6 +2815,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: status
     type: string
@@ -2783,6 +2879,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: sort
     type: integer
@@ -2822,6 +2920,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: user_created
     type: uuid
@@ -2863,6 +2963,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: date_created
     type: timestamp
@@ -2904,6 +3006,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: user_updated
     type: uuid
@@ -2945,6 +3049,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: date_updated
     type: timestamp
@@ -2986,6 +3092,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: slug
     type: string
@@ -3035,6 +3143,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: type
     type: string
@@ -3091,6 +3201,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: price
     type: integer
@@ -3142,6 +3254,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: released_at
     type: timestamp
@@ -3189,6 +3303,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: auction_until
     type: timestamp
@@ -3236,6 +3352,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: show_nfts
     type: boolean
@@ -3262,7 +3380,7 @@ fields:
       collection: pack_templates
       field: show_nfts
       special:
-        - boolean
+        - cast-boolean
       interface: null
       options: null
       display: boolean
@@ -3290,6 +3408,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: nft_order
     type: string
@@ -3344,6 +3464,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: nft_distribution
     type: string
@@ -3398,6 +3520,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: nfts_per_pack
     type: integer
@@ -3448,6 +3572,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: pack_image
     type: uuid
@@ -3487,6 +3613,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: allow_bid_expiration
     type: boolean
@@ -3513,7 +3641,7 @@ fields:
       collection: pack_templates
       field: allow_bid_expiration
       special:
-        - boolean
+        - cast-boolean
       interface: null
       options: null
       display: boolean
@@ -3542,6 +3670,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: homepage
     type: uuid
@@ -3581,6 +3711,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: one_pack_per_customer
     type: boolean
@@ -3607,7 +3739,7 @@ fields:
       collection: pack_templates
       field: one_pack_per_customer
       special:
-        - boolean
+        - cast-boolean
       interface: null
       options: null
       display: boolean
@@ -3636,6 +3768,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_directus_files
     field: id
     type: integer
@@ -3675,6 +3809,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_directus_files
     field: directus_files_id
     type: uuid
@@ -3714,6 +3850,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_directus_files
     field: pack_templates_id
     type: uuid
@@ -3753,6 +3891,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_directus_files
     field: sort
     type: integer
@@ -3792,6 +3932,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_translations
     field: id
     type: integer
@@ -3831,6 +3973,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_translations
     field: pack_templates_id
     type: uuid
@@ -3870,6 +4014,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_translations
     field: languages_code
     type: string
@@ -3909,6 +4055,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_translations
     field: title
     type: string
@@ -3949,6 +4097,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_translations
     field: subtitle
     type: string
@@ -3989,6 +4139,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates_translations
     field: body
     type: text
@@ -4028,6 +4180,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: id
     type: uuid
@@ -4068,6 +4222,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: user_created
     type: uuid
@@ -4109,6 +4265,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: date_created
     type: timestamp
@@ -4150,6 +4308,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: user_updated
     type: uuid
@@ -4191,6 +4351,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: date_updated
     type: timestamp
@@ -4232,6 +4394,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: code
     type: string
@@ -4272,6 +4436,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: color
     type: string
@@ -4311,6 +4477,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities_translations
     field: id
     type: integer
@@ -4350,6 +4518,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities_translations
     field: rarities_id
     type: uuid
@@ -4389,6 +4559,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities_translations
     field: languages_code
     type: string
@@ -4428,6 +4600,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities_translations
     field: name
     type: string
@@ -4468,6 +4642,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: id
     type: uuid
@@ -4508,6 +4684,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: status
     type: string
@@ -4570,6 +4748,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: sort
     type: integer
@@ -4609,6 +4789,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: user_created
     type: uuid
@@ -4650,6 +4832,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: date_created
     type: timestamp
@@ -4691,6 +4875,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: user_updated
     type: uuid
@@ -4732,6 +4918,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: date_updated
     type: timestamp
@@ -4773,6 +4961,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: slug
     type: string
@@ -4822,6 +5012,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: collection
     type: uuid
@@ -4872,6 +5064,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets_translations
     field: id
     type: integer
@@ -4911,6 +5105,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets_translations
     field: sets_id
     type: uuid
@@ -4950,6 +5146,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets_translations
     field: languages_code
     type: string
@@ -4989,6 +5187,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets_translations
     field: name
     type: string
@@ -5029,6 +5229,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: rarities
     field: translations
     type: alias
@@ -5053,6 +5255,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: translations
     type: alias
@@ -5077,6 +5281,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: translations
     type: alias
@@ -5101,6 +5307,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: translations
     type: alias
@@ -5125,6 +5333,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: additional_images
     type: alias
@@ -5147,6 +5357,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: nft_templates
     field: translations
     type: alias
@@ -5171,6 +5383,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: homepage
     field: upcoming_packs
     type: alias
@@ -5195,6 +5409,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: homepage
     field: notable_collectibles
     type: alias
@@ -5219,6 +5435,8 @@ fields:
       conditions: null
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: sets
     field: nft_templates
     type: alias
@@ -5254,6 +5472,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: sets
     type: alias
@@ -5287,6 +5507,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: collections
     field: nft_templates
     type: alias
@@ -5322,6 +5544,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
   - collection: pack_templates
     field: nft_templates
     type: alias
@@ -5356,6 +5580,8 @@ fields:
           readonly: true
       required: false
       group: null
+      validation: null
+      validation_message: null
 relations:
   - collection: rarities
     field: user_created
