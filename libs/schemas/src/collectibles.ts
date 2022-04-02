@@ -179,7 +179,7 @@ export const CollectibleShowcaseQuerystringSchema = Type.Intersect([
 ])
 
 export const PublicCollectibleQuerystringSchema = Type.Intersect([
-  LocaleSchema,
+  LanguageSchema,
   Type.Object({
     collectionId: Type.Optional(Type.String({ format: 'uuid' })),
     templateIds: Type.Optional(Type.Array(IdSchema)),
