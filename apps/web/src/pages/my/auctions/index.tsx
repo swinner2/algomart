@@ -18,7 +18,7 @@ import {
   handleUnauthenticatedRedirect,
 } from '@/services/api/auth-service'
 import MyAuctionsTemplate from '@/templates/my-auctions-template'
-import { getAuctionSortingOptions } from '@/utils/filters'
+import { getSelectSortingOptions } from '@/utils/filters'
 import { urls } from '@/utils/urls'
 
 export default function MyAuctionsPage() {
@@ -27,7 +27,7 @@ export default function MyAuctionsPage() {
   const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const selectOptions = getAuctionSortingOptions(t)
+  const selectOptions = getSelectSortingOptions(t)
   const [selectedOption, setSelectedOption] = useState<SelectOption>(
     selectOptions[0]
   )

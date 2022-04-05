@@ -93,12 +93,10 @@ export function Currency({
   )
 }
 
-export function Email({ error, t, defaultValue }: AuthInputProps) {
+export function Email({ error, t }: AuthInputProps) {
   return (
     <FormField className={css.formField}>
       <TextInput
-        value={defaultValue || undefined}
-        readOnly={!!defaultValue}
         error={error as string}
         id="email"
         label={t('forms:fields.email.label')}

@@ -5,13 +5,14 @@ import { useRouter } from 'next/router'
 import { ApiClient } from '@/clients/api-client'
 import Loading from '@/components/loading/loading'
 import { useAuth } from '@/contexts/auth-context'
+import { Environment } from '@/environment'
 import DefaultLayout from '@/layouts/default-layout'
 import {
   getAuthenticatedUser,
   handleUnauthenticatedRedirect,
 } from '@/services/api/auth-service'
 import PublicCollectionTemplate from '@/templates/public-collection-template'
-import { logger } from '@/utils/logger'
+import { createLogger } from '@/utils/logger'
 import { useApi } from '@/utils/swr'
 import { urls } from '@/utils/urls'
 
@@ -46,6 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // if (!user) {
   //   return handleUnauthenticatedRedirect(context.resolvedUrl)
   // }
+  const logger = createLogger(Environment.logLevel)
 
   const slug = context.params?.collectionSlug as string
   const collection = await ApiClient.instance
