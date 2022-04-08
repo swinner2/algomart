@@ -274,6 +274,8 @@ export function useAuthProvider() {
       passphrase,
       profilePic,
       username,
+      currency,
+      language,
     }: SignUpPayload) => {
       dispatch(authActions.setLoading())
       try {

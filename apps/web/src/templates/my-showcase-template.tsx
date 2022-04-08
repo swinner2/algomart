@@ -77,7 +77,7 @@ export default function MyShowcaseTemplate({
   return (
     <div className="mx-auto max-w-7xl mt-10 px-2">
       {/* Tabs */}
-      <Tabs activeTab={2} tabs={getCollectionTabs(t)} />
+      <Tabs activeTab={2} tabs={getCollectionTabs(t)} className="-mt-8" />
 
       {/* Showcase Grid */}
       <section className="md:px-24 px-2">
