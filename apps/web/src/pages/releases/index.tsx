@@ -73,6 +73,7 @@ export default function Releases({ packs }: PublishedPacks) {
   // If state changes, update the URL
   useEffect(() => {
     const previousState = stringify(parse(location.search))
+    // @ts-ignore not sure
     const nextState = stringify(state)
     if (previousState !== nextState) {
       const { selectedOption, selectOptions, ...rest } = state

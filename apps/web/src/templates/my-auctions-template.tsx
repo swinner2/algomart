@@ -38,7 +38,7 @@ export default function MyAuctionsTemplate({
   return (
     <div className="mx-auto max-w-7xl mt-10 px-2">
       {/* Tabs */}
-      <Tabs activeTab={3} tabs={getCollectionTabs(t)} negativeMargin />
+      <Tabs activeTab={3} tabs={getCollectionTabs(t)} className="-mx-8 -mt-8" />
       {auctions.length > 0 ? (
         <>
           <div className={css.selectWrapper}>
