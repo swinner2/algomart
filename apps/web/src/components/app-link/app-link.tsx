@@ -2,7 +2,9 @@ import clsx from 'clsx'
 import Link, { LinkProps as NextLinkProps } from 'next/link'
 import { AnchorHTMLAttributes, DetailedHTMLProps } from 'react'
 
-import { useLocale } from '@/hooks/use-locale'
+import css from './app-link.module.css'
+
+import { useLanguage } from '@/hooks/use-language'
 
 export type AppLinkProps = NextLinkProps &
   Omit<
@@ -25,12 +27,12 @@ export default function AppLink({
   className,
   ...rest
 }: AppLinkProps) {
-  const locale = useLocale()
+  const language = useLanguage()
   return (
     <Link
       href={href}
       as={as}
-      locale={locale}
+      locale={language}
       passHref={passHref}
       prefetch={prefetch}
       replace={replace}

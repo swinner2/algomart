@@ -23,22 +23,20 @@
   @apply w-1/2 text-white;
 }
 
-.labelSmall {
-  @apply text-sm;
-}
-
 .helpText {
   @apply font-light text-white text-right text-sm mt-1 float-right mr-1;
-}
-
-.helpTextSmall {
-  @apply text-xs;
 }
 
 .errorText {
   @apply font-light text-base-errorRed text-right text-sm mt-1 float-right mr-1;
 }
 
-.errorTextSmall {
+/* Small variant */
+.small .label {
+  @apply text-sm;
+}
+
+.small .helpText,
+.small .errorText {
   @apply text-xs;
 }

@@ -5,54 +5,65 @@ import {
   DetailedHTMLProps,
   InputHTMLAttributes,
   ReactNode,
+  useMemo,
   useState,
 } from 'react'
 
 import css from './select.module.css'
 
 export interface SelectOption {
-  id: string
+  value: string
   label: string | ReactNode
+  disabled?: boolean
 }
 
 export interface SelectProps
   extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLSelectElement>,
+    Omit<InputHTMLAttributes<HTMLSelectElement>, 'onChange'>,
     HTMLSelectElement
   > {
-  defaultOption?: SelectOption
   error?: string
-  handleChange?(option: SelectOption): void
+  onChange?(value: string): void
   helpText?: string
   label?: string
   options: SelectOption[]
-  selectedValue?: SelectOption | null
   horizontal?: boolean
+  value?: string
   Icon?: ReactNode
 }
 
 export default function Select({
   className,
-  defaultOption,
+  defaultValue,
   disabled,
   error,
-  handleChange,
+  onChange,
   helpText,
   id,
+  name,
   label,
   options,
-  selectedValue,
   horizontal,
+  value,
   Icon,
 }: SelectProps) {
-  const [selected, setSelected] = useState(defaultOption || options[0])
-  const value = selectedValue || selected
+  const _id = id ?? crypto.randomUUID()
+  const [internalValue, setInternalValue] = useState(
+    defaultValue || (options?.length ? options[0].value : '')
+  )
 
-  const onChange = (option: SelectOption) => {
-    if (handleChange) {
-      handleChange(option)
+  const actualValue = value ?? internalValue
+  const selectedOption = useMemo(() => {
+    return value
+      ? options.find((option) => option.value === value)
+      : options.find((option) => option.value === internalValue)
+  }, [options, internalValue, value])
+
+  const handleChange = (value: string) => {
+    if (onChange) {
+      onChange(value)
     } else {
-      setSelected(option)
+      setInternalValue(value)
     }
   }
 
@@ -71,7 +82,7 @@ export default function Select({
         {error && <span className={css.errorText}>{error}</span>}
         {!error && helpText && <span className={css.helpText}>{helpText}</span>}
       </div>
-      <Listbox disabled={disabled} onChange={onChange} value={value}>
+      <Listbox disabled={disabled} onChange={handleChange} value={actualValue}>
         <div className={css.selectContainer}>
           <Listbox.Button
             className={clsx(
@@ -85,7 +96,7 @@ export default function Select({
           >
             <span className="font-bold text-blue-800">
               {Icon ? Icon : <svg viewBox={'0 0 24 24'} />}
-              {value.label}
+              {label}
             </span>
             <span className={css.selectButtonIconContainer}>
               <SelectorIcon
@@ -98,16 +109,18 @@ export default function Select({
           <Listbox.Options className={css.selectOptions}>
             {options.map((option) => (
               <Listbox.Option
+                disabled={option.disabled}
                 className={({ active, selected }) =>
                   clsx(css.selectOption, {
                     [css.selectOptionSelected]: selected,
                     [css.selectOptionActive]: active,
+                    [css.selectOptionDisabled]: option.disabled,
                   })
                 }
-                key={option.id}
-                value={option}
+                key={option.value}
+                value={option.value}
               >
-                <span>{option.label}</span>
+                {option.label}
               </Listbox.Option>
             ))}
           </Listbox.Options>
@@ -115,11 +128,12 @@ export default function Select({
       </Listbox>
       {/* Used to capture value of select */}
       <input
+        tabIndex={-1}
         className="sr-only"
-        id={id}
-        name={id}
         readOnly
-        value={selected.id}
+        value={selectedOption.value}
+        name={name}
+        id={id}
       />
     </label>
   )

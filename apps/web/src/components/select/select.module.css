@@ -71,3 +71,7 @@
 .horizontal {
   @apply flex items-center justify-center;
 }
+
+.selectOptionDisabled {
+  @apply text-base-textDisabled;
+}
