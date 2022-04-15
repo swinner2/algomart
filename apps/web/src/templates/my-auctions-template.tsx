@@ -16,7 +16,7 @@ export interface MyAuctionsTemplateProps {
   auctions: AuctionDetail[]
   handleNoAuctionRedirect: () => void
   handlePageChange: (pageNumber: number) => void
-  handleSortChange: (option: SelectOption) => void
+  handleSortChange: (option: string) => void
   selectOptions: SelectOption[]
   selectedOption: SelectOption
   currentPage: number
@@ -43,10 +43,10 @@ export default function MyAuctionsTemplate({
         <>
           <div className={css.selectWrapper}>
             <Select
-              handleChange={handleSortChange}
+              onChange={handleSortChange}
               id="sortOption"
               options={selectOptions}
-              selectedValue={selectedOption}
+              value={selectedOption.value}
               label="Sort by"
               horizontal
             />
@@ -62,10 +62,7 @@ export default function MyAuctionsTemplate({
                 body={auction.body}
                 currentBidPrice={auction.currentBidPrice}
                 endTime={auction.endTime}
-                auctionLink={urls.myAuctionDetail.replace(
-                  ':auctionSlug',
-                  auction.auctionId
-                )}
+                auctionLink={'#'}
               />
             ))}
           </Grid>

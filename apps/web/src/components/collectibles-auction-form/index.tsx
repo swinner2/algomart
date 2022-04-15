@@ -32,8 +32,8 @@ export default function CollectiblesAuctionForm({
     setStatus('form')
   }, [setStatus])
   const auctionType = [
-    { id: 'purchase', label: 'Purchase' },
-    { id: 'auction', label: 'Auction' },
+    { value: 'purchase', label: 'Purchase' },
+    { value: 'auction', label: 'Auction' },
   ]
 
   return (
@@ -61,7 +61,7 @@ export default function CollectiblesAuctionForm({
           </Heading>
           <Select
             options={auctionType}
-            defaultOption={auctionType[1]}
+            value={auctionType[1].value}
             className="w-full my-3"
             label={t('forms:fields.auctionType.label')}
             name="auctionType"
