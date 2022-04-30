@@ -1,6 +1,8 @@
 import {
   AuctionSortOptions,
   CollectibleListQuerystring,
+  GetCurrencyConversion,
+  GetCurrencyConversions,
   PacksByOwnerQuery,
   PackStatus,
   PackType,
@@ -140,5 +142,18 @@ export const getUsersFilterQuery = (query: UsersQuerystring) => {
     sortBy: query.sortBy,
     sortDirection: query.sortDirection,
     search: query.search,
+  })
+}
+
+export const getCurrencyConversionQuery = (params: GetCurrencyConversion) => {
+  return stringify({
+    sourceCurrency: params.sourceCurrency,
+    targetCurrency: params.targetCurrency,
+  })
+}
+
+export const getCurrencyConversionsQuery = (params: GetCurrencyConversions) => {
+  return stringify({
+    sourceCurrency: params.sourceCurrency,
   })
 }

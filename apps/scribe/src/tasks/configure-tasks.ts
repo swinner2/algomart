@@ -10,13 +10,16 @@ import {
   handlePackAuctionExpirationTask,
   mintCollectiblesTask,
   storeCollectiblesTask,
+  updateCurrencyConversionsTask,
   updatePaymentBankStatusesTask,
   updatePaymentCardStatusesTask,
   updatePaymentStatusesTask,
   syncCMSCacheTask,
+  submitTransactionsTask,
 } from '@algomart/scribe/tasks'
 
 import { logger } from '../configuration/logger'
+import { Configuration } from '../configuration/app-config'
 
 type FastifyInstanceWithScheduler = FastifyInstance & {
   scheduler: ToadScheduler
@@ -36,13 +39,42 @@ export function configureTasks(app: FastifyInstanceWithScheduler) {
   )
   //#endregion
 
+  // #region Currency Rates
+  app.scheduler.addSimpleIntervalJob(
+    new SimpleIntervalJob(
+      { hours: 1 },
+      new AsyncTask(
+        'update-currency-conversions',
+        async () =>
+          await updateCurrencyConversionsTask(
+            app.container,
+            Configuration.currency,
+            logger
+          ),
+        (error) => app.log.error(error)
+      )
+    )
+  )
+  //#endregion
+
   //#region Pack & Collectible generation/storage/minting
   app.scheduler.addSimpleIntervalJob(
     new SimpleIntervalJob(
-      { seconds: 10 },
+      { seconds: 5 },
       new AsyncTask(
         'confirm-transactions',
         async () => await confirmTransactionsTask(app.container, logger),
+        (error) => app.log.error(error)
+      )
+    )
+  )
+
+  app.scheduler.addSimpleIntervalJob(
+    new SimpleIntervalJob(
+      { seconds: 5 },
+      new AsyncTask(
+        'submit-transactions',
+        async () => await submitTransactionsTask(app.container, logger),
         (error) => app.log.error(error)
       )
     )

@@ -3,8 +3,10 @@ import { ReactNode } from 'react'
 
 import css from './bid-activity-details.module.css'
 
+import Currency from '@/components/currency'
+
 export interface BidActivityProps {
-  amount: string | null
+  amount?: number
   content: string | null
   date: string
   children: ReactNode
@@ -23,7 +25,11 @@ export default function BidActivityDetails({
         <h2 className={clsx('text-white', css.heading)}>{content}</h2>
         <p className={css.date}>{date}</p>
       </div>
-      {amount && <p className={clsx('text-white', css.amount)}>{amount}</p>}
+      {typeof amount === 'number' && (
+        <p className={clsx('text-white', css.amount)}>
+          <Currency value={amount} />
+        </p>
+      )}
     </li>
   )
 }

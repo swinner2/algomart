@@ -7,10 +7,7 @@ import css from './release-item.module.css'
 
 import AppLink from '@/components/app-link/app-link'
 import Counter from '@/components/counter/counter'
-import { useI18n } from '@/contexts/i18n-context'
-import { useCurrency } from '@/hooks/use-currency'
-import { useLocale } from '@/hooks/use-locale'
-import { formatCurrency } from '@/utils/format-currency'
+import Currency from '@/components/currency'
 import { urls } from '@/utils/urls'
 
 export interface ReleaseItemProps {
@@ -18,9 +15,6 @@ export interface ReleaseItemProps {
 }
 
 export default function ReleaseItem({ pack }: ReleaseItemProps) {
-  const locale = useLocale()
-  const currency = useCurrency()
-  const { conversionRate } = useI18n()
   const { t } = useTranslation()
 
   const reserveMet =
@@ -98,14 +92,11 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
                 : t('release:Reserve Price')}
             </div>
             <div className={css.metadataValue}>
-              {reserveMet
-                ? formatCurrency(
-                    pack.activeBid ?? 0,
-                    locale,
-                    currency,
-                    conversionRate
-                  )
-                : t('release:Not Met')}
+              {reserveMet ? (
+                <Currency value={pack.activeBid || 0} />
+              ) : (
+                t('release:Not Met')
+              )}
             </div>
           </div>
           <div className="flex flex-col">
@@ -130,14 +121,11 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
                 : t('release:Reserve Price')}
             </div>
             <div className={css.metadataValue}>
-              {reserveMet
-                ? formatCurrency(
-                    pack.activeBid ?? 0,
-                    locale,
-                    currency,
-                    conversionRate
-                  )
-                : t('release:Not Met')}
+              {reserveMet ? (
+                <Currency value={pack.activeBid || 0} />
+              ) : (
+                t('release:Not Met')
+              )}
             </div>
           </div>
           <div className="flex flex-col">
@@ -169,7 +157,7 @@ export default function ReleaseItem({ pack }: ReleaseItemProps) {
           <div>
             <div className={css.metadataLabel}>{t('release:Mint Cost')}</div>
             <div className={css.metadataValue}>
-              {formatCurrency(pack.price, locale, currency, conversionRate)}
+              <Currency value={pack.price} />
             </div>
           </div>
           <div className="text-right mt-4 px-4">

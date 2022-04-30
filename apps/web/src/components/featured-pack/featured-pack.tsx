@@ -10,9 +10,9 @@ import css from './featured-pack.module.css'
 import AppLink from '@/components/app-link/app-link'
 import Button from '@/components/button'
 import Counter from '@/components/counter/counter'
+import Currency from '@/components/currency'
 import Heading from '@/components/heading'
-import { useLocale } from '@/hooks/use-locale'
-import { formatCurrency } from '@/utils/format-currency'
+import { formatCurrency } from '@/utils/currency'
 
 export interface FeaturedPackProps {
   featuredPack: PublishedPack
@@ -23,8 +23,7 @@ export default function HomeTemplate({
   featuredPack,
   onClickFeatured,
 }: FeaturedPackProps) {
-  const locale = useLocale()
-  const { t, lang } = useTranslation()
+  const { t } = useTranslation()
 
   const highestBid = featuredPack?.activeBid || 0
   const isReserveMet = highestBid >= featuredPack.price || 0
@@ -191,7 +190,7 @@ export default function HomeTemplate({
                             [css.completeSuccess]: isExpired && isReserveMet,
                           })}
                         >
-                          {formatCurrency(highestBid, lang)}
+                          <Currency value={highestBid} />
                         </div>
                       </>
                     </div>
@@ -249,11 +248,11 @@ export default function HomeTemplate({
                   <>
                     <p className="text-blue-800 text-2xl my-4 font-bold text-center">
                       {(featuredPack.type === PackType.Auction ||
-                        featuredPack.type === PackType.Purchase) &&
-                        formatCurrency(
-                          featuredPack.activeBid ?? featuredPack.price,
-                          locale
-                        )}
+                        featuredPack.type === PackType.Purchase) && (
+                        <Currency
+                          value={featuredPack.activeBid ?? featuredPack.price}
+                        />
+                      )}
                     </p>
                     <Button onClick={onClickFeatured} fullWidth size="small">
                       {t('common:actions.Buy Now')}

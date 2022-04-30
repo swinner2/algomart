@@ -37,7 +37,6 @@ import {
   CMSCacheLanguageModel,
   CMSCachePackTemplateModel,
   CMSCacheSetModel,
-  PackModel,
 } from '@algomart/shared/models'
 import {
   invariant,
@@ -46,7 +45,7 @@ import {
   isStringArray,
 } from '@algomart/shared/utils'
 import { URL } from 'node:url'
-import Objection, { Transaction } from 'objection'
+import Objection, { QueryBuilder, Transaction } from 'objection'
 import pino from 'pino'
 
 export interface ItemsResponse<T> {
@@ -432,7 +431,7 @@ export class CMSCacheAdapter {
   }
 
   async findAllPacksAuctionCompletion(
-    startDate,
+    startDate: Date,
     language = DEFAULT_LANG,
     trx?: Transaction
   ) {
@@ -498,7 +497,7 @@ export class CMSCacheAdapter {
   }
 
   async findPacksByTemplateIds(
-    templateIds,
+    templateIds: string[],
     language = DEFAULT_LANG,
     trx?: Transaction
   ) {
@@ -516,28 +515,11 @@ export class CMSCacheAdapter {
     return data
   }
 
-  async findPacksByType(
-    type,
-    limit,
+  async findPackBySlug(
+    slug: string,
     language = DEFAULT_LANG,
     trx?: Transaction
   ) {
-    const queryResult = await CMSCachePackTemplateModel.query(trx)
-      .whereIn('type', type)
-      .limit(limit)
-      .select('content')
-
-    const data = queryResult.map(
-      (result: CMSCachePackTemplateModel): PackBase => {
-        const packTemplate = result.content as unknown as DirectusPackTemplate
-        return toPackBase(packTemplate, this.getFileURL.bind(this), language)
-      }
-    )
-
-    return data
-  }
-
-  async findPackBySlug(slug, language = DEFAULT_LANG, trx?: Transaction) {
     const queryResult = await CMSCachePackTemplateModel.query(trx)
       .findOne('slug', slug)
       .select('content')
@@ -547,7 +529,7 @@ export class CMSCacheAdapter {
   }
 
   async findPackByTemplateId(
-    templateId,
+    templateId: string,
     language = DEFAULT_LANG,
     trx?: Transaction
   ) {
@@ -604,7 +586,7 @@ export class CMSCacheAdapter {
   }
 
   async findCollectiblesByTemplateIds(
-    templateIds,
+    templateIds: string[],
     language = DEFAULT_LANG,
     trx?: Transaction
   ): Promise<CollectibleBase[]> {
@@ -735,27 +717,17 @@ export class CMSCacheAdapter {
       .orWhere('releasedAt', null)
       .orWhere('releasedAt', '<', new Date())
 
-    const queryResult = await this.cacheQueryBuilder(query, queryBuild)
-    const data = queryResult.map(
+    const { total, results } = await this.cacheQueryBuilder(query, queryBuild)
+    const data = results.map(
       (result: CMSCachePackTemplateModel): DirectusPackTemplate =>
         result.content as unknown as DirectusPackTemplate
     )
     const result: ItemsResponse<DirectusPackTemplate> = {
-      data: data,
+      data,
       meta: {
-        filter_count: queryResult.length,
+        filter_count: data.length,
+        total_count: total,
       },
-    }
-
-    if (query.totalCount) {
-      const total = await CMSCachePackTemplateModel.query(trx)
-        .orWhere('releasedAt', null)
-        .orWhere('releasedAt', '<', new Date())
-        .count('*', { as: 'count' })
-        .first()
-        .castTo<{ count: string }>()
-
-      result.meta.total_count = Number.parseInt(total.count, 10)
     }
 
     return result
@@ -766,28 +738,19 @@ export class CMSCacheAdapter {
     trx?: Transaction
   ) {
     const queryBuild = CMSCacheCollectibleTemplateModel.query(trx)
-    const queryResult = await this.cacheQueryBuilder(query, queryBuild).select(
-      'content'
-    )
+    const { total, results } = await this.cacheQueryBuilder(query, queryBuild)
 
-    const data = queryResult.map(
+    const data = results.map(
       (result: CMSCacheCollectibleTemplateModel): DirectusCollectibleTemplate =>
         result.content as unknown as DirectusCollectibleTemplate
     )
 
     const result: ItemsResponse<DirectusCollectibleTemplate> = {
-      data: data,
+      data,
       meta: {
         filter_count: data.length,
+        total_count: total,
       },
-    }
-
-    if (query.totalCount) {
-      const total = await CMSCacheCollectibleTemplateModel.query()
-        .count('*', { as: 'count' })
-        .first()
-        .castTo<{ count: string }>()
-      result.meta.total_count = Number.parseInt(total.count, 10)
     }
 
     return result
@@ -795,56 +758,19 @@ export class CMSCacheAdapter {
 
   private async findCollections(query: ItemQuery = {}, trx?: Transaction) {
     const queryBuild = CMSCacheCollectionModel.query(trx)
-    const queryResult = await this.cacheQueryBuilder(query, queryBuild).select(
-      'content'
-    )
+    const { total, results } = await this.cacheQueryBuilder(query, queryBuild)
 
-    const data = queryResult.map(
+    const data = results.map(
       (result: CMSCacheCollectionModel): DirectusCollection =>
         result.content as unknown as DirectusCollection
     )
 
     const result: ItemsResponse<DirectusCollection> = {
-      data: data,
+      data,
       meta: {
         filter_count: data.length,
+        total_count: total,
       },
-    }
-
-    if (query.totalCount) {
-      const total = await CMSCacheCollectionModel.query(trx)
-        .count('*', { as: 'count' })
-        .first()
-        .castTo<{ count: string }>()
-      result.meta.total_count = Number.parseInt(total.count, 10)
-    }
-
-    return result
-  }
-
-  private async findSets(query: ItemQuery = {}, trx?: Transaction) {
-    const queryBuild = CMSCacheSetModel.query(trx)
-    const queryResult = await this.cacheQueryBuilder(query, queryBuild).select(
-      'content'
-    )
-
-    const data = queryResult.map(
-      (result: CMSCacheSetModel): DirectusSet =>
-        result.content as unknown as DirectusSet
-    )
-    const result: ItemsResponse<DirectusSet> = {
-      data: data,
-      meta: {
-        filter_count: data.length,
-      },
-    }
-
-    if (query.totalCount) {
-      const total = await CMSCacheSetModel.query()
-        .count('*', { as: 'count' })
-        .first()
-        .castTo<{ count: string }>()
-      result.meta.total_count = Number.parseInt(total.count, 10)
     }
 
     return result
@@ -863,6 +789,8 @@ export class CMSCacheAdapter {
       | CMSCacheSetModel[]
     >
   ) {
+    queryBuild = queryBuild.select('content')
+
     // For each column defined in the filter, loop through and convert to query
     if (query.filter) {
       for (const column of Object.keys(query.filter)) {
@@ -922,18 +850,17 @@ export class CMSCacheAdapter {
       queryBuild = queryBuild.orderBy(sort.field, sort.order)
     }
 
-    if (query.page) {
-      queryBuild = queryBuild.offset((query.page - 1) * query.limit)
-    }
+    const page = query.page - 1 || 0
+    const pageSize =
+      query.limit != -1 ? query.limit || 10 : Number.MAX_SAFE_INTEGER
 
-    if (query.limit && query.limit !== -1) {
-      queryBuild = queryBuild.limit(query.limit)
-    }
-
-    return queryBuild
+    return queryBuild.page(page, pageSize)
   }
 
-  private inStatusFilter(queryBuild, statuses: PackStatus[]) {
+  private inStatusFilter<M extends Objection.Model>(
+    queryBuild: QueryBuilder<M>,
+    statuses: PackStatus[]
+  ) {
     return queryBuild.where((builder) => {
       builder
         .orWhereIn('type', [PackType.Free, PackType.Purchase, PackType.Redeem])
@@ -945,13 +872,19 @@ export class CMSCacheAdapter {
     })
   }
 
-  private auctionUpcomingWhere(builder, statuses: PackStatus[]) {
+  private auctionUpcomingWhere<M extends Objection.Model>(
+    builder: QueryBuilder<M>,
+    statuses: PackStatus[]
+  ) {
     return statuses.includes(PackStatus.Upcoming)
       ? builder.where('releasedAt', '>', new Date())
       : builder
   }
 
-  private auctionActiveWhere(builder, statuses: PackStatus[]) {
+  private auctionActiveWhere<M extends Objection.Model>(
+    builder: QueryBuilder<M>,
+    statuses: PackStatus[]
+  ) {
     return statuses.includes(PackStatus.Active)
       ? builder
           .where('releasedAt', '<', new Date())
@@ -959,13 +892,18 @@ export class CMSCacheAdapter {
       : builder
   }
 
-  private auctionExpiredWhere(builder, statuses: PackStatus[]) {
+  private auctionExpiredWhere<M extends Objection.Model>(
+    builder: QueryBuilder<M>,
+    statuses: PackStatus[]
+  ) {
     return statuses.includes(PackStatus.Expired)
       ? builder.where('auctionUntil', '<', new Date())
       : builder
   }
 
-  private gtReserveMetWhere(builder) {
+  private gtReserveMetWhere<M extends Objection.Model>(
+    builder: QueryBuilder<M>
+  ) {
     return builder
       .orWhereIn('type', [PackType.Free, PackType.Purchase, PackType.Redeem])
       .orWhere((subBuilder) => {

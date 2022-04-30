@@ -20,10 +20,13 @@ import {
   CreateTransferPayment,
   CreateUserAccountRequest,
   CurrencyConversionDict,
+  CurrencyConversionResult,
   DEFAULT_LANG,
   DropdownLanguageList,
   ExternalId,
   FindTransferByAddress,
+  GetCurrencyConversion,
+  GetCurrencyConversions,
   GetPaymentBankAccountStatus,
   GetPaymentCardStatus,
   Homepage,
@@ -77,6 +80,8 @@ import { stringify } from 'query-string'
 import { Environment } from '@/environment'
 import {
   getCollectiblesFilterQuery,
+  getCurrencyConversionQuery,
+  getCurrencyConversionsQuery,
   getPacksByOwnerFilterQuery,
   getPaymentsFilterQuery,
   getUsersFilterQuery,
@@ -131,7 +136,7 @@ export class ApiClient {
       .get<PublicAccount>(`accounts/${externalId}`)
       .then((response) => response.data)
       .catch((error) => {
-        if (axios.isAxiosError(error) && error.response.status === 404) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
           return null
         }
         throw error
@@ -145,7 +150,7 @@ export class ApiClient {
       })
       .then((response) => response.data)
       .catch((error) => {
-        if (axios.isAxiosError(error) && error.response.status === 404) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
           return null
         }
         throw error
@@ -211,7 +216,7 @@ export class ApiClient {
       .get<CollectibleListShowcase>('collectibles/showcase', { params })
       .then((response) => response.data)
       .catch((error) => {
-        if (axios.isAxiosError(error) && error.response.status === 404) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
           return null
         }
         throw error
@@ -317,8 +322,9 @@ export class ApiClient {
   }
 
   async createWalletAddress() {
+    // NB: Payload must be {} or this is sent with the wrong accept header.
     return await this.http
-      .post<CircleBlockchainAddress>('payments/wallets')
+      .post<CircleBlockchainAddress>('payments/wallets', {})
       .then((response) => response.data)
   }
 
@@ -553,9 +559,17 @@ export class ApiClient {
       .then((response) => response.data)
   }
 
-  async getCurrencyConversions() {
+  async getCurrencyConversion(params: GetCurrencyConversion) {
+    const queryParams = getCurrencyConversionQuery(params)
     return await this.http
-      .get<CurrencyConversionDict>('i18n/currencyConversions')
+      .get<CurrencyConversionResult>(`i18n/currencyConversion?${queryParams}`)
+      .then((response) => response.data)
+  }
+
+  async getCurrencyConversions(params: GetCurrencyConversions) {
+    const queryParams = getCurrencyConversionsQuery(params)
+    return await this.http
+      .get<CurrencyConversionDict>(`i18n/currencyConversions?${queryParams}`)
       .then((response) => response.data)
   }
 

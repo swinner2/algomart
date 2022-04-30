@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { v4 as uuid } from 'uuid'
 
 import css from './select.module.css'
 
@@ -47,7 +48,7 @@ export default function Select({
   value,
   Icon,
 }: SelectProps) {
-  const _id = id ?? crypto.randomUUID()
+  const _id = id ?? uuid()
   const [internalValue, setInternalValue] = useState(
     defaultValue || (options?.length ? options[0].value : '')
   )

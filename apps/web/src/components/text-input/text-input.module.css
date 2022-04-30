@@ -19,6 +19,18 @@
   @apply border-base-error;
 }
 
+.inputValid {
+  @apply border-base-border;
+}
+
+.labelContainer {
+  @apply relative font-bold text-base-textPrimary;
+}
+
+.contentTop {
+  @apply flex flex-wrap content-between;
+}
+
 .label {
   @apply w-1/2 text-white;
 }
