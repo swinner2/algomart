@@ -97,7 +97,7 @@
     "@nrwl/cli": "13.9.3",
     "@nrwl/cypress": "13.9.3",
     "@nrwl/devkit": "13.9.3",
-    "@nrwl/eslint-plugin-nx": "13.9.3",
+    "@nrwl/eslint-plugin-nx": "14.3.6",
     "@nrwl/jest": "13.9.3",
     "@nrwl/linter": "13.9.3",
     "@nrwl/node": "13.9.3",
